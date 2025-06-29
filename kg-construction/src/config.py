@@ -1,6 +1,8 @@
 # 上面用来切换不同的配置文件
 import os
+
 from src.config_file.config_educational_psychology import *
+
 # 下面不用改
 from zhipuai import ZhipuAI
 from openai import AsyncOpenAI, OpenAI
