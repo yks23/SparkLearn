@@ -1,2 +1,4 @@
 opencv-python
 PyMuPDF
+requests
+html2text
