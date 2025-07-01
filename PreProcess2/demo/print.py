@@ -1,126 +1,60 @@
-from datetime import datetime
-from wsgiref.handlers import format_date_time
-from time import mktime
+
+"""
+  印刷文字识别WebAPI接口调用示例接口文档(必看)：https://doc.xfyun.cn/rest_api/%E5%8D%B0%E5%88%B7%E6%96%87%E5%AD%97%E8%AF%86%E5%88%AB.html
+  上传图片base64编码后进行urlencode要求base64编码和urlencode后大小不超过4M最短边至少15px，最长边最大4096px支持jpg/png/bmp格式
+  (Very Important)创建完webapi应用添加合成服务之后一定要设置ip白名单，找到控制台--我的应用--设置ip白名单，如何设置参考：http://bbs.xfyun.cn/forum.php?mod=viewthread&tid=41891
+  错误码链接：https://www.xfyun.cn/document/error-code (code返回错误码时必看)
+  @author iflytek
+"""
+#-*- coding: utf-8 -*-
+import requests
+import time
 import hashlib
 import base64
-import hmac
-from urllib.parse import urlencode
 import json
-import requests
+#from urllib import parse
+# 印刷文字识别 webapi 接口地址
+URL = "http://webapi.xfyun.cn/v1/service/v1/ocr/general"
+# 应用ID (必须为webapi类型应用，并印刷文字识别服务，参考帖子如何创建一个webapi应用：http://bbs.xfyun.cn/forum.php?mod=viewthread&tid=36481)
+APPID = "b97bb794"
+# 接口密钥(webapi类型应用开通印刷文字识别服务后，控制台--我的应用---印刷文字识别---服务的apikey)
+API_KEY = "03b0f6ec7474dc586fcf0439d939de15"
+def getHeader():
+#  当前时间戳
+    curTime = str(int(time.time()))
+#  支持语言类型和是否开启位置定位(默认否)
+    param = {"language": "cn|en", "location": "false"}
+    param = json.dumps(param)
+    paramBase64 = base64.b64encode(param.encode('utf-8'))
 
-'''
-1、通用文字识别,图像数据base64编码后大小不得超过10M
-2、appid、apiSecret、apiKey请到讯飞开放平台控制台获取并填写到此demo中
-3、支持中英文,支持手写和印刷文字。
-4、在倾斜文字上效果有提升，同时支持部分生僻字的识别
-'''
-
-APPId = "b97bb794"  # 控制台获取
-APISecret = "Y2ExMGViM2RjMjdjNmZhNjkyNjZkZDhi"  # 控制台获取
-APIKey = "c87bad1f164b70337becc4d833246d17"  # 控制台获取
-
-with open("/mnt/d/code/python/TextRecognize/source/formula_text.png", "rb") as f:
-    imageBytes = f.read()
-
-
-class AssembleHeaderException(Exception):
-    def __init__(self, msg):
-        self.message = msg
-
-
-class Url:
-    def __init__(self, host, path, schema):
-        self.host = host
-        self.path = path
-        self.schema = schema
-        pass
-
-
-# calculate sha256 and encode to base64
-def sha256base64(data):
-    sha256 = hashlib.sha256()
-    sha256.update(data)
-    digest = base64.b64encode(sha256.digest()).decode(encoding='utf-8')
-    return digest
-
-
-def parse_url(requset_url):
-    stidx = requset_url.index("://")
-    host = requset_url[stidx + 3:]
-    schema = requset_url[:stidx + 3]
-    edidx = host.index("/")
-    if edidx <= 0:
-        raise AssembleHeaderException("invalid request url:" + requset_url)
-    path = host[edidx:]
-    host = host[:edidx]
-    u = Url(host, path, schema)
-    return u
-
-
-# build websocket auth request url
-def assemble_ws_auth_url(requset_url, method="POST", api_key="", api_secret=""):
-    u = parse_url(requset_url)
-    host = u.host
-    path = u.path
-    now = datetime.now()
-    date = format_date_time(mktime(now.timetuple()))
-    print(date)
-    # date = "Thu, 12 Dec 2019 01:57:27 GMT"
-    signature_origin = "host: {}\ndate: {}\n{} {} HTTP/1.1".format(host, date, method, path)
-    print(signature_origin)
-    signature_sha = hmac.new(api_secret.encode('utf-8'), signature_origin.encode('utf-8'),
-                             digestmod=hashlib.sha256).digest()
-    signature_sha = base64.b64encode(signature_sha).decode(encoding='utf-8')
-    authorization_origin = "api_key=\"%s\", algorithm=\"%s\", headers=\"%s\", signature=\"%s\"" % (
-        api_key, "hmac-sha256", "host date request-line", signature_sha)
-    authorization = base64.b64encode(authorization_origin.encode('utf-8')).decode(encoding='utf-8')
-    print(authorization_origin)
-    values = {
-        "host": host,
-        "date": date,
-        "authorization": authorization
+    m2 = hashlib.md5()
+    str1 = API_KEY + curTime + str(paramBase64,'utf-8')
+    m2.update(str1.encode('utf-8'))
+    checkSum = m2.hexdigest()
+# 组装http请求头
+    header = {
+        'X-CurTime': curTime,
+        'X-Param': paramBase64,
+        'X-Appid': APPID,
+        'X-CheckSum': checkSum,
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
     }
+    return header
+# 上传文件并进行base64位编码
+with open(r'../source/CS1.jpg', 'rb') as f:
+    f1 = f.read()
 
-    return requset_url + "?" + urlencode(values)
+f1_base64 = str(base64.b64encode(f1), 'utf-8')
 
-
-url = '	https://webapi.xfyun.cn/v1/service/v1/ocr/general'
-
-body = {
-    "header": {
-        "app_id": APPId,
-        "status": 3
-    },
-    "parameter": {
-        "sf8e6aca1": {
-            "category": "ch_en_public_cloud",
-            "result": {
-                "encoding": "utf8",
-                "compress": "raw",
-                "format": "json"
-            }
+    
+data = {
+        'image': f1_base64
         }
-    },
-    "payload": {
-        "sf8e6aca1_data_1": {
-            "encoding": "jpg",
-            "image": str(base64.b64encode(imageBytes), 'UTF-8'),
-            "status": 3
-        }
-    }
-}
 
-request_url = assemble_ws_auth_url(url, "POST", APIKey, APISecret)
 
-headers = {'content-type': "application/json", 'host': 'api.xf-yun.com', 'app_id': APPId}
-print(request_url)
-response = requests.post(request_url, data=json.dumps(body), headers=headers)
-print(response)
-print(response.content)
+r = requests.post(URL, data=data, headers=getHeader())
+result = str(r.content, 'utf-8')
+# 错误码链接：https://www.xfyun.cn/document/error-code (code返回错误码时必看)
+print(result)
+input("Entry the any key to exit")
 
-print("resp=>" + response.content.decode())
-tempResult = json.loads(response.content.decode())
-
-finalResult = base64.b64decode(tempResult['payload']['result']['text']).decode()
-finalResult = finalResult.replace(" ", "").replace("\n", "").replace("\t", "").strip()
-print("text字段Base64解码后=>" + finalResult)
