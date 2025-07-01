@@ -1,0 +1,17 @@
+torch>=1.13.0
+torchvision>=0.14.0
+
+layoutparser==0.3.4 # 插图提取
+detectron2 # 插图提取后端
+
+# 图像处理库
+opencv-python>=4.7.0
+Pillow>=9.5.0
+numpy>=1.21.0
+
+# PDF处理库
+PyMuPDF>=1.22.0
+
+# 数据处理和序列化
+pathlib
+json5>=0.9.0
