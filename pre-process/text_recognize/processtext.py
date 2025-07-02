@@ -9,7 +9,7 @@ from email.utils import formatdate
 from pdf2image import convert_from_path
 from PIL import Image
 
-# ========== 配置 ==========
+# ========== 配置(调用的是科大讯飞的通用文档（大模型）) ==========
 APPID = "b97bb794"
 API_KEY = "c87bad1f164b70337becc4d833246d17"
 API_SECRET = "Y2ExMGViM2RjMjdjNmZhNjkyNjZkZDhi"
@@ -70,7 +70,7 @@ def build_body(app_id, image_path):
         }
     }
 
-# ========== 图片识别主函数 ==========
+# ========== 图片到md ==========
 def process_image(image_path, output_md_name):
     date_str = formatdate(timeval=None, localtime=False, usegmt=True)
     auth = get_authorization(API_KEY, API_SECRET, "api.xf-yun.com", REQUEST_LINE, date_str)
@@ -121,6 +121,39 @@ def process_image(image_path, output_md_name):
     else:
         print("⚠️ 未找到 markdown 内容")
 
+import subprocess
+
+# word to md，调用的是pandoc，需要安装pandoc
+def check_pandoc_installed():
+    try:
+        subprocess.run(["pandoc", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return True
+    except FileNotFoundError:
+        return False
+
+def process_docx(docx_path, output_md_name):
+    if not check_pandoc_installed():
+        print("❌ 未检测到 pandoc，请先安装：conda install -c conda-forge pandoc")
+        return
+
+    doc_basename = os.path.splitext(os.path.basename(docx_path))[0]
+    media_output_dir = f"media_{doc_basename}"
+    try:
+        command = [
+            "pandoc",
+            docx_path,
+            "-f", "docx",
+            "-t", "markdown",
+            "-o", output_md_name,
+            "--wrap=none",
+            f"--extract-media={media_output_dir}"  # 可选：将图片资源提取为本地文件夹
+        ]
+        subprocess.run(command, check=True)
+        print(f"✅ 成功使用 Pandoc 转换 Word 文件为 Markdown：{output_md_name}")
+    except Exception as e:
+        print(f"❌ Pandoc 转换失败: {e}")
+
+
 # ========== 输入路径判断 + 调用 ==========
 def process_input(input_path):
     if not os.path.exists(input_path):
@@ -133,7 +166,7 @@ def process_input(input_path):
     if os.path.exists(output_md_name):
         os.remove(output_md_name)
 
-    if ext.lower() in ['.jpg', '.jpeg', '.png']:
+    if ext.lower() in ['.jpg', '.png']:
         process_image(input_path, output_md_name)
 
     elif ext.lower() == '.pdf':
@@ -144,14 +177,24 @@ def process_input(input_path):
             page.save(temp_path, "PNG")
             process_image(temp_path, output_md_name)
             os.remove(temp_path)
+
+    elif ext.lower() == '.docx':
+        print(f"📄 正在处理 Word 文件: {input_path}")
+        process_docx(input_path, output_md_name)
+
+    elif ext.lower() == '.doc':
+        print(f"📄 请在WPS或office中手动打开并另存为docx文件！{input_path}")
+        return
+
     else:
         print("❌ 不支持的文件类型，请输入 .jpg/.png/.pdf 文件")
         return
+    
 
     print(f"\n✅ 最终 Markdown 文件已保存至: {output_md_name}")
 
 # ========== 启动 ==========
 if __name__ == "__main__":
-    inputfile="./example/CSfile.pdf"
+    inputfile="./example/MaoGai.docx"
     input_path = inputfile
     process_input(input_path)
