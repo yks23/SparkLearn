@@ -11,73 +11,105 @@ from urllib.parse import urlparse, urlencode
 from datetime import datetime
 from time import mktime
 from wsgiref.handlers import format_date_time
-
+import os
 import ssl
+from tqdm import tqdm
+import time
 
 class KnowledgeGraph:
     def __init__(self):
-        """初始化带知识点属性的图结构"""
-        self.graph = nx.DiGraph()  # 使用有向图表示知识点依赖关系
+        """初始化知识图谱结构"""
+        self.graph = nx.DiGraph()  # 使用有向图
         self.question_templates = {
             'definition': "请解释{concept}的核心概念",
             'relation': "{source}和{target}之间的关系主要体现在哪些方面？",
             'application': "如何运用{concept}解决实际问题？"
         }
-    def load_knowledge_graph(self,graph_file_path:str='./demo_kg/graph'):
+
+    def load_knowledge_graph(self, graph_file_path: str = './demo_kg/graph'):
+        """加载知识图谱（带进度显示）"""
+        print("🔍 开始加载知识图谱...")
+        start_time = time.time()
         
         nodes_path = graph_file_path + "/all_node.json"
         edges_path = graph_file_path + "/all_relations.json"
         
-        """从文件加载知识图谱"""
-        nodes = json.load(open(nodes_path, 'r', encoding='utf-8'))
-        edges = json.load(open(edges_path, 'r', encoding='utf-8'))
-        id_to_name = {node['id']: node['title'] for node in nodes}
-        for node in nodes:
-            if 'summary' in node:
-                self.graph.add_node(node['title'], description=node['summary'])
-            else:
-                self.graph.add_node(node['title'],description=node['description'][-1]) 
-        for edge in edges:
+        # 加载节点
+        print(f"📂 正在加载节点文件: {nodes_path}")
+        with open(nodes_path, 'r', encoding='utf-8') as f:
+            nodes = json.load(f)
+        print(f"✅ 已加载 {len(nodes)} 个节点")
+        
+        # 加载边
+        print(f"📂 正在加载边文件: {edges_path}")
+        with open(edges_path, 'r', encoding='utf-8') as f:
+            edges = json.load(f)
+        print(f"✅ 已加载 {len(edges)} 条边")
+        
+        # 处理节点（带进度条）
+        print("\n🛠️ 正在构建知识节点...")
+        id_to_name = {}
+        for node in tqdm(nodes, desc="处理节点"):
+            id_to_name[node['id']] = node['title']
+            description = node['summary'] if 'summary' in node else node['descriptions'][-1]
+            self.graph.add_node(node['title'], description=description)
+        
+        # 处理边（带进度条）
+        print("\n🛠️ 正在构建知识关系...")
+        for edge in tqdm(edges, desc="处理边"):
             source = id_to_name[edge['source_id']]
             target = id_to_name[edge['target_id']]
-            type = edge['type']+edge['description'][-1] if len(edge['description']) > 0 else edge['type']
-            weight = edge.get('weight', 1.0)
-            self.graph.add_edge(source, target, type = type, weight=weight)
-            
-    def add_knowledge_node(self, concept: str, metadata: Dict):
-        """添加知识点节点"""
-        self.graph.add_node(concept, **metadata)
+            rel_type = edge['type'] + edge['descriptions'][-1] if edge['descriptions'] else edge['type']
+            self.graph.add_edge(source, target, type=rel_type, weight=edge.get('weight', 1.0))
         
-    def add_relation(self, source: str, target: str, rel_type: str, weight: float = 1.0):
-        """添加知识点关系边"""
-        self.graph.add_edge(source, target, relation=rel_type, weight=weight)
-    
-    def generate_question_prompts(self) -> List[Tuple[str, str]]:
-        """生成基于知识结构的提示词对(问题提示, 参考答案提示)"""
-        prompts = []
+        print(f"\n🎉 知识图谱加载完成! 共 {len(nodes)} 节点, {len(edges)} 边, 耗时 {time.time()-start_time:.2f} 秒")
+
+
+    def generate_questions(self) -> List[Dict[str, str]]:
+        """生成三类问题（适配当前数据结构）"""
+        questions = []
         
-        # 1. 概念定义类问题
+        # 1. 概念定义问题（使用节点描述）
         for concept in self.graph.nodes:
-            meta = self.graph.nodes[concept]
-            prompt = f"作为{meta.get('domain', '某领域')}专家，请用{meta.get('difficulty', '简单')}语言解释：{concept}"
-            answer_hint = f"{concept}是指{meta.get('definition', '暂无标准定义')}"
-            prompts.append((prompt, answer_hint))
+            desc = self.graph.nodes[concept]['descriptions']
+            questions.append({
+                'type': 'definition',
+                'question': f"请解释'{concept}'的概念",
+                'reference': f"{concept}是指：{desc}",
+                'concept': concept
+            })
         
-        # 2. 关系类问题
+        # 2. 关系问题（使用边信息）
         for src, dst, data in self.graph.edges(data=True):
-            prompt = (f"在{self.graph.nodes[src].get('domain', '该领域')}中，"
-                    f"{src}如何通过{data['relation']}影响{dst}？")
-            answer_hint = f"典型影响包括：{data.get('evidence', '文献[1]证明...')}"
-            prompts.append((prompt, answer_hint))
+            questions.append({
+                'type': 'relation',
+                'question': f"描述'{src}'和'{dst}'之间的{data['type']}关系",
+                'reference': f"关系类型：{data['type']}\n关系强度：{data['weight']}",
+                'source': src,
+                'target': dst
+            })
         
-        # 3. 综合应用题
-        for concept in nx.center(self.graph):
-            linked = list(self.graph.neighbors(concept))
-            prompt = (f"给定场景：{self.graph.nodes[concept].get('scenario', '常规场景')}，"
-                    f"请分析{concept}与{'、'.join(linked[:3])}的协同作用")
-            prompts.append((prompt, "需考虑多因素耦合效应"))
+        # 3. 应用问题（基于连接性）
+        for concept in self.graph.nodes:
+            neighbors = list(self.graph.neighbors(concept))
+            if neighbors:
+                questions.append({
+                    'type': 'application',
+                    'question': f"举例说明'{concept}'如何影响'{neighbors[0]}'",
+                    'reference': f"通过{self.graph.edges[concept, neighbors[0]]['type']}关系产生影响",
+                    'concept': concept,
+                    'related': neighbors[0]
+                })
         
-        return prompts
+        return questions
+
+    def get_node_description(self, concept: str) -> str:
+        """获取节点描述"""
+        return self.graph.nodes.get(concept, {}).get('description', '无描述')
+
+    def get_relation_info(self, source: str, target: str) -> Dict:
+        """获取关系信息"""
+        return self.graph.edges.get((source, target), {})
     
 class SparkAPI:
     def __init__(self, appid, api_key, api_secret, spark_url="wss://spark-api.xf-yun.com/v1/x1"):
@@ -190,7 +222,8 @@ class KnowledgeQuestionGenerator(SparkAPI):
                           "- 题干清晰明确\n"
                           "- 选项4个，其中1个正确\n"
                           "- 难度{level}\n"
-                          "- 考察重点：{focus}",
+                          "- 考察重点：{focus}\n"
+                          "- 知识点描述：{description}",
                 'focus_map': {
                     'definition': '概念理解',
                     'relation': '关联分析'
@@ -200,24 +233,26 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 'template': "请生成关于{concept}的简答题，要求：\n"
                           "- 问题聚焦{aspect}\n"
                           "- 期望答案长度{length}\n"
-                          "- 包含评分要点"
+                          "- 知识点描述：{description}"
             }
         }
 
     def generate_by_concept(self, concept: str, q_type: str = 'mcq') -> List[str]:
-        """基于特定知识点生成问题"""
+        """基于特定知识点生成问题（适配当前数据结构）"""
         if concept not in self.kg.graph:
             raise ValueError(f"未知知识点: {concept}")
         
         node_data = self.kg.graph.nodes[concept]
+        print("-------before------")
+        print("node_data: ",node_data)
         params = {
             'concept': concept,
-            'level': node_data.get('difficulty', '中等'),
-            'domain': node_data.get('domain', '通用领域')
+            'level': self._infer_difficulty(concept),  # 基于连接数推断难度
+            'description': node_data['description']  # 使用节点描述
         }
-        
+        print("1111111111111111")
         if q_type == 'mcq':
-            # 自动确定考察重点
+            print("-----mcq----------")
             neighbors = list(self.kg.graph.neighbors(concept))
             focus = 'relation' if neighbors else 'definition'
             params.update({
@@ -225,38 +260,253 @@ class KnowledgeQuestionGenerator(SparkAPI):
             })
             prompt = self.question_types['mcq']['template'].format(**params)
         else:
+            print("-----short_answer----------")
             prompt = self.question_types['short_answer']['template'].format(
-                aspect=node_data.get('key_aspect', '核心特征'),
-                length='3-5句话'
+                concept=concept,  # 添加缺失的关键参数
+                aspect=self._infer_aspect(concept),  # 自动推断考察重点
+                length='3-5句话',
+                description=node_data['description']
             )
-        
+        print("222222222222222222222")
         return self.generate_questions(prompt)
 
-    def generate_relation_questions(self, relation_type: str) -> Dict[str, List[str]]:
-        """生成特定关系类型的问题集"""
-        results = {}
-        for src, dst, data in self.kg.graph.edges(data=True):
-            if data['relation'] == relation_type:
-                prompt = (f"请以选择题形式考察{src}与{dst}的{relation_type}关系：\n"
-                         f"- 正确选项应体现{data.get('evidence', '权威文献')}结论\n"
-                         f"- 干扰项包含常见误解")
-                questions = self.generate_questions(prompt)
-                results[f"{src}→{dst}"] = questions
-        return results
+    # def generate_relation_questions(self, relation_type: str = None) -> Dict[str, List[str]]:
+    #     """生成关系类问题（适配当前边数据结构）"""
+    #     results = {}
+    #     for src, dst, data in self.kg.graph.edges(data=True):
+    #         if relation_type is None or data['type'] == relation_type:
+    #             prompt = (
+    #                 f"请生成考察以下关系的题目：\n"
+    #                 f"- 知识点1：{src}（{self.kg.graph.nodes[src]['description']}）\n"
+    #                 f"- 知识点2：{dst}（{self.kg.graph.nodes[dst]['description']}）\n"
+    #                 f"- 关系类型：{data['type']}\n"
+    #                 f"- 关系权重：{data.get('weight', 1.0)}\n"
+    #                 f"要求：\n"
+    #                 f"- 选择题需包含反映该关系特征的选项\n"
+    #                 f"- 简答题需评估对该关系的理解深度"
+    #             )
+    #             questions = self.generate_questions(prompt)
+    #             results[f"{src}→{dst}({data['type']})"] = questions
+    #     return results
+
+    def _infer_difficulty(self, concept: str) -> str:
+        """基于连接数推断难度"""
+        degree = len(list(self.kg.graph.neighbors(concept)))
+        print(f"🔍 推断知识点 '{concept}' 的难度，连接数: {degree}")
+        if degree == 0:
+            return "简单"
+        elif degree <= 3:
+            return "中等" 
+        else:
+            return "困难"
+
+    def _infer_aspect(self, concept: str) -> str:
+        """从描述中提取关键考察方面"""
+        desc = self.kg.graph.nodes[concept]['description']
+        print("desc:",desc)
+        if len(desc) < 20:
+            return "核心定义"
+        elif "应用" in desc or "使用" in desc:
+            return "实际应用"
+        else:
+            return "关键特征"
     
+    def generate_and_save(self, output_path: str = "./questions", formats: List[str] = ["md", "txt"], 
+                        concept: str = None, relation_type: str = None):
+        """生成并保存问题（带进度显示）"""
+        print("\n" + "="*50)
+        print("🚀 开始生成问题集")
+        start_time = time.time()
+        
+        os.makedirs(output_path, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        # 生成问题
+        print("\n🔧 正在生成问题...")
+        if concept:
+            print(f"  专注生成知识点: {concept}")
+            questions = {
+                "concept_questions": [
+                    ("选择题", self._generate_with_progress(concept, 'mcq')),
+                    ("简答题", self._generate_with_progress(concept, 'short_answer'))
+                ]
+            }
+        elif relation_type:
+            print(f"  专注生成关系类型: {relation_type}")
+            questions = {"relation_questions": self.generate_relation_questions(relation_type)}
+        else:
+            print("  生成全部知识点和关系的问题")
+            questions = {
+                "all_concepts": self._generate_all_concept_questions(),
+                "all_relations": self.generate_relation_questions()
+            }
+        
+        # 保存文件
+        print("\n💾 正在保存文件...")
+        for fmt in formats:
+            if fmt == "md":
+                path = f"{output_path}/questions_{timestamp}.md"
+                self._save_as_markdown(questions, path)
+                print(f"  ✅ Markdown文件已保存: {path}")
+            elif fmt == "txt":
+                path = f"{output_path}/questions_{timestamp}.txt"
+                self._save_as_text(questions, path)
+                print(f"  ✅ 文本文件已保存: {path}")
+        
+        # 预览
+        print("\n🔍 生成结果预览:")
+        self._print_questions_preview(questions)
+        
+        print(f"\n🎉 全部完成! 总耗时 {time.time()-start_time:.2f} 秒")
+        print("="*50)
+
+    def _generate_with_progress(self, concept: str, q_type: str) -> List[str]:
+        """带进度显示的问题生成"""
+        try:
+            print(f"  正在生成 {q_type} 问题: {concept[:20]}...")
+            start_time = time.time()
+            result = self.generate_by_concept(concept, q_type)
+            print(f"  ✅ 生成完成 ({len(result)} 个问题, 耗时 {time.time()-start_time:.2f} 秒)")
+            return result
+        except Exception as e:
+            print(f"  ❌ 生成失败: {str(e)}")
+            return []
+
+    def _generate_all_concept_questions(self) -> Dict[str, List[str]]:
+        """生成所有知识点的问题（带进度条）"""
+        results = {}
+        concepts = list(self.kg.graph.nodes)
+        print(f"  需要处理 {len(concepts)} 个知识点")
+        cnt=0
+        for concept in tqdm(concepts, desc="生成概念问题"):
+            cnt+=1
+            if cnt<4:
+                try:
+                    results[concept] = {
+                        "mcq": self.generate_by_concept(concept, 'mcq'),
+                        "short_answer": self.generate_by_concept(concept, 'short_answer')
+                    }
+                except Exception as e:
+                    print(f"\n⚠️ 生成失败 [{concept}]: {str(e)}")
+                    continue
+                
+        return results
+
+    def generate_relation_questions(self, relation_type: str = None) -> Dict[str, List[str]]:
+        """生成关系类问题（带进度显示）"""
+        results = {}
+        edges = [e for e in self.kg.graph.edges(data=True) 
+                if relation_type is None or e[2]['type'] == relation_type]
+        
+        if not edges:
+            print("⚠️ 未找到匹配的关系类型" if relation_type else "⚠️ 知识图谱中没有关系数据")
+            return {}
+        
+        print(f"  正在处理 {len(edges)} 条关系...")
+        cnt=0
+        for src, dst, data in tqdm(edges, desc="生成关系问题"):
+            cnt+=1
+            if cnt<2:
+                try:
+                    prompt = (
+                        f"请生成考察以下关系的题目：\n"
+                        f"- 知识点1：{src}\n"
+                        f"- 知识点2：{dst}\n"
+                        f"- 关系类型：{data['type']}\n"
+                        f"要求：\n"
+                        f"- 选择题需包含反映该关系特征的选项\n"
+                        f"- 简答题需评估对该关系的理解深度\n"
+                        f"- 不要在题干和选项中出现“第几章”等与知识点无关的冗杂字样"
+                    )
+                    questions = self.generate_questions(prompt)
+                    print(questions)
+                    results[f"{src}→{dst}({data['type']})"] = questions
+                except Exception as e:
+                    print(f"\n⚠️ 生成失败 [{src}→{dst}]: {str(e)}")
+                    continue
+            else:
+                break
+                    
+        return results
+    def _save_as_markdown(self, questions: Dict, filepath: str):
+        """保存为Markdown格式"""
+        with open(filepath, 'w', encoding='utf-8') as f:
+            for category, content in questions.items():
+                f.write(f"## {category.replace('_', ' ').title()}\n\n")
+                if isinstance(content, dict):
+                    for key, value in content.items():
+                        f.write(f"### {key}\n")
+                        if isinstance(value, list):
+                            for q in value:
+                                f.write(f"- {q}\n")
+                        elif isinstance(value, dict):
+                            for sub_key, sub_value in value.items():
+                                f.write(f"#### {sub_key}\n")
+                                for q in sub_value:
+                                    f.write(f"- {q}\n")
+                        f.write("\n")
+                else:
+                    for q in content:
+                        f.write(f"- {q}\n")
+                f.write("\n")
+
+    def _save_as_text(self, questions: Dict, filepath: str):
+        """保存为纯文本格式"""
+        with open(filepath, 'w', encoding='utf-8') as f:
+            for category, content in questions.items():
+                f.write(f"【{category.replace('_', ' ').upper()}】\n\n")
+                if isinstance(content, dict):
+                    for key, value in content.items():
+                        f.write(f"*{key}*\n")
+                        if isinstance(value, list):
+                            for q in value:
+                                f.write(f"  - {q}\n")
+                        elif isinstance(value, dict):
+                            for sub_key, sub_value in value.items():
+                                f.write(f"  {sub_key}:\n")
+                                for q in sub_value:
+                                    f.write(f"    - {q}\n")
+                        f.write("\n")
+                else:
+                    for q in content:
+                        f.write(f"- {q}\n")
+                f.write("\n")
+
+    def _print_questions_preview(self, questions: Dict):
+        """控制台打印预览"""
+        print("\n=== 问题预览 ===")
+        for category, content in questions.items():
+            print(f"\n【{category.replace('_', ' ').title()}】")
+            if isinstance(content, dict):
+                for key, value in content.items():
+                    print(f"\n* {key}:")
+                    if isinstance(value, list):
+                        for i, q in enumerate(value[:2], 1):  # 每类只显示前2个
+                            print(f"  {i}. {q[:60]}...")
+                    elif isinstance(value, dict):
+                        for sub_key, sub_value in value.items():
+                            print(f"  - {sub_key}:")
+                            for i, q in enumerate(sub_value[:1], 1):  # 每子类只显示1个
+                                print(f"    {i}. {q[:60]}...")
+            else:
+                for i, q in enumerate(content[:3], 1):  # 只显示前3个
+                    print(f"{i}. {q[:60]}...")
+        
+
 # 1. 构建知识图谱
 kg = KnowledgeGraph()
-kg.add_knowledge_node("气候变化", {
-    'domain': '环境科学',
-    'difficulty': '中等',
-    'definition': '全球气候系统的长期变化过程',
-    'key_aspects': ['温室效应', '极端天气']
-})
-kg.add_knowledge_node("碳中和", {
-    'domain': '能源政策',
-    'difficulty': '进阶'
-})
-kg.add_relation("气候变化", "碳中和", "解决方案", weight=0.8)
+kg.load_knowledge_graph()
+# kg.add_knowledge_node("气候变化", {
+#     'domain': '环境科学',
+#     'difficulty': '中等',
+#     'definition': '全球气候系统的长期变化过程',
+#     'key_aspects': ['温室效应', '极端天气']
+# })
+# kg.add_knowledge_node("碳中和", {
+#     'domain': '能源政策',
+#     'difficulty': '进阶'
+# })
+# kg.add_relation("气候变化", "碳中和", "解决方案", weight=0.8)
 
 # 2. 初始化生成器
 generator = KnowledgeQuestionGenerator(
@@ -266,13 +516,20 @@ generator = KnowledgeQuestionGenerator(
     api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
 )
 
-# 3. 生成两类问题
-print("=== 概念测试题 ===")
-for q in generator.generate_by_concept("气候变化"):
-    print(q)
+# 生成所有关系问题
+all_relation_questions = generator.generate_relation_questions()
 
-print("\n=== 关系测试题 ===")
-for rel, questions in generator.generate_relation_questions("解决方案").items():
-    print(f"\n关系 {rel}:")
-    for q in questions:
-        print(f"- {q}")
+# 生成特定类型关系问题
+causal_questions = generator.generate_relation_questions("因果关系")
+
+generator.generate_and_save()
+# # 3. 生成两类问题
+# print("=== 概念测试题 ===")
+# for q in generator.generate_by_concept("气候变化"):
+#     print(q)
+
+# print("\n=== 关系测试题 ===")
+# for rel, questions in generator.generate_relation_questions("解决方案").items():
+#     print(f"\n关系 {rel}:")
+#     for q in questions:
+#         print(f"- {q}")
