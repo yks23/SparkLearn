@@ -11,6 +11,7 @@ from urllib.parse import urlparse, urlencode
 from datetime import datetime
 from time import mktime
 from wsgiref.handlers import format_date_time
+
 import ssl
 
 class KnowledgeGraph:
@@ -22,7 +23,27 @@ class KnowledgeGraph:
             'relation': "{source}和{target}之间的关系主要体现在哪些方面？",
             'application': "如何运用{concept}解决实际问题？"
         }
-
+    def load_knowledge_graph(self,graph_file_path:str='./demo_kg/graph'):
+        
+        nodes_path = graph_file_path + "/all_node.json"
+        edges_path = graph_file_path + "/all_relations.json"
+        
+        """从文件加载知识图谱"""
+        nodes = json.load(open(nodes_path, 'r', encoding='utf-8'))
+        edges = json.load(open(edges_path, 'r', encoding='utf-8'))
+        id_to_name = {node['id']: node['title'] for node in nodes}
+        for node in nodes:
+            if 'summary' in node:
+                self.graph.add_node(node['title'], description=node['summary'])
+            else:
+                self.graph.add_node(node['title'],description=node['description'][-1]) 
+        for edge in edges:
+            source = id_to_name[edge['source_id']]
+            target = id_to_name[edge['target_id']]
+            type = edge['type']+edge['description'][-1] if len(edge['description']) > 0 else edge['type']
+            weight = edge.get('weight', 1.0)
+            self.graph.add_edge(source, target, type = type, weight=weight)
+            
     def add_knowledge_node(self, concept: str, metadata: Dict):
         """添加知识点节点"""
         self.graph.add_node(concept, **metadata)
