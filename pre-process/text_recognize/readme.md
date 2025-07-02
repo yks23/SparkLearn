@@ -4,9 +4,7 @@
 
 processtext.py的环境相关：
 
-pip install pdf2image pillow
-
-pip install requests
+与python有关的依赖已写进requirements.txt 可用 pip install -r requirements.txt 进行下载  
 
 conda install -c conda-forge poppler
 

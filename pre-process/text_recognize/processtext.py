@@ -8,6 +8,8 @@ from datetime import datetime
 from email.utils import formatdate
 from pdf2image import convert_from_path
 from PIL import Image
+import html2text
+from urllib.parse import urlparse
 
 # ========== 配置(调用的是科大讯飞的通用文档（大模型）) ==========
 APPID = "b97bb794"
@@ -70,8 +72,132 @@ def build_body(app_id, image_path):
         }
     }
 
+# ========== 提取并保存图片，返回图片引用信息 ==========
+def extract_and_save_images(parsed_json, page_image, page_num, base_name):
+    images_dir = f"images_{base_name}"
+    os.makedirs(images_dir, exist_ok=True)
+    
+    img_width, img_height = page_image.size
+    image_refs = {}
+    
+    # ========== 提取图片说明文字 ==========
+    def extract_text_from_note(content):
+        if isinstance(content, list):
+            for item in content:
+                result = extract_text_from_note(item)
+                if result:
+                    return result
+        elif isinstance(content, dict):
+            if "text" in content:
+                return content["text"][0] if isinstance(content["text"], list) else str(content["text"])
+            if "content" in content:
+                return extract_text_from_note(content["content"])
+        return ""
+
+    def find_images(obj):
+        if isinstance(obj, dict):
+            if obj.get("type") == "graph" and "note" in obj:
+                coord = obj.get("coord", [])
+                if len(coord) >= 2:
+                    y_pos = coord[0]["y"]  # 使用y坐标确定文档位置
+                    
+                    title = ""
+                    for note in obj["note"]:
+                        if "content" in note:
+                            title = extract_text_from_note(note["content"])
+                            break
+                    
+                    if not title:
+                        title = f"图片_{page_num}_{len(image_refs)+1}"
+                    
+                    try:
+                        x_coords = [point["x"] for point in coord]
+                        y_coords = [point["y"] for point in coord]
+
+                        left = max(0, min(x_coords))
+                        right = min(img_width, max(x_coords))
+                        top = max(0, min(y_coords))
+                        bottom = min(img_height, max(y_coords))
+                        
+                        cropped = page_image.crop((left, top, right, bottom))
+                        
+                        img_filename = f"page_{page_num}_img_{len(image_refs)+1}.png"
+                        img_path = os.path.join(images_dir, img_filename)
+                        cropped.save(img_path)
+                        
+                        img_ref = f"\n\n![{title}](images_{base_name}/{img_filename})\n\n"
+                        image_refs[y_pos] = img_ref
+                        
+                        print(f"✅ 保存图片: {img_filename}")
+                        
+                    except Exception as e:
+                        print(f"❌ 图片保存失败: {e}")
+            
+            # 递归查找
+            for value in obj.values():
+                if isinstance(value, (dict, list)):
+                    find_images(value)
+        elif isinstance(obj, list):
+            for item in obj:
+                find_images(item)
+    
+    find_images(parsed_json)
+    return image_refs
+
+# ========== 根据坐标插入图片 ==========
+def insert_images_to_markdown(markdown_doc, image_refs, parsed_json):
+    if not image_refs:
+        return markdown_doc
+    
+    text_to_images = {}
+    head_images = []  # 用于存储开头无文本时出现的图片
+    last_text = None
+    has_seen_text = False
+
+    def collect_text_image_pairs(obj):
+        nonlocal last_text, has_seen_text
+
+        if isinstance(obj, dict):
+            if obj.get("type") in ["paragraph", "textline"] and "text" in obj:
+                texts = obj.get("text", [])
+                text_content = texts[0] if isinstance(texts, list) and texts else ""
+                if text_content.strip():
+                    last_text = text_content.strip()
+                    has_seen_text = True
+
+            elif obj.get("type") == "graph" and obj.get("coord"):
+                img_y = obj["coord"][0]["y"]
+                if img_y in image_refs:
+                    img_ref = image_refs[img_y]
+                    if has_seen_text and last_text:
+                        text_to_images.setdefault(last_text, []).append(img_ref)
+                    else:
+                        head_images.append(img_ref)
+
+            for value in obj.values():
+                collect_text_image_pairs(value)
+
+        elif isinstance(obj, list):
+            for item in obj:
+                collect_text_image_pairs(item)
+
+    collect_text_image_pairs(parsed_json)
+
+    result = markdown_doc
+    for text, img_list in text_to_images.items():
+        if text in result:
+            all_imgs = "".join(img_list)
+            result = result.replace(text, text + all_imgs, 1)
+
+    if head_images:
+        prefix_imgs = "".join(head_images)
+        result = prefix_imgs + "\n\n" + result
+
+    return result
+
+
 # ========== 图片到md ==========
-def process_image(image_path, output_md_name):
+def process_image(image_path, output_md_name, page_num=1):
     date_str = formatdate(timeval=None, localtime=False, usegmt=True)
     auth = get_authorization(API_KEY, API_SECRET, "api.xf-yun.com", REQUEST_LINE, date_str)
 
@@ -104,8 +230,13 @@ def process_image(image_path, output_md_name):
         parsed_json = {}
         decoded_text = "[空结果]"
 
-    print(f"\n✅ {os.path.basename(image_path)} 识别成功，输出内容：\n")
-    print(decoded_text)
+    base_name = os.path.splitext(os.path.basename(output_md_name))[0]
+    image_refs = {}
+
+    if parsed_json and os.path.exists(image_path):
+        from PIL import Image
+        page_image = Image.open(image_path)
+        image_refs = extract_and_save_images(parsed_json, page_image, page_num, base_name)
 
     markdown_doc = ""
     for item in parsed_json.get("document", []):
@@ -115,6 +246,8 @@ def process_image(image_path, output_md_name):
 
     if markdown_doc:
         markdown_doc = markdown_doc.replace("\\n", "\n")
+        markdown_doc = insert_images_to_markdown(markdown_doc, image_refs, parsed_json)
+
         with open(output_md_name, "a", encoding="utf-8") as f:
             f.write(markdown_doc + "\n\n")
         print(f"✅ 写入 Markdown 文件: {output_md_name}")
@@ -153,9 +286,65 @@ def process_docx(docx_path, output_md_name):
     except Exception as e:
         print(f"❌ Pandoc 转换失败: {e}")
 
+# ========== HTML到md ==========
+def process_html(input_source, output_md_name):
+    """处理HTML文件或URL转换为Markdown"""
+    try:
+        # 判断是URL还是文件路径
+        if input_source.startswith(('http://', 'https://')):
+            html_content = fetch_from_url(input_source)
+        else:
+            html_content = read_html_file(input_source)
+        
+        # 配置转换器
+        converter = html2text.HTML2Text()
+        converter.ignore_links = False
+        converter.ignore_images = False
+        converter.body_width = 0
+        converter.unicode_snob = True
+        
+        markdown_content = converter.handle(html_content).strip()
+        
+        with open(output_md_name, "w", encoding="utf-8") as f:
+            f.write(markdown_content)
+        print(f"✅ HTML转换完成: {output_md_name}")
+        
+    except Exception as e:
+        print(f"❌ HTML转换失败: {e}")
+
+def fetch_from_url(url):
+    """从URL获取HTML内容"""
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+    response = requests.get(url, headers=headers, timeout=30)
+    response.raise_for_status()
+    response.encoding = response.apparent_encoding
+    return response.text
+
+def read_html_file(file_path):
+    """读取本地HTML文件"""
+    encodings = ['utf-8', 'gbk', 'gb2312', 'latin1']
+    for encoding in encodings:
+        try:
+            with open(file_path, 'r', encoding=encoding) as f:
+                return f.read()
+        except UnicodeDecodeError:
+            continue
+    raise UnicodeDecodeError("无法解码HTML文件")
 
 # ========== 输入路径判断 + 调用 ==========
 def process_input(input_path):
+    if input_path.startswith(('http://', 'https://')):
+        from urllib.parse import urlparse
+        parsed_url = urlparse(input_path)
+        name = parsed_url.netloc.replace('.', '_')
+        output_md_name = f"{name}_output.md"
+        if os.path.exists(output_md_name):
+            os.remove(output_md_name)
+        print(f"🌐 正在处理 URL: {input_path}")
+        process_html(input_path, output_md_name)
+        print(f"\n✅ 最终 Markdown 文件已保存至: {output_md_name}")
+        return
+
     if not os.path.exists(input_path):
         print("❌ 输入文件不存在")
         return
@@ -175,7 +364,7 @@ def process_input(input_path):
         for i, page in enumerate(pages):
             temp_path = f"temp_page_{i}.png"
             page.save(temp_path, "PNG")
-            process_image(temp_path, output_md_name)
+            process_image(temp_path, output_md_name, page_num=i+1)
             os.remove(temp_path)
 
     elif ext.lower() == '.docx':
@@ -185,9 +374,13 @@ def process_input(input_path):
     elif ext.lower() == '.doc':
         print(f"📄 请在WPS或office中手动打开并另存为docx文件！{input_path}")
         return
+    
+    elif ext.lower() in ['.html', '.htm']:
+        print(f"🌐 正在处理 HTML 文件: {input_path}")
+        process_html(input_path, output_md_name)
 
     else:
-        print("❌ 不支持的文件类型，请输入 .jpg/.png/.pdf 文件")
+        print("❌ 不支持的文件类型，请输入 .jpg/.png/.pdf/.docx/.html/.htm 文件或URL")
         return
     
 
@@ -195,6 +388,7 @@ def process_input(input_path):
 
 # ========== 启动 ==========
 if __name__ == "__main__":
-    inputfile="./example/MaoGai.docx"
-    input_path = inputfile
+    inputfile="./example/wangyuan.pdf"
+    # input_path = inputfile
+    input_path = "https://example.com"
     process_input(input_path)
