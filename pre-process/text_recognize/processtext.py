@@ -270,7 +270,7 @@ def process_docx(docx_path, output_md_name):
         return
 
     doc_basename = os.path.splitext(os.path.basename(docx_path))[0]
-    media_output_dir = f"media_{doc_basename}"
+    media_output_dir = f"outputs/media_{doc_basename}"
     try:
         command = [
             "pandoc",
@@ -333,11 +333,13 @@ def read_html_file(file_path):
 
 # ========== 输入路径判断 + 调用 ==========
 def process_input(input_path):
+    os.makedirs("outputs", exist_ok=True)
+
     if input_path.startswith(('http://', 'https://')):
         from urllib.parse import urlparse
         parsed_url = urlparse(input_path)
         name = parsed_url.netloc.replace('.', '_')
-        output_md_name = f"{name}_output.md"
+        output_md_name = f"outputs/{name}_output.md"
         if os.path.exists(output_md_name):
             os.remove(output_md_name)
         print(f"🌐 正在处理 URL: {input_path}")
@@ -362,7 +364,7 @@ def process_input(input_path):
         print(f"📄 正在将 PDF 拆分为图片: {input_path}")
         pages = convert_from_path(input_path, dpi=300)
         for i, page in enumerate(pages):
-            temp_path = f"temp_page_{i}.png"
+            temp_path = f"outputs/temp_page_{i}.png"
             page.save(temp_path, "PNG")
             process_image(temp_path, output_md_name, page_num=i+1)
             os.remove(temp_path)
@@ -386,9 +388,17 @@ def process_input(input_path):
 
     print(f"\n✅ 最终 Markdown 文件已保存至: {output_md_name}")
 
+
 # ========== 启动 ==========
 if __name__ == "__main__":
-    inputfile="./example/wangyuan.pdf"
-    # input_path = inputfile
-    input_path = "https://example.com"
+    import sys
+    
+    if len(sys.argv) != 2:
+        print("使用方法: python processtext.py <文件路径或URL>")
+        print("支持格式: .jpg, .png, .pdf, .docx, .html, .htm 或 URL")
+        print("示例: python processtext.py example.pdf")
+        print("示例: python processtext.py https://example.com")
+        sys.exit(1)
+    
+    input_path = sys.argv[1]
     process_input(input_path)
