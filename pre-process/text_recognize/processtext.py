@@ -2,9 +2,10 @@ import requests
 import base64
 import hashlib
 import hmac
+import os
+import json
 from datetime import datetime
 from email.utils import formatdate
-import json
 from pdf2image import convert_from_path
 from PIL import Image
 
@@ -15,8 +16,6 @@ API_SECRET = "Y2ExMGViM2RjMjdjNmZhNjkyNjZkZDhi"
 HOST = "cbm01.cn-huabei-1.xf-yun.com"
 REQUEST_LINE = "POST /v1/private/se75ocrbm HTTP/1.1"
 URL_PATH = "/v1/private/se75ocrbm"
-IMAGE_PATH = "./source/formula_text.png"  # 替换为你的图片路径
-
 
 # ========== 鉴权函数 ==========
 def get_authorization(api_key, api_secret, host, request_line, date_str):
@@ -71,20 +70,15 @@ def build_body(app_id, image_path):
         }
     }
 
-
-
-
-
-# ========== 主流程 ==========
-def main():
+# ========== 图片识别主函数 ==========
+def process_image(image_path, output_md_name):
     date_str = formatdate(timeval=None, localtime=False, usegmt=True)
     auth = get_authorization(API_KEY, API_SECRET, "api.xf-yun.com", REQUEST_LINE, date_str)
 
-    # 构造带鉴权参数的 URL（注意 host 固定写 api.xf-yun.com）
     url = f"https://{HOST}{URL_PATH}" \
           f"?authorization={auth}&host=api.xf-yun.com&date={requests.utils.quote(date_str)}"
 
-    body = build_body(APPID, IMAGE_PATH)
+    body = build_body(APPID, image_path)
 
     response = requests.post(url, headers={"Content-Type": "application/json"}, data=json.dumps(body))
 
@@ -97,12 +91,11 @@ def main():
         print("❌ 识别失败:", result["header"])
         return
 
-        # 解码 base64 内容为文本
     text = result["payload"]["result"].get("text", "")
     if text:
         try:
             decoded_text = base64.b64decode(text).decode("utf-8")
-            parsed_json = json.loads(decoded_text)  # 关键步骤！
+            parsed_json = json.loads(decoded_text)
         except Exception as e:
             print(f"❌ 解码失败: {e}")
             parsed_json = {}
@@ -111,25 +104,54 @@ def main():
         parsed_json = {}
         decoded_text = "[空结果]"
 
-    print("\n✅ 识别成功，输出内容：\n")
+    print(f"\n✅ {os.path.basename(image_path)} 识别成功，输出内容：\n")
     print(decoded_text)
 
-    # 提取 markdown 段落
     markdown_doc = ""
     for item in parsed_json.get("document", []):
         if item.get("name") == "markdown":
             markdown_doc = item.get("value", "")
-            break  # 只取第一段
+            break
 
     if markdown_doc:
-        markdown_doc = markdown_doc.replace("\\n", "\n")  # 转换换行符
-        print("\n✅ 提取成功，输出内容：\n")
-        print(markdown_doc)
-        with open("result.md", "w", encoding="utf-8") as f:
-            f.write(markdown_doc)
+        markdown_doc = markdown_doc.replace("\\n", "\n")
+        with open(output_md_name, "a", encoding="utf-8") as f:
+            f.write(markdown_doc + "\n\n")
+        print(f"✅ 写入 Markdown 文件: {output_md_name}")
     else:
         print("⚠️ 未找到 markdown 内容")
 
+# ========== 输入路径判断 + 调用 ==========
+def process_input(input_path):
+    if not os.path.exists(input_path):
+        print("❌ 输入文件不存在")
+        return
 
+    name, ext = os.path.splitext(os.path.basename(input_path))
+    output_md_name = f"{name}_output.md"
+
+    if os.path.exists(output_md_name):
+        os.remove(output_md_name)
+
+    if ext.lower() in ['.jpg', '.jpeg', '.png']:
+        process_image(input_path, output_md_name)
+
+    elif ext.lower() == '.pdf':
+        print(f"📄 正在将 PDF 拆分为图片: {input_path}")
+        pages = convert_from_path(input_path, dpi=300)
+        for i, page in enumerate(pages):
+            temp_path = f"temp_page_{i}.png"
+            page.save(temp_path, "PNG")
+            process_image(temp_path, output_md_name)
+            os.remove(temp_path)
+    else:
+        print("❌ 不支持的文件类型，请输入 .jpg/.png/.pdf 文件")
+        return
+
+    print(f"\n✅ 最终 Markdown 文件已保存至: {output_md_name}")
+
+# ========== 启动 ==========
 if __name__ == "__main__":
-    main()
+    inputfile="./example/CSfile.pdf"
+    input_path = inputfile
+    process_input(input_path)
