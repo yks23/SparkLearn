@@ -20,7 +20,7 @@ class DocumentProcessor:
             'APPID': "b97bb794",
             'API_KEY': "c87bad1f164b70337becc4d833246d17", 
             'API_SECRET': "Y2ExMGViM2RjMjdjNmZhNjkyNjZkZDhi",
-            'HOST': "cbm01.cn-huabei-1.xf-yun.com",
+            'HOST': "api.xf-yun.com",
             'REQUEST_LINE': "POST /v1/private/se75ocrbm HTTP/1.1",
             'URL_PATH': "/v1/private/se75ocrbm"
         }
@@ -77,7 +77,7 @@ class DocumentProcessor:
         date_str = formatdate(timeval=None, localtime=False, usegmt=True)
         auth = self._get_authorization(date_str)
         
-        url = f"https://{self.config['HOST']}{self.config['URL_PATH']}" \
+        url = f"https://cbm01.cn-huabei-1.xf-yun.com{self.config['URL_PATH']}" \
               f"?authorization={auth}&host=api.xf-yun.com&date={requests.utils.quote(date_str)}"
         
         body = self._build_body(image_path)
