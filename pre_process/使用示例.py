@@ -1,11 +1,11 @@
-from document_converter import DocumentConverter, process_document
+from document_converter import DocumentProcessor, process_document
 
 # 方式1：直接使用便捷函数
 def example_1():
     """使用便捷函数转换文件"""
     
     try:
-        output_path = process_document('example.pdf', 'my_outputs')
+        output_path = process_document('pre_process/text_recognize/example/wangyuan.pdf', 'my_outputs')
         print(f"转换完成，输出文件：{output_path}")
     except Exception as e:
         print(f"转换失败：{e}")
@@ -15,7 +15,7 @@ def example_2():
     """使用类实例进行转换"""
     
     # 创建转换器
-    converter = DocumentConverter()
+    converter = DocumentProcessor()
     
     # 转换多个文件
     files = ['doc1.pdf', 'doc2.docx', 'doc3.html']
@@ -31,7 +31,7 @@ def example_2():
 def example_3():
     """转换网页URL"""
     
-    converter = DocumentConverter()
+    converter = DocumentProcessor()
     
     try:
         output_path = converter.process('https://example.com')
@@ -43,7 +43,7 @@ def example_3():
 def batch_convert(file_list):
     """批量转换文件"""
     
-    converter = DocumentConverter()
+    converter = DocumentProcessor()
     results = []
     
     for file_path in file_list:
