@@ -1,0 +1,6 @@
+opencv-python
+PyMuPDF
+requests
+html2text
+pdf2image
+pillow
