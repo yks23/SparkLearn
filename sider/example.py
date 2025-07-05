@@ -2,12 +2,11 @@ import sys
 import os
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
-
-from sider.annotator_simple import SimplifiedAnnotator
-from sider.annotator import Annotator
+from annotator_simple import SimplifiedAnnotator
+from annotator import Annotator
 if __name__ == "__main__":
     # 读入一个md文档，用的是pre-process里面的一个md文件
-    with open("pre-process/text_recognize/example_output/wangyuan_output.md", "r", encoding="utf-8") as f:
+    with open("pre_process/text_recognize/example_output/wangyuan_output.md", "r", encoding="utf-8") as f:
         content = f.read()
     # annotator_simple.py使用示例
     print("===============annotator_simple.py使用示例===============")

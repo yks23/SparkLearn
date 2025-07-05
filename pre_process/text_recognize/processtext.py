@@ -332,8 +332,8 @@ def read_html_file(file_path):
     raise UnicodeDecodeError("无法解码HTML文件")
 
 # ========== 输入路径判断 + 调用 ==========
-def process_input(input_path):
-    os.makedirs("outputs", exist_ok=True)
+def process_input(input_path,output_path='./outputs'):
+    os.makedirs(output_path, exist_ok=True)
 
     if input_path.startswith(('http://', 'https://')):
         from urllib.parse import urlparse

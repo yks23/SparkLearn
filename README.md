@@ -18,3 +18,38 @@
 ## 环境要求
 预处理插图提取要求python版本为：3.9  
 相关依赖安装见requirement.txt  
+
+## 目前pipeline
+
+1. 静态过程
+用户填写基本的配置，然后运行主程序即可
+
+- 包含是哪种类型的：multi-笔记（文件夹）/ 一本书 / pdf / 图片 / 网页
+    - 书：结构在内部
+    - 文件夹结构：叶子节点是图片/网页/pdf
+
+dataroot
+    - raw
+    - processed
+        - ...
+    - kg
+    - QA
+
+- 基本过程：
+    - 是否需要sider
+    - 是否需要图谱
+    - 是否需要问题
+
+对象：Task manager
+
+1. preprocess  -> 文本
+2. sider -> 补充后的文本
+3. kg生成 -> 图谱--重在可视化（有无API何以生成静态图片）
+4. qg生成 -> 生成question.pdf和answer.pdf
+
+2. 带有前端
+灵活、可交互。上述流程是高度可定制（容易出问题的）
+
+3. AGENT with ABILITY.
+
+## 第一部分只用文书材料

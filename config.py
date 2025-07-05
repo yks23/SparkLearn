@@ -19,6 +19,7 @@ json_feature = {
     "pro-128k": True,
     "lite": True,
 }
+# API key configs
 spark_api_key = "PqaddjxvbBSYjGckQcxD:qzaVIDUrLtMTVLZuEZkg"
 silicon_api_key = "" # SiliconFlow API key, if applicable
 openai_api_key = "" # OpenAI API key, if applicable
@@ -26,7 +27,7 @@ glm_api_key = "" # ChatGLM API key, if applicable
 model_provider = "spark"  # 'openai', 'chatglm', 'silicon', 'spark'
 num_dims=2560
 
-
+# APP configs
 APPID ='e7832989'
 APISecret = 'NDY1YWZkZmJmNzhmYTYzNmI5NjViMjVl'
 APIKEY = '6d024c927a931a7d244d332af67472e9'

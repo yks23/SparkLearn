@@ -492,44 +492,44 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 for i, q in enumerate(content[:3], 1):  # 只显示前3个
                     print(f"{i}. {q[:60]}...")
         
+if __name__ == "__main__":
+    # 1. 构建知识图谱
+    kg = KnowledgeGraph()
+    kg.load_knowledge_graph()
+    # kg.add_knowledge_node("气候变化", {
+    #     'domain': '环境科学',
+    #     'difficulty': '中等',
+    #     'definition': '全球气候系统的长期变化过程',
+    #     'key_aspects': ['温室效应', '极端天气']
+    # })
+    # kg.add_knowledge_node("碳中和", {
+    #     'domain': '能源政策',
+    #     'difficulty': '进阶'
+    # })
+    # kg.add_relation("气候变化", "碳中和", "解决方案", weight=0.8)
 
-# 1. 构建知识图谱
-kg = KnowledgeGraph()
-kg.load_knowledge_graph()
-# kg.add_knowledge_node("气候变化", {
-#     'domain': '环境科学',
-#     'difficulty': '中等',
-#     'definition': '全球气候系统的长期变化过程',
-#     'key_aspects': ['温室效应', '极端天气']
-# })
-# kg.add_knowledge_node("碳中和", {
-#     'domain': '能源政策',
-#     'difficulty': '进阶'
-# })
-# kg.add_relation("气候变化", "碳中和", "解决方案", weight=0.8)
+    # 2. 初始化生成器
+    generator = KnowledgeQuestionGenerator(
+        kg,
+        appid="2d1bc910",
+        api_key="a1df9334fd048ded0c9304ccf12c20d1",
+        api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
+    )
 
-# 2. 初始化生成器
-generator = KnowledgeQuestionGenerator(
-    kg,
-    appid="2d1bc910",
-    api_key="a1df9334fd048ded0c9304ccf12c20d1",
-    api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
-)
+    # 生成所有关系问题
+    all_relation_questions = generator.generate_relation_questions()
 
-# 生成所有关系问题
-all_relation_questions = generator.generate_relation_questions()
+    # 生成特定类型关系问题
+    causal_questions = generator.generate_relation_questions("因果关系")
 
-# 生成特定类型关系问题
-causal_questions = generator.generate_relation_questions("因果关系")
+    generator.generate_and_save()
+    # # 3. 生成两类问题
+    # print("=== 概念测试题 ===")
+    # for q in generator.generate_by_concept("气候变化"):
+    #     print(q)
 
-generator.generate_and_save()
-# # 3. 生成两类问题
-# print("=== 概念测试题 ===")
-# for q in generator.generate_by_concept("气候变化"):
-#     print(q)
-
-# print("\n=== 关系测试题 ===")
-# for rel, questions in generator.generate_relation_questions("解决方案").items():
-#     print(f"\n关系 {rel}:")
-#     for q in questions:
-#         print(f"- {q}")
+    # print("\n=== 关系测试题 ===")
+    # for rel, questions in generator.generate_relation_questions("解决方案").items():
+    #     print(f"\n关系 {rel}:")
+    #     for q in questions:
+    #         print(f"- {q}")
