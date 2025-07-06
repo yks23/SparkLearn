@@ -16,9 +16,12 @@
     - 生成各种题目及其解答
 
 ## 环境要求
-预处理插图提取要求python版本为：3.9  
+python版本为：3.11.7  
 相关依赖安装见requirement.txt  
-
+```bash
+conda create --name eduspark python=3.11.7
+pip install -r requirements.txt
+```
 ## 目前pipeline
 
 1. 静态过程

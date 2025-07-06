@@ -1,8 +1,6 @@
 import networkx as nx
 from typing import Dict, List, Tuple
 import json
-import websocket
-from websocket import WebSocketApp
 import _thread as thread
 import base64
 import hashlib
