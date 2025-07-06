@@ -1,0 +1,353 @@
+[
+    {
+        "relations": [
+            {
+                "source": "参考系",
+                "target": "质点",
+                "type": "依赖",
+                "raw_content": "选定了参考系, 一个质点的运动, 即它的位置随时间的变化, 就可以用数学函数的形式表示出来了。"
+            },
+            {
+                "source": "质点",
+                "target": "运动函数",
+                "type": "表示为",
+                "raw_content": "这样的一组函数叫做质点的运动函数 (有的书上叫做运动方程)。"
+            },
+            {
+                "source": "矢量",
+                "target": "质点",
+                "type": "描述",
+                "raw_content": "质点的位置可以用矢量的概念更简洁清楚地表示出来。"
+            },
+            {
+                "source": "位置矢量",
+                "target": "质点",
+                "type": "确定",
+                "raw_content": "用来确定质点位置的这一矢量 \\( \\mathbf{r} \\) 叫做质点的位置矢量, 简称位矢, 也叫径矢。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "电场",
+                "target": "电荷",
+                "type": "产生于",
+                "raw_content": "电场由电荷产生，具有力的作用，其强度与距离平方成反比。"
+            },
+            {
+                "source": "磁场",
+                "target": "电流",
+                "type": "产生于",
+                "raw_content": "磁场由电流或运动电荷产生，对磁极有力的作用。"
+            },
+            {
+                "source": "电磁场",
+                "target": "电场",
+                "type": "包含",
+                "raw_content": "电磁场是电场和磁场的统一体，具有能量和动量。"
+            },
+            {
+                "source": "电磁场",
+                "target": "磁场",
+                "type": "包含",
+                "raw_content": "电磁场是电场和磁场的统一体，具有能量和动量。"
+            },
+            {
+                "source": "电磁波",
+                "target": "电磁场",
+                "type": "传播形式",
+                "raw_content": "电磁波是电磁场在空间中的传播，具有波动特性，如反射、折射等。"
+            },
+            {
+                "source": "电磁感应现象",
+                "target": "电磁场",
+                "type": "由...产生",
+                "raw_content": "电磁场与物质相互作用时，会产生电磁感应现象，如感生电动势。"
+            },
+            {
+                "source": "真空电容率",
+                "target": "电场强度公式",
+                "type": "用于计算",
+                "raw_content": "点电荷产生的电场：真空中，点电荷Q产生的电场强度E=Q/(4πε₀r²) r^0，其中ε₀为真空电容率。"
+            },
+            {
+                "source": "电场强度公式",
+                "target": "点电荷",
+                "type": "描述",
+                "raw_content": "点电荷产生的电场：真空中，点电荷Q产生的电场强度E=Q/(4πε₀r²) r^0，其中ε₀为真空电容率，r为点电荷到某点的距离，r^0为该点的单位矢量。"
+            },
+            {
+                "source": "磁场强度公式",
+                "target": "载流直导线",
+                "type": "描述",
+                "raw_content": "载流直导线产生的磁场：真空中，载流直导线产生的磁场强度H=I/(2πa)，其中I为导线中的电流，a为某点到导线的距离。"
+            },
+            {
+                "source": "电磁波的传播速度",
+                "target": "光波",
+                "type": "实例",
+                "raw_content": "例如，光波就是一种电磁波，它在不同介质中的传播速度会发生变化。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "预约包（RTS）",
+                "target": "数据帧碰撞",
+                "type": "避免",
+                "raw_content": "为避免数据帧碰撞，发送方使用小的预约包（RTS）向基站请求信道。"
+            },
+            {
+                "source": "CSMA",
+                "target": "预约包（RTS）",
+                "type": "传输方式",
+                "raw_content": "首先，发送方通过CSMA传输RTS包，这些包可能仍会碰撞，但因其短小，影响较小。"
+            },
+            {
+                "source": "CTS包",
+                "target": "预约包（RTS）",
+                "type": "响应",
+                "raw_content": "基站收到RTS后，广播CTS包以响应，所有节点都能听到CTS，从而知道信道已被预留。"
+            },
+            {
+                "source": "数据传输阶段",
+                "target": "CTS包",
+                "type": "依赖条件",
+                "raw_content": "发送方在收到CTS后传输数据帧，其他站点则延迟传输。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "码分多址（CDMA）",
+                "target": "编码序列",
+                "type": "依赖",
+                "raw_content": "码分多址（CDMA）是一种多址通信技术，通过为每个用户分配唯一的编码序列（chipping sequence）实现共享频段通信。"
+            },
+            {
+                "source": "码分多址（CDMA）",
+                "target": "正交或准正交的编码序列",
+                "type": "核心技术",
+                "raw_content": "正交或准正交的编码序列是CDMA的核心技术，理想情况下能完全消除用户间干扰。"
+            },
+            {
+                "source": "码分多址（CDMA）",
+                "target": "内积运算",
+                "type": "涉及",
+                "raw_content": "编码过程涉及原始数据与编码序列的内积运算，而解码则是将接收到的数据与编码序列进行内积求和。"
+            },
+            {
+                "source": "Walsh码",
+                "target": "码分多址（CDMA）",
+                "type": "应用于",
+                "raw_content": "Walsh码是CDMA系统中常用的正交码之一，用于区分不同用户。在理想情况下，使用Walsh码的用户可以在同一频率上无干扰地通信。"
+            },
+            {
+                "source": "Walsh码",
+                "target": "正交或准正交的编码序列",
+                "type": "属于",
+                "raw_content": "Walsh码是CDMA系统中常用的正交码之一，用于区分不同用户。"
+            },
+            {
+                "source": "内积运算",
+                "target": "编码序列",
+                "type": "关键作用",
+                "raw_content": "编码过程涉及原始数据与编码序列的内积运算，而解码则是将接收到的数据与编码序列进行内积求和。内积运算在编码和解码中起关键作用，其结果反映了数据与编码序列的匹配度。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "eNodeB",
+                "target": "无线通信",
+                "type": "负责",
+                "raw_content": "4G LTE架构的关键组件包括eNodeB、MME、SGW和P-GW，分别负责无线通信、信令和移动性管理以及数据路由。"
+            },
+            {
+                "source": "MME",
+                "target": "信令和移动性管理",
+                "type": "负责",
+                "raw_content": "4G LTE架构的关键组件包括eNodeB、MME、SGW和P-GW，分别负责无线通信、信令和移动性管理以及数据路由。"
+            },
+            {
+                "source": "SGW",
+                "target": "数据路由",
+                "type": "负责",
+                "raw_content": "4G LTE架构的关键组件包括eNodeB、MME、SGW和P-GW，分别负责无线通信、信令和移动性管理以及数据路由。"
+            },
+            {
+                "source": "P-GW",
+                "target": "数据路由",
+                "type": "负责",
+                "raw_content": "4G LTE架构的关键组件包括eNodeB、MME、SGW和P-GW，分别负责无线通信、信令和移动性管理以及数据路由。"
+            },
+            {
+                "source": "设备切换",
+                "target": "无缝连接",
+                "type": "确保",
+                "raw_content": "设备切换确保移动设备在不同小区间无缝连接。"
+            },
+            {
+                "source": "跟踪和寻呼机制",
+                "target": "快速定位设备",
+                "type": "允许",
+                "raw_content": "跟踪和寻呼机制允许网络在需要时快速定位设备。"
+            },
+            {
+                "source": "路径设置",
+                "target": "安全的数据通道",
+                "type": "建立",
+                "raw_content": "路径设置通过隧道技术从移动设备到P-GW建立安全的数据通道。"
+            }
+        ]
+    },
+    null,
+    {
+        "relations": [
+            {
+                "source": "电场",
+                "target": "电场强度",
+                "type": "描述为",
+                "raw_content": "电场是由电荷产生的力场，描述为电场强度E，单位是伏特每米（V/m）。"
+            },
+            {
+                "source": "点电荷的电场强度公式",
+                "target": "电场强度",
+                "type": "公式表示",
+                "raw_content": "点电荷的电场强度与距离平方成反比，公式为E=kQ/r²。"
+            },
+            {
+                "source": "电场线",
+                "target": "电场",
+                "type": "用于表示",
+                "raw_content": "电场线用于直观表示电场方向和强度，始于正电荷，止于负电荷。"
+            },
+            {
+                "source": "磁场",
+                "target": "磁感应强度",
+                "type": "描述为",
+                "raw_content": "磁场由运动电荷或电流产生，用磁感应强度B表示，单位是特斯拉（T）。"
+            },
+            {
+                "source": "洛伦兹力",
+                "target": "磁场",
+                "type": "施加于",
+                "raw_content": "磁场对运动电荷施加洛伦兹力F=q(v×B)。"
+            },
+            {
+                "source": "载流导线受力公式",
+                "target": "磁场",
+                "type": "施加于",
+                "raw_content": "磁场对载流导线施加力F=I(L×B)。"
+            },
+            {
+                "source": "磁感线",
+                "target": "磁场",
+                "type": "用于表示",
+                "raw_content": "磁感线是闭合曲线，从N极到S极。"
+            },
+            {
+                "source": "麦克斯韦方程组",
+                "target": "电磁场",
+                "type": "统一描述",
+                "raw_content": "电磁场的统一性体现在麦克斯韦方程组中，描述了电场和磁场如何相互转化和传播。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "最长前缀匹配",
+                "target": "三元内容可寻址存储器（TCAM）",
+                "type": "使用",
+                "raw_content": "最长前缀匹配通常使用三元内容可寻址存储器（TCAM）来实现。"
+            },
+            {
+                "source": "内容可寻址存储器（CAM）",
+                "target": "网络路由",
+                "type": "应用于",
+                "raw_content": "内容可寻址存储器（CAM）常用于硬件加速的查找操作，如网络路由和安全检查。"
+            },
+            {
+                "source": "Cisco Catalyst系列交换机",
+                "target": "三元内容可寻址存储器（TCAM）",
+                "type": "配备",
+                "raw_content": "Cisco Catalyst系列交换机配备TCAM用于快速查找和转发数据包。"
+            },
+            {
+                "source": "点电荷的电场分布",
+                "target": "E=kQ/r²",
+                "type": "公式描述",
+                "raw_content": "点电荷的电场强度与距离平方成反比，公式为E=kQ/r²。"
+            },
+            {
+                "source": "地球磁场的磁感线",
+                "target": "条形磁铁的磁场分布",
+                "type": "类比",
+                "raw_content": "地球磁场的磁感线类似于条形磁铁的磁场分布。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "网络层",
+                "target": "数据报",
+                "type": "封装为",
+                "raw_content": "发送方将传输层数据段封装成数据报，并传递给链路层。"
+            },
+            {
+                "source": "网络层",
+                "target": "链路层",
+                "type": "依赖",
+                "raw_content": "发送方将传输层数据段封装成数据报，并传递给链路层；接收方则将数据段传递给传输层协议。"
+            },
+            {
+                "source": "网络层",
+                "target": "所有互联网设备",
+                "type": "运行于",
+                "raw_content": "所有互联网设备（包括主机和路由器）都运行网络层协议。"
+            },
+            {
+                "source": "数据报",
+                "target": "网络层头部",
+                "type": "包含",
+                "raw_content": "数据报是网络层的基本传输单位，包含网络层头部和上层数据。"
+            },
+            {
+                "source": "数据报",
+                "target": "独立路由",
+                "type": "特性",
+                "raw_content": "每个数据报独立路由，可能经过不同路径。"
+            },
+            {
+                "source": "链路层",
+                "target": "数据帧传输",
+                "type": "负责",
+                "raw_content": "链路层负责物理网络中的数据帧传输，处理硬件地址和错误检测。"
+            },
+            {
+                "source": "最长前缀匹配",
+                "target": "路由条目",
+                "type": "选择依据",
+                "raw_content": "比如有两个路由条目192.168.1.0/24和192.168.1.0/25，当目标IP是192.168.1.100时，会选择后者。"
+            },
+            {
+                "source": "TCAM",
+                "target": "路由条目",
+                "type": "快速查找",
+                "raw_content": "在路由器中，TCAM可以快速查找与目标IP匹配的路由条目。"
+            },
+            {
+                "source": "Cisco Catalyst交换机",
+                "target": "路由表条目",
+                "type": "支持",
+                "raw_content": "Cisco Catalyst 9300系列交换机支持高密度接口和高级路由功能，可以支持多达1百万条路由表条目，满足大型网络的需求。"
+            }
+        ]
+    }
+]

@@ -1,10 +1,10 @@
-from src.model import Section, Entity
-from src.model.graph_structure import GraphStructureType
-from src.utils import save_json,communicate_with_agent
-from src.model.base_operator import AggregationOperation
-from src.config import request_cache_path,final_prompt_path,graph_structure_path
-from src.utils.file_operation import save_json
-from src.utils.id_operation import realloc_id,graph_structure,save_relation
+from ....src.model import Section, Entity
+from ....src.model.graph_structure import GraphStructureType
+from ....src.utils import save_json,communicate_with_agent
+from ....src.model.base_operator import AggregationOperation
+from ....src.config import request_cache_path,final_prompt_path,graph_structure_path
+from ....src.utils.file_operation import save_json
+from ....src.utils.id_operation import realloc_id,graph_structure,save_relation
 import os
 def  load_data():
     """加载数据"""

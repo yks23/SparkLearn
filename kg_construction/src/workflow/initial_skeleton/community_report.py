@@ -1,12 +1,11 @@
 import os
 
-from numpy import isin
-from src.model.section import Section
-from src.utils import save_json
-from src.config import request_cache_path, final_prompt_path,max_level,graph_structure_path
-from src.model.base_operator import RelationExtractionoperation,Summaryoperator
-from src.utils.communication import execute_operator
-from src.utils.id_operation import graph_structure,GraphStructureType,get_sons
+from ....src.model.section import Section
+from ....src.utils import save_json
+from ....src.config import request_cache_path, final_prompt_path,max_level,graph_structure_path
+from ....src.model.base_operator import RelationExtractionoperation,Summaryoperator
+from ....src.utils.communication import execute_operator
+from ....src.utils.id_operation import graph_structure,GraphStructureType,get_sons
 def get_community_report(level:int,nodes:list[Section]):
     tackle_nodes=[node for node in nodes if node.level==level]
     type_1_node=[node for node in tackle_nodes if node.is_elemental==True]
@@ -22,6 +21,7 @@ def get_community_report(level:int,nodes:list[Section]):
                 continue
             node.summary=response.get("summary","")
             node.example=response.get("example",[])
+    print(id_to_sons.keys())
     if len(type_2_node)!=0:
         ops=[Summaryoperator(node,id_to_sons[node.id]) for node in type_2_node]
         request_response=execute_operator(ops,cached_file_path=os.path.join(request_cache_path,f"community_summary_{level}.json"),need_read_from_cache=True)
@@ -77,4 +77,4 @@ def community_report():
     save_json(os.path.join(graph_structure_path, "section_nodes.json"),nodes)
     save_json(os.path.join(graph_structure_path, "has_subsection.json"),has_subsection_relations)
     save_json(os.path.join(graph_structure_path, "section_related.json"),section_related_relations)
-    os.remove(os.path.join(request_cache_path,"community_report_cache.json"))
+    # os.remove(os.path.join(request_cache_path,"community_report_cache.json"))

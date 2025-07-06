@@ -1,9 +1,9 @@
 import json
 
-from src.model import Section, Relation, Entity
+from ...src.model import Section, Relation, Entity
 import os
-from src.config import final_prompt_path
-from src.utils.id_operation import get_adjacency_matrix
+from ...src.config import final_prompt_path
+from ...src.utils.id_operation import get_adjacency_matrix
 
 Max_len = 800
 

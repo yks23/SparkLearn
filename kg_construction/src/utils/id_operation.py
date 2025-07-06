@@ -1,8 +1,8 @@
 import os
-from src.model import Section, Relation, Entity
-from src.utils.file_operation import load_json, save_json
-from src.config import graph_structure_path
-from src.model.graph_structure import GraphStructureType
+from ...src.model import Section, Relation, Entity
+from ...src.utils.file_operation import load_json, save_json
+from ...src.config import graph_structure_path
+from ...src.model.graph_structure import GraphStructureType
 def get_adjacency_matrix():
     relations=graph_structure([GraphStructureType.all_relation],return_type="object")[0]
     adjacency_matrix_to = {(rel.source_id, rel.target_id) for rel in relations}

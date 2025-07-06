@@ -1,18 +1,18 @@
 from numpy import average
-from src.utils.engine import initialize_entity_engine
-from src.utils.id_operation import graph_structure, get_relation_id, realloc_id
-from src.model.graph_structure import GraphStructureType
-from src.model.base_operator import (
+from ....src.utils.engine import initialize_entity_engine
+from ....src.utils.id_operation import graph_structure, get_relation_id, realloc_id
+from ....src.model.graph_structure import GraphStructureType
+from ....src.model.base_operator import (
     CheckMergeoperation,
     RelationPredictoperation,
     RelationevalOperation,
 )
-from src.model.relation import Relation
-from src.utils.communication import execute_operator
-from src.utils.file_operation import save_json, load_json
-from src.config import engine_cache_path, max_level
-from src.utils.score import get_aa_score, get_common_score
-from src.config import request_cache_path, graph_structure_path
+from ....src.model.relation import Relation
+from ....src.utils.communication import execute_operator
+from ....src.utils.file_operation import save_json, load_json
+from ....src.config import engine_cache_path, max_level
+from ....src.utils.score import get_aa_score, get_common_score
+from ....src.config import request_cache_path, graph_structure_path
 import os
 import logging
 import tqdm

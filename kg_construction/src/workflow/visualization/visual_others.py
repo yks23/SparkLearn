@@ -7,7 +7,7 @@ from typing import List, Dict
 from collections import defaultdict
 
 from neo4j import AsyncGraphDatabase, basic_auth
-from src.config import NEO4j_PASSWORD, NEO4j_URI, NEO4j_USER
+from ....src.config import NEO4j_PASSWORD, NEO4j_URI, NEO4j_USER
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

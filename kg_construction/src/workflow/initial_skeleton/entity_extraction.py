@@ -3,7 +3,7 @@ import os
 import logging
 from dataclasses import dataclass, field
 
-from src.config import (
+from ....src.config import (
     graph_structure_path,
     request_cache_path,
     final_prompt_path,
@@ -12,10 +12,10 @@ from src.config import (
     extraction_type,
     is_async,
 )
-from src.utils.id_operation import graph_structure,deduplicate_relation, realloc_id
-from src.model import Entity, Relation, Chunk, Section
-from src.model.graph_structure import GraphStructureType
-from src.utils import save_json, jsonalize, communicate_with_agent
+from ....src.utils.id_operation import graph_structure,deduplicate_relation, realloc_id
+from ....src.model import Entity, Relation, Chunk, Section
+from ....src.model.graph_structure import GraphStructureType
+from ....src.utils import save_json, jsonalize, communicate_with_agent
 
 @dataclass
 class ExtractionPaths:
@@ -134,6 +134,8 @@ def extract_entities_and_relations(
     """从响应JSON中提取实体和关系"""
     logging.info("Extracting entities and relations from response.")
     result = ExtractionResult(current_id=current_id, current_relation_id=current_relation_id)
+    if response_json == None:
+        return None
     entities = response_json.get("entities", [])
     relations = response_json.get("relations", [])
     name_to_id = {}
@@ -230,7 +232,7 @@ def process_extraction(
             step_1_output = communicate_with_agent(
                 system_prompt=async_system_prompt_1,
                 user_input=contents_input,
-                need_json=False,
+                need_json=True,
                 cached_file_path=os.path.join(request_cache_path,"step_1_output.json"),
                 need_read_from_cache=True
             )
@@ -251,6 +253,8 @@ def process_extraction(
             # 合并实体数据
             
             for i, resp in enumerate(response_data):
+                if resp is None:
+                    resp = {}
                 try:
                     resp["entities"] = jsonalize(step_1_output[i])["entities"]
                 except Exception as e:
@@ -286,6 +290,9 @@ def process_chunk_data(
         extraction_result = extract_entities_and_relations(
             data, id_counter, relation_id_counter
         )
+        if extraction_result is None:
+            logging.warning(f"No entities or relations found in response {i}.")
+            continue
         # 更新计数器
         id_counter = extraction_result.current_id
         relation_id_counter = extraction_result.current_relation_id

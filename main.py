@@ -5,10 +5,12 @@ from  pre_process.text_recognize.processtext import process_input
 from sider.annotator_simple import SimplifiedAnnotator
 from qg.graph_class import KnowledgeGraph,KnowledgeQuestionGenerator
 from config import APPID,APISecret,APIKEY
+import json
 def parse_args():
     parser = argparse.ArgumentParser(description="EduSpark CLI Tool")
     parser.add_argument('--file_path', type=str, required=True, help='Input file or directory path')
     parser.add_argument('--output_path', type=str, default='./outputs', help='Output directory path')
+    parser.add_argument('--state_path', type=str, default='./state.json', help='Path to save the state file')
     return parser.parse_args()
 
 def process_folder(input_path, output_path):
@@ -47,27 +49,60 @@ def generate_QA(input_path, output_path):
     """
     kg = KnowledgeGraph()
     kg.load_knowledge_graph(input_path)
+    kg.visualize(os.path.join(input_path,'graph.png'))
     generator = KnowledgeQuestionGenerator(
         kg,
-        appid=APPID,
-        api_key=APIKEY,
-        api_secret=APISecret
+        appid="2d1bc910",
+        api_key="a1df9334fd048ded0c9304ccf12c20d1",
+        api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
     )
     generator.generate_and_save(output_path=output_path)
     
 def main(args):
     # 首先处理原始文件
-    
     # 复制目录结构
     file_path = args.file_path
     output_path = args.output_path
-    process_folder(file_path,output_path) # 处理之后，形成了目录结构，然后最下面的叶节点就是.md格式
+    processed_path  = os.path.join(output_path, os.path.basename(file_path))
+    if os.path.exists(os.path.join(output_path, args.state_path)):
+        with open(os.path.join(output_path, args.state_path), 'r') as f:
+            print(f"初始化状态文件: {os.path.join(output_path, args.state_path)}")
+            try:
+                state_file = json.load(f) 
+            except:
+                state_file = {}
+        
+    if state_file.get('preprocess',False):
+        print("已处理过，跳过预处理")
+    else:
+        process_folder(file_path,output_path) # 处理之后，形成了目录结构，然后最下面的叶节点就是.md格式
+        state_file['preprocess'] = True
+        with open(os.path.join(output_path, args.state_path), 'w') as f:
+            json.dump(state_file, f, indent=4)
     
-    augment_folder(os.path.join(output_path,'processed'))  # 假设处理后的文件在processed目录下,逐个文件增广
-    
-    tree_folder(os.path.join(output_path,'processed'),os.path.join(output_path,'tree'))  # 假设增广后的文件在processed目录下,生成树形结构到tree目录下
-    
-    generate_QA(os.path.join(output_path,'tree','graph'),os.path.join(output_path,'qa'))  # 假设树形结构在tree目录下,生成问答对到qa目录下
+    if state_file.get('augment',False):
+        print("已增广过，跳过增广")
+    else:
+        augment_folder(processed_path)  # 假设处理后的文件在processed目录下,逐个文件增广
+        state_file['augment'] = True
+        with open(os.path.join(output_path, args.state_path), 'w') as f:
+            json.dump(state_file, f, indent=4)
+            
+    if state_file.get('tree',False):
+        print("已生成树形结构，跳过")
+    else:
+        tree_folder(processed_path,os.path.join(output_path,'tree'))  # 假设增广后的文件在processed目录下,生成树形结构到tree目录下
+        state_file['tree'] = True
+        with open(os.path.join(output_path, args.state_path), 'w') as f:
+            json.dump(state_file, f, indent=4)
+            
+    if state_file.get('qa',False):
+        print("已生成问答对，跳过")
+    else:
+        generate_QA(os.path.join(output_path,'tree','graph'),os.path.join(output_path,'qa'))  # 假设树形结构在tree目录下,生成问答对到qa目录下
+        state_file['qa'] = True
+        with open(os.path.join(output_path, args.state_path), 'w') as f:
+            json.dump(state_file, f, indent=4)
     
     
 if __name__ == "__main__":

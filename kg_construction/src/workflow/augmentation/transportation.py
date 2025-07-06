@@ -1,11 +1,11 @@
 import os
 
-from src.model.graph_structure import GraphStructureType
-from src.utils import execute_operator
-from src.utils import save_json
-from src.utils.id_operation import graph_structure
-from src.config import request_cache_path, graph_structure_path
-from src.model.base_operator import LocalityRoleOperation
+from ....src.model.graph_structure import GraphStructureType
+from ....src.utils import execute_operator
+from ....src.utils import save_json
+from ....src.utils.id_operation import graph_structure
+from ....src.config import request_cache_path, graph_structure_path
+from ....src.model.base_operator import LocalityRoleOperation
 import logging
 
 def get_local_role(need_ask=False):

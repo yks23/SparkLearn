@@ -15,6 +15,9 @@ import os
 import ssl
 from tqdm import tqdm
 import time
+import matplotlib.pyplot as plt
+
+import matplotlib.font_manager as fm
 
 class KnowledgeGraph:
     def __init__(self):
@@ -59,10 +62,66 @@ class KnowledgeGraph:
         for edge in tqdm(edges, desc="处理边"):
             source = id_to_name[edge['source_id']]
             target = id_to_name[edge['target_id']]
+            if 'has' in edge['type']:
+                edge['type'] = '关联' 
             rel_type = edge['type'] + edge['descriptions'][-1] if edge['descriptions'] else edge['type']
-            self.graph.add_edge(source, target, type=rel_type, weight=edge.get('weight', 1.0))
+            
+            self.graph.add_edge(source, target, short=edge['type'], type=rel_type,weight=edge.get('weight', 1.0))
         
         print(f"\n🎉 知识图谱加载完成! 共 {len(nodes)} 节点, {len(edges)} 边, 耗时 {time.time()-start_time:.2f} 秒")
+
+
+
+    def visualize(self, output_path: str = "knowledge_graph.png", max_nodes: int = 200):
+        """
+        可视化当前知识图谱，并导出为 PNG 图片（支持中文）。
+        :param output_path: 输出图片路径
+        :param max_nodes: 最多可视化的节点数，避免大图过于拥挤
+        """
+        print(f"\n🖼️ 开始可视化知识图谱（最多显示 {max_nodes} 个节点）...")
+
+        # 设置支持中文的字体
+        try:
+            # ✅ Windows 常见字体
+            zh_font = fm.FontProperties(fname="C:/Windows/Fonts/simhei.ttf")
+        except:
+            try:
+                # ✅ MacOS 常见字体
+                zh_font = fm.FontProperties(fname="/System/Library/Fonts/STHeiti Medium.ttc")
+            except:
+                print("⚠️ 未找到中文字体，中文可能无法正常显示。")
+                zh_font = None
+
+        # 限制可视化规模
+        subgraph = self.graph.copy()
+        if len(subgraph.nodes) > max_nodes:
+            nodes_subset = list(subgraph.nodes)[:max_nodes]
+            subgraph = subgraph.subgraph(nodes_subset)
+
+        plt.figure(figsize=(12, 8))
+        # pos = nx.spring_layout(subgraph, weight='weight', seed=42, k=0.8/(len(subgraph)**0.5))
+        # pos = nx.circular_layout(subgraph)  # 替代 spring_layout
+        pos = nx.kamada_kawai_layout(subgraph)  # 替代 spring_layout
+
+        # 绘制节点和边
+        nx.draw(subgraph, pos, with_labels=True, node_color="skyblue", edge_color="gray",
+                node_size=2000, font_size=10, font_family=zh_font.get_name() if zh_font else "sans-serif", arrows=True)
+
+        # 边的关系标签
+        edge_labels = nx.get_edge_attributes(subgraph, 'short')
+        
+        nx.draw_networkx_edge_labels(
+            subgraph, pos, edge_labels=edge_labels,
+            font_color='red', font_size=8,
+            font_family=zh_font.get_name() if zh_font else "sans-serif"
+        )
+
+        plt.axis("off")
+        plt.tight_layout()
+        plt.savefig(output_path, dpi=300)
+        plt.close()
+
+        print(f"✅ 可视化完成，图片已保存至: {output_path}")
 
 
     def generate_questions(self) -> List[Dict[str, str]]:

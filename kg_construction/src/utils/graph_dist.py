@@ -1,4 +1,4 @@
-from src.utils.file_operation import load_json
+from ...src.utils.file_operation import load_json
 
 
 def floyd_warshall(graph, num_nodes):

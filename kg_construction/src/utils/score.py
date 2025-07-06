@@ -1,5 +1,5 @@
 from sklearn.metrics import max_error
-from src.utils.id_operation import graph_structure,GraphStructureType
+from ...src.utils.id_operation import graph_structure,GraphStructureType
 import numpy as np
 def get_aa_score()->dict[(int,int),float]:
     """返回一个字典，键为两个实体id，值为两个实体之间的aa_score"""

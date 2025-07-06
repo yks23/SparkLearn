@@ -9,15 +9,15 @@ import logging
 from collections import defaultdict
 import os
 
-from src.model.graph_structure import GraphStructureType
-from src.model.entity import Entity
-from src.model.relation import Relation
-from src.model.section import Section
-from src.utils import save_json,execute_operator
-from src.config import graph_structure_path
-from src.model.base_operator import CheckMergeoperation
+from ....src.model.graph_structure import GraphStructureType
+from ....src.model.entity import Entity
+from ....src.model.relation import Relation
+from ....src.model.section import Section
+from ....src.utils import save_json,execute_operator
+from ....src.config import graph_structure_path
+from ....src.model.base_operator import CheckMergeoperation
 # from kg4edu.exceptions import DeduplicationError
-from src.utils.id_operation import graph_structure, realloc_id,save_relation
+from ....src.utils.id_operation import graph_structure, realloc_id,save_relation
 # 配置日志
 logging.basicConfig(
     level=logging.INFO,

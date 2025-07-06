@@ -14,8 +14,8 @@ def main():
     """
     主函数入口
     """
-    from src.utils.process_manager import ProcessManager
-    manager = ProcessManager(state_path=os.environ.get('meta_path', './state.json'))
+    from .src.utils.process_manager import ProcessManager
+    manager = ProcessManager(state_path=os.path.join(os.environ['meta_path'], "state.json"), from_scratch=False)
     manager.execute()
     
 if __name__ == "__main__":

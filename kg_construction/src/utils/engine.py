@@ -1,7 +1,7 @@
-from src.model import Entity, Section
-from src.model.graph_structure import GraphStructureType
-from src.utils.communication import execute_operator
-from src.model.base_operator import (
+from ...src.model import Entity, Section
+from ...src.model.graph_structure import GraphStructureType
+from ...src.utils.communication import execute_operator
+from ...src.model.base_operator import (
     EmbeddingEntityoperation,
     Embeddingstroperation,
     EmbeddingSectionoperation,
@@ -9,8 +9,8 @@ from src.model.base_operator import (
 import os
 import re
 import faiss
-from src.utils.file_operation import save_json, load_json
-from src.utils.id_operation import graph_structure
+from ...src.utils.file_operation import save_json, load_json
+from ...src.utils.id_operation import graph_structure
 import numpy as np
 import os
 

@@ -333,13 +333,14 @@ def read_html_file(file_path):
 
 # ========== 输入路径判断 + 调用 ==========
 def process_input(input_path,output_path='./outputs'):
+    print(f"🔍 正在处理输入: {input_path},输出到: {output_path}")
     os.makedirs(output_path, exist_ok=True)
 
     if input_path.startswith(('http://', 'https://')):
         from urllib.parse import urlparse
         parsed_url = urlparse(input_path)
         name = parsed_url.netloc.replace('.', '_')
-        output_md_name = f"outputs/{name}_output.md"
+        output_md_name = os.path.join(output_path, f"{name}.md")
         if os.path.exists(output_md_name):
             os.remove(output_md_name)
         print(f"🌐 正在处理 URL: {input_path}")
@@ -352,7 +353,7 @@ def process_input(input_path,output_path='./outputs'):
         return
 
     name, ext = os.path.splitext(os.path.basename(input_path))
-    output_md_name = f"{name}_output.md"
+    output_md_name = os.path.join(output_path,f"{name}.md")
 
     if os.path.exists(output_md_name):
         os.remove(output_md_name)
@@ -364,10 +365,10 @@ def process_input(input_path,output_path='./outputs'):
         print(f"📄 正在将 PDF 拆分为图片: {input_path}")
         pages = convert_from_path(input_path, dpi=300)
         for i, page in enumerate(pages):
-            temp_path = f"outputs/temp_page_{i}.png"
+            temp_path = os.path.join(output_path, f"temp_page_{i+1}.png")
             page.save(temp_path, "PNG")
             process_image(temp_path, output_md_name, page_num=i+1)
-            os.remove(temp_path)
+            # os.remove(temp_path)  # 删除临时图片文件
 
     elif ext.lower() == '.docx':
         print(f"📄 正在处理 Word 文件: {input_path}")

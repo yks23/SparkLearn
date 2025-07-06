@@ -5,11 +5,11 @@ import json
 from dataclasses import dataclass
 from typing import List, Dict, Tuple
 
-from src.model import Entity, Section, Relation, Chunk, Example
-from src.model.graph_structure import GraphStructureType
-from src.utils import load_json
-from src.utils.id_operation import graph_structure
-from src.config import (
+from ....src.model import Entity, Section, Relation, Chunk, Example
+from ....src.model.graph_structure import GraphStructureType
+from ....src.utils import load_json
+from ....src.utils.id_operation import graph_structure
+from ....src.config import (
     request_cache_path,
     max_level,
     NEO4j_URI,

@@ -1,7 +1,7 @@
 import pandas as pd
 import networkx as nx
 from openpyxl import load_workbook
-from src.utils.id_operation import graph_structure, GraphStructureType
+from ...src.utils.id_operation import graph_structure, GraphStructureType
 import re
 
 

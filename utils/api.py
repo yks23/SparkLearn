@@ -62,6 +62,7 @@ def worker_conservation(args):
         for model in [model_name] + extra_models:
             try:
                 if need_json and json_feature.get(model, False):
+                    print('use_json_feature')
                     result = client.chat.completions.create(
                         model=model_name,
                         messages=conversation,

@@ -1,10 +1,10 @@
 import os
-from src.model.base_operator import AugmentationOperation,EmbeddingEntityoperation
-from src.utils.id_operation import graph_structure, GraphStructureType
-from src.utils.file_operation import save_json
-from src.utils.engine import initialize_entity_engine
-from src.config import request_cache_path,graph_structure_path
-from src.utils.communication import execute_operator
+from ....src.model.base_operator import AugmentationOperation,EmbeddingEntityoperation
+from ....src.utils.id_operation import graph_structure, GraphStructureType
+from ....src.utils.file_operation import save_json
+from ....src.utils.engine import initialize_entity_engine
+from ....src.config import request_cache_path,graph_structure_path
+from ....src.utils.communication import execute_operator
 def augment_with_relation(new_relations:list,engine_folder:str=None):
     # 初始化实体节点和关系边
     [entity_nodes,relation_edges] = graph_structure(type=[GraphStructureType.entity_node,GraphStructureType.entity_related_relation],return_type='object')

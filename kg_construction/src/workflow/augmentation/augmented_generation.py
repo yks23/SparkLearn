@@ -1,10 +1,10 @@
 import os
-from src.model.graph_structure import GraphStructureType
-from src.model.relation import Relation
-from src.utils import communicate_with_agent
-from src.utils import save_json
-from src.utils.id_operation import graph_structure
-from src.config import request_cache_path, final_prompt_path,user_input,graph_structure_path
+from ....src.model.graph_structure import GraphStructureType
+from ....src.model.relation import Relation
+from ....src.utils import communicate_with_agent
+from ....src.utils import save_json
+from ....src.utils.id_operation import graph_structure
+from ....src.config import request_cache_path, final_prompt_path,user_input,graph_structure_path
 import logging
 def augment_entities(entity_nodes: list, prompt_template: str,relations:dict,entities:dict,is_first:bool):
     input_content=[]

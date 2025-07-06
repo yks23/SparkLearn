@@ -28,6 +28,6 @@ model_provider = "spark"  # 'openai', 'chatglm', 'silicon', 'spark'
 num_dims=2560
 
 # APP configs
-APPID ='e7832989'
-APISecret = 'NDY1YWZkZmJmNzhmYTYzNmI5NjViMjVl'
-APIKEY = '6d024c927a931a7d244d332af67472e9'
+APPID ="2d1bc910"
+APISecret = "YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
+APIKEY = "a1df9334fd048ded0c9304ccf12c20d1"

@@ -2,8 +2,7 @@ import logging
 import json
 import os
 import asyncio
-from src.utils.id_operation import realloc_id
-
+from ...src.utils.id_operation import realloc_id
 
 class ProcessManager:
     def __init__(
@@ -24,7 +23,7 @@ class ProcessManager:
         self.workflow = workflow
         self.processed = 0
         if state_path == None:
-            from src.config import metadata_path
+            from ...src.config import metadata_path
 
             self.state_path = os.path.join(metadata_path, "state.json")
         else:
@@ -63,12 +62,12 @@ class ProcessManager:
         return {"workflow": self.workflow, "processed": self.processed}
 
     def step(self):
-        from src.config import metadata_path
+        from ...src.config import metadata_path
 
         onprocess_task = self.workflow[self.processed]
         print("onprocess_task", onprocess_task)
         if onprocess_task == "doc2section":
-            from src.workflow.initial_skeleton.documents_to_section import (
+            from ...src.workflow.initial_skeleton.documents_to_section import (
                 documents_to_sections,
             )
 
@@ -76,13 +75,13 @@ class ProcessManager:
             realloc_id()
             self.processed += 1
         elif onprocess_task == "community_report":
-            from src.workflow.initial_skeleton.community_report import community_report
+            from ...src.workflow.initial_skeleton.community_report import community_report
 
             community_report()
             realloc_id()
             self.processed += 1
         elif onprocess_task == "section2tree":
-            from src.workflow.initial_skeleton.entity_extraction import (
+            from ...src.workflow.initial_skeleton.entity_extraction import (
                 entity_extraction,
             )
 
@@ -90,7 +89,7 @@ class ProcessManager:
             realloc_id()
             self.processed += 1
         elif onprocess_task == "augmentent":
-            from src.workflow.augmentation.augmented_generation import (
+            from ...src.workflow.augmentation.augmented_generation import (
                 augmented_generation,
             )
 
@@ -100,7 +99,7 @@ class ProcessManager:
                 augmented_generation(True, False, False)
             self.processed += 1
         elif onprocess_task == "augmentrel":
-            from src.workflow.augmentation.augmented_generation import (
+            from ...src.workflow.augmentation.augmented_generation import (
                 augmented_generation,
             )
 
@@ -109,7 +108,7 @@ class ProcessManager:
             else:
                 augmented_generation(False, True, False)
         elif onprocess_task == "aggregation-naive":
-            from src.workflow.augmentation.transportation import get_local_role
+            from ...src.workflow.augmentation.transportation import get_local_role
 
             get_local_role(need_ask=False)
             self.processed += 1
@@ -117,7 +116,7 @@ class ProcessManager:
             get_local_role(need_ask=True)
             self.processed += 1
         elif onprocess_task == "identical_predict":
-            from src.workflow.augmentation.relation_predict import identical_predict
+            from ...src.workflow.augmentation.relation_predict import identical_predict
 
             identical_predict(
                 0.55,
@@ -127,17 +126,17 @@ class ProcessManager:
             )
             self.processed += 1
         elif onprocess_task == "connection_predict":
-            from src.workflow.augmentation.relation_predict import connection_predict
+            from ...src.workflow.augmentation.relation_predict import connection_predict
 
             connection_predict(5)
             self.processed += 1
         elif onprocess_task == "continue_iteration":
-            from src.workflow.augmentation.relation_predict import continue_predict
+            from ...src.workflow.augmentation.relation_predict import continue_predict
 
             continue_predict()
             self.processed += 1
         elif onprocess_task_name == "visualization_internal":
-            from src.workflow.visualization.tree_visualize import tree_visualization
+            from ...src.workflow.visualization.tree_visualize import tree_visualization
 
             asyncio.run(tree_visualization())
 
@@ -145,13 +144,13 @@ class ProcessManager:
         elif isinstance(onprocess_task, dict):
             onprocess_task_name = onprocess_task["name"]
             if onprocess_task_name == "internal2uniform":
-                from src.eval.prepare_for_eval import internal2uniform
+                from ...src.eval.prepare_for_eval import internal2uniform
 
                 data_root = onprocess_task.get("data_root", metadata_path)
                 internal2uniform(data_root)
                 self.processed += 1
             elif onprocess_task_name == "eval_ES":
-                from src.eval.eval_entity import ES_external
+                from ...src.eval.eval_entity import ES_external
 
                 if "target_field" in onprocess_task.keys():
                     target_field = onprocess_task["target_field"]
@@ -162,7 +161,7 @@ class ProcessManager:
                 ES_external(target_field, data_path)
                 self.processed += 1
             elif onprocess_task_name == "eval_RS":
-                from src.eval.eval_relation import RS_external
+                from ...src.eval.eval_relation import RS_external
 
                 if "data_root" in onprocess_task.keys():
                     data_path = onprocess_task["data_root"]
@@ -174,25 +173,25 @@ class ProcessManager:
             elif onprocess_task_name == "eval_ER":
                 gt_root = onprocess_task["gt_root"]
                 pred_root = onprocess_task["pred_root"]
-                from src.eval.eval_entity import ER_CROSS
+                from ...src.eval.eval_entity import ER_CROSS
 
                 ER_CROSS(gt_root, pred_root)
                 self.processed += 1
             elif onprocess_task_name == "external2uniform":
                 data_root = onprocess_task["data_root"]
-                from src.eval.prepare_for_eval import external2uniform
+                from ...src.eval.prepare_for_eval import external2uniform
 
                 external2uniform(data_root)
                 self.processed += 1
             elif onprocess_task_name == "MEC&MED":
                 gt_root = onprocess_task["gt_root"]
                 pred_root = onprocess_task["pred_root"]
-                from src.eval.eval_mapping import MEC_MED
+                from ...src.eval.eval_mapping import MEC_MED
 
                 MEC_MED(gt_root, pred_root)
                 self.processed += 1
             elif onprocess_task_name == "visualization_external":
-                from src.workflow.visualization.visual_others import (
+                from ...src.workflow.visualization.visual_others import (
                     visualize_native_graph,
                 )
 

@@ -1,4 +1,3 @@
-from src.config import model_name
 from utils.api import multi_conservation, multi_embedding
 import logging as log
 import logging
@@ -7,13 +6,13 @@ import json
 import time
 
 log = logging.getLogger(__name__)
-from src.model.base_operator import (
+from ...src.model.base_operator import (
     EmbeddingEntityoperation,
     KGoperator,
     EmbeddingSectionoperation,
     Embeddingstroperation,
 )
-from src.utils.file_operation import jsonalize, load_json
+from ...src.utils.file_operation import jsonalize, load_json
 
 
 # 同步调用
