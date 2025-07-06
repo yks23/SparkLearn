@@ -109,3 +109,20 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()  # 支持Windows下的多进程
     args = parse_args()
     main(args)
+    
+"""
+命令行运行：
+python main.py --file_path ./网原 --output_path ./outputs --state_path state.json
+即可
+现有结果在./outputs目录下
+- /outputs/网原:preprocess处理后的目录结构
+- /outputs/网原/tree: 生成的树形结构
+    - /outputs/网原/tree/graph/graph.png: 生成的知识图谱可视化
+- /outputs/网原/qa: 生成的问答对
+
+
+支持断点恢复。
+file_path可以是单个文件，也可以是目录，目录下的所有文件都会被处理。
+output_path是输出目录，处理后的文件会保存在该目录下。
+state_path是状态文件路径，用于记录处理状态，支持断点续传。保留在output_path/state_path下
+"""
