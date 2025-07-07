@@ -16,8 +16,10 @@
     - 生成各种题目及其解答
 
 ## 环境要求
-预处理插图提取要求python版本为：3.9  
 相关依赖安装见requirement.txt  
+ppt相关处理需要sudo apt install libreoffice-core libreoffice-common  
+sudo apt install libreoffice-impress  
+conda install -c conda-forge poppler  
 
 ## 目前pipeline
 

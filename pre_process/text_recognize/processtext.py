@@ -11,6 +11,12 @@ from PIL import Image
 import html2text
 from urllib.parse import urlparse
 
+import glob
+import tempfile
+import shutil
+import subprocess
+from pptx.enum.shapes import MSO_SHAPE_TYPE
+
 # ========== 配置(调用的是科大讯飞的通用文档（大模型）) ==========
 APPID = "b97bb794"
 API_KEY = "c87bad1f164b70337becc4d833246d17"
@@ -73,8 +79,8 @@ def build_body(app_id, image_path):
     }
 
 # ========== 提取并保存图片，返回图片引用信息 ==========
-def extract_and_save_images(parsed_json, page_image, page_num, base_name):
-    images_dir = f"images_{base_name}"
+def extract_and_save_images(parsed_json, page_image, page_num, base_name, output_path = None):
+    images_dir = os.path.join(output_path, f"images_{base_name}")
     os.makedirs(images_dir, exist_ok=True)
     
     img_width, img_height = page_image.size
@@ -236,7 +242,7 @@ def process_image(image_path, output_md_name, page_num=1):
     if parsed_json and os.path.exists(image_path):
         from PIL import Image
         page_image = Image.open(image_path)
-        image_refs = extract_and_save_images(parsed_json, page_image, page_num, base_name)
+        image_refs = extract_and_save_images(parsed_json, page_image, page_num, base_name, os.path.dirname(output_md_name))
 
     markdown_doc = ""
     for item in parsed_json.get("document", []):
@@ -331,6 +337,82 @@ def read_html_file(file_path):
             continue
     raise UnicodeDecodeError("无法解码HTML文件")
 
+# ========== PPT到md ==========
+def convert_ppt_to_images(ppt_path, output_dir):
+    """将PPT转换为多张图片"""
+    
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # 步骤1：转换为PDF
+    subprocess.run([
+        'libreoffice',
+        '--headless',
+        '--convert-to', 'pdf',
+        '--outdir', output_dir,
+        ppt_path
+    ], check=True, capture_output=True, timeout=60)
+    
+    # 找到生成的PDF文件
+    pdf_files = glob.glob(os.path.join(output_dir, "*.pdf"))
+    pdf_path = pdf_files[0]
+    
+    # 步骤2：PDF直接转图片
+    subprocess.run([
+        'pdftoppm',
+        '-png',
+        '-r', '300',  # 分辨率DPI
+        pdf_path,
+        os.path.join(output_dir, 'slide')
+    ], check=True)
+    
+    # 删除PDF文件
+    os.remove(pdf_path)
+    
+    # 返回生成的图片文件
+    return sorted(glob.glob(os.path.join(output_dir, "slide-*.png")))
+
+def is_slide_simple(slide):
+    """判断单个幻灯片是否为纯文本"""
+    for shape in slide.shapes:
+        if shape.shape_type in [
+            MSO_SHAPE_TYPE.PICTURE, MSO_SHAPE_TYPE.CHART, 
+            MSO_SHAPE_TYPE.GROUP, MSO_SHAPE_TYPE.AUTO_SHAPE,
+            MSO_SHAPE_TYPE.FREEFORM, MSO_SHAPE_TYPE.MEDIA
+        ]:
+            return False
+    return True
+
+def process_presentation(ppt_path, output_path=None):
+    """统一处理PPT/PPTX文件，生成MD文件"""
+    if not os.path.exists(ppt_path):
+        return None
+    
+    if output_path is None:
+        output_path = os.path.dirname(ppt_path)
+
+    # 统一转换为图片（不区分ppt/pptx）
+    with tempfile.TemporaryDirectory() as temp_dir:
+        try:
+            png_files = convert_ppt_to_images(ppt_path, temp_dir)
+            
+            for i, png_file in enumerate(png_files):
+                slide_num = i + 1
+                
+                try:
+                    md_path = os.path.join(output_path, f"slide_{slide_num:02d}.md")
+                    process_image(png_file, md_path, slide_num)
+                    os.remove(png_file)
+                    
+                except Exception:
+                    with open(output_path, "w", encoding="utf-8") as f:
+                        f.write(f"# 幻灯片 {slide_num}\n\n![幻灯片{slide_num}](images/slide_{slide_num:02d}.png)\n\n")
+                        
+        except Exception:
+            return None
+    
+    return output_path
+
+
 # ========== 输入路径判断 + 调用 ==========
 def process_input(input_path,output_path='./outputs'):
     print(f"🔍 正在处理输入: {input_path},输出到: {output_path}")
@@ -369,6 +451,12 @@ def process_input(input_path,output_path='./outputs'):
             page.save(temp_path, "PNG")
             process_image(temp_path, output_md_name, page_num=i+1)
             # os.remove(temp_path)  # 删除临时图片文件
+    
+    elif ext.lower() in ['.ppt', '.pptx']:
+        result = process_presentation(input_path, output_path)
+        if result:
+            print(f"完成: {result}")
+        return
 
     elif ext.lower() == '.docx':
         print(f"📄 正在处理 Word 文件: {input_path}")
@@ -396,7 +484,7 @@ if __name__ == "__main__":
     
     if len(sys.argv) != 2:
         print("使用方法: python processtext.py <文件路径或URL>")
-        print("支持格式: .jpg, .png, .pdf, .docx, .html, .htm 或 URL")
+        print("支持: .jpg, .png, .pdf, .docx, .ppt, .pptx, .html, .htm")
         print("示例: python processtext.py example.pdf")
         print("示例: python processtext.py https://example.com")
         sys.exit(1)

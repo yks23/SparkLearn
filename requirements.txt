@@ -6,8 +6,10 @@ pdf2image
 pillow
 pyvis
 openai
+python-pptx
+PyPDF2
 
-# Additional dependencies for treekg
+Additional dependencies for treekg
 faiss_cpu==1.9.0.post1
 neo4j==5.23.0
 networkx==3.4.2
