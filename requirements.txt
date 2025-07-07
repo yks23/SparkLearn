@@ -6,6 +6,9 @@ pdf2image
 pillow
 pyvis
 openai
+python-pptx
+PyPDF2
+
 networkx==3.1
 zhipuai==2.1.5.20230904
 chatdet
@@ -20,6 +23,5 @@ matplotlib
 # scipy==1.12.0
 # transformers==4.42.4
 
-
-
 # python == 3.11.7
+
