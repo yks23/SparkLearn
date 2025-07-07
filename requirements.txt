@@ -9,14 +9,19 @@ openai
 python-pptx
 PyPDF2
 
-Additional dependencies for treekg
-faiss_cpu==1.9.0.post1
-neo4j==5.23.0
-networkx==3.4.2
-numpy==1.23.5
-openai==1.69.0
-pandas==1.1.5
-scikit_learn==0.20.0
-scipy==1.5.3
-transformers==4.49.0
-zhipuai==2.1.5.20250106
+networkx==3.1
+zhipuai==2.1.5.20230904
+chatdet
+matplotlib
+# Additional dependencies for treekg
+# faiss_cpu==1.11.0
+# neo4j==5.23.0
+# numpy==1.26.4
+# openai==1.68.2
+# pandas==2.2.2
+# scikit_learn==1.5.1
+# scipy==1.12.0
+# transformers==4.42.4
+
+# python == 3.11.7
+

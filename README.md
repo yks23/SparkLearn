@@ -16,7 +16,13 @@
     - 生成各种题目及其解答
 
 ## 环境要求
+
+python版本为：3.11.7  
 相关依赖安装见requirement.txt  
+```bash
+conda create --name eduspark python=3.11.7
+pip install -r requirements.txt
+```
 ppt相关处理需要sudo apt install libreoffice-core libreoffice-common  
 sudo apt install libreoffice-impress  
 conda install -c conda-forge poppler  
