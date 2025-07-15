@@ -15,6 +15,7 @@ from zhipuai import ZhipuAI
 import logging
 from utils.edusp import get_embp_embedding, parser_Message
 
+#TODO 完成tree-kg所需要的embedding格式函数
 
 def get_default_client_sync():
     from config import silicon_api_key, glm_api_key, model_provider, spark_api_key
@@ -61,6 +62,7 @@ def worker_conservation(args):
         for model in [model_name] + extra_models:
             try:
                 if need_json and json_feature.get(model, False):
+                    print('use_json_feature')
                     result = client.chat.completions.create(
                         model=model_name,
                         messages=conversation,

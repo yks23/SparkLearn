@@ -1,17 +1,27 @@
-torch>=1.13.0
-torchvision>=0.14.0
+opencv-python
+PyMuPDF
+requests
+html2text
+pdf2image
+pillow
+pyvis
+openai
+python-pptx
+PyPDF2
 
-layoutparser==0.3.4 # 插图提取
-detectron2 # 插图提取后端
+networkx==3.1
+zhipuai==2.1.5.20230904
+chatdet
+matplotlib
+# Additional dependencies for treekg
+# faiss_cpu==1.11.0
+# neo4j==5.23.0
+# numpy==1.26.4
+# openai==1.68.2
+# pandas==2.2.2
+# scikit_learn==1.5.1
+# scipy==1.12.0
+# transformers==4.42.4
 
-# 图像处理库
-opencv-python>=4.7.0
-Pillow>=9.5.0
-numpy>=1.21.0
+# python == 3.11.7
 
-# PDF处理库
-PyMuPDF>=1.22.0
-
-# 数据处理和序列化
-pathlib
-json5>=0.9.0
