@@ -1,6 +1,8 @@
 import networkx as nx
 from typing import Dict, List, Tuple
 import json
+import websocket
+from websocket import WebSocketApp
 import _thread as thread
 import base64
 import hashlib
@@ -13,9 +15,53 @@ import os
 import ssl
 from tqdm import tqdm
 import time
-import matplotlib.pyplot as plt
 
-import matplotlib.font_manager as fm
+# import sys
+# from pathlib import Path
+
+# # 获取当前文件的绝对路径，然后找到项目根目录（假设项目根目录是 "EduSpark"）
+# current_dir = Path(__file__).parent
+# project_root = current_dir.parent.parent  # 根据实际情况调整层级
+
+# # 将项目根目录添加到 Python 路径
+# sys.path.append(str(project_root))
+
+from utils.api import (
+    single_conversation,
+    multi_conservation,
+    single_embedding,
+    multi_embedding,
+    multiroundConversation,
+)
+
+import multiprocessing as mp
+from concurrent.futures import ThreadPoolExecutor
+
+
+class ConcurrentRequestHandler:
+    def __init__(self, max_workers: int = 4):
+        self.max_workers = max_workers
+
+    def generate_questions_concurrently(self, prompts: List[str]) -> List[str]:
+        """并发生成多个问题"""
+        with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+            results = list(tqdm.tqdm(
+                executor.map(self._generate_single_question, prompts),
+                total=len(prompts),
+                desc="并发生成问题"
+            ))
+        return results
+
+    def _generate_single_question(self, prompt: str) -> str:
+        """单个问题生成（适配你的API）"""
+        # 这里替换为你的实际生成逻辑
+        return single_conversation(
+            system_prompt="你是一个问题生成助手",
+            user_input=prompt,
+            need_json=False,
+            show_progress=False
+        )
+    
 
 class KnowledgeGraph:
     def __init__(self):
@@ -60,66 +106,10 @@ class KnowledgeGraph:
         for edge in tqdm(edges, desc="处理边"):
             source = id_to_name[edge['source_id']]
             target = id_to_name[edge['target_id']]
-            if 'has' in edge['type']:
-                edge['type'] = '关联' 
             rel_type = edge['type'] + edge['descriptions'][-1] if edge['descriptions'] else edge['type']
-            
-            self.graph.add_edge(source, target, short=edge['type'], type=rel_type,weight=edge.get('weight', 1.0))
+            self.graph.add_edge(source, target, type=rel_type, weight=edge.get('weight', 1.0))
         
         print(f"\n🎉 知识图谱加载完成! 共 {len(nodes)} 节点, {len(edges)} 边, 耗时 {time.time()-start_time:.2f} 秒")
-
-
-
-    def visualize(self, output_path: str = "knowledge_graph.png", max_nodes: int = 200):
-        """
-        可视化当前知识图谱，并导出为 PNG 图片（支持中文）。
-        :param output_path: 输出图片路径
-        :param max_nodes: 最多可视化的节点数，避免大图过于拥挤
-        """
-        print(f"\n🖼️ 开始可视化知识图谱（最多显示 {max_nodes} 个节点）...")
-
-        # 设置支持中文的字体
-        try:
-            # ✅ Windows 常见字体
-            zh_font = fm.FontProperties(fname="C:/Windows/Fonts/simhei.ttf")
-        except:
-            try:
-                # ✅ MacOS 常见字体
-                zh_font = fm.FontProperties(fname="/System/Library/Fonts/STHeiti Medium.ttc")
-            except:
-                print("⚠️ 未找到中文字体，中文可能无法正常显示。")
-                zh_font = None
-
-        # 限制可视化规模
-        subgraph = self.graph.copy()
-        if len(subgraph.nodes) > max_nodes:
-            nodes_subset = list(subgraph.nodes)[:max_nodes]
-            subgraph = subgraph.subgraph(nodes_subset)
-
-        plt.figure(figsize=(12, 8))
-        # pos = nx.spring_layout(subgraph, weight='weight', seed=42, k=0.8/(len(subgraph)**0.5))
-        # pos = nx.circular_layout(subgraph)  # 替代 spring_layout
-        pos = nx.kamada_kawai_layout(subgraph)  # 替代 spring_layout
-
-        # 绘制节点和边
-        nx.draw(subgraph, pos, with_labels=True, node_color="skyblue", edge_color="gray",
-                node_size=2000, font_size=10, font_family=zh_font.get_name() if zh_font else "sans-serif", arrows=True)
-
-        # 边的关系标签
-        edge_labels = nx.get_edge_attributes(subgraph, 'short')
-        
-        nx.draw_networkx_edge_labels(
-            subgraph, pos, edge_labels=edge_labels,
-            font_color='red', font_size=8,
-            font_family=zh_font.get_name() if zh_font else "sans-serif"
-        )
-
-        plt.axis("off")
-        plt.tight_layout()
-        plt.savefig(output_path, dpi=300)
-        plt.close()
-
-        print(f"✅ 可视化完成，图片已保存至: {output_path}")
 
 
     def generate_questions(self) -> List[Dict[str, str]]:
@@ -293,55 +283,8 @@ class KnowledgeQuestionGenerator(SparkAPI):
                           "- 知识点描述：{description}"
             }
         }
-        
-        # 添加难度级别定义
-        self.difficulty_levels = {
-            'easy': {
-                'description': '基础概念题，直接考察定义',
-                'keywords': ['定义', '基本概念', '简单']
-            },
-            'medium': {
-                'description': '中等难度题，考察理解和简单应用',
-                'keywords': ['理解', '应用', '关系']
-            },
-            'hard': {
-                'description': '高难度题，考察综合分析能力',
-                'keywords': ['分析', '综合', '复杂']
-            }
-        }
 
-    def generate_difficulty_samples(self, concept: str) -> Dict[str, List[str]]:
-        """生成三种难度的样例题目"""
-        samples = {}
-        for level in ['easy', 'medium', 'hard']:
-            try:
-                # 每种难度生成2道题
-                questions = self._generate_with_difficulty(concept, level, num=2)
-                samples[level] = {
-                    'description': self.difficulty_levels[level]['description'],
-                    'questions': questions
-                }
-            except Exception as e:
-                print(f"生成{level}难度题目失败: {str(e)}")
-                samples[level] = {'questions': []}
-        return samples
-
-    def _generate_with_difficulty(self, concept: str, level: str, num: int = 2) -> List[str]:
-        """按指定难度生成题目"""
-        prompt = (
-            f"请生成关于'{concept}'的{num}道{self.difficulty_levels[level]['description']}题目，要求：\n"
-            f"- 题目类型：单项选择题\n"
-            f"- 难度：{level}\n"
-            f"- 重点考察：{', '.join(self.difficulty_levels[level]['keywords'])}\n)"
-            f"- 知识点描述：{self.kg.get_node_description(concept)}\n"
-            f"- 每道题有4个选项，其中1个正确\n"
-            f"- 题目之间用'---'分隔"
-        )
-        raw_questions = self.generate_questions(prompt)
-        # 处理返回的问题列表
-        return [q.strip() for q in '\n'.join(raw_questions).split('---') if q.strip()]
-
-    def generate_by_concept(self, concept: str, q_type: str = 'mcq',level: str = 'easy') -> List[str]:
+    def generate_by_concept(self, concept: str, q_type: str = 'mcq') -> List[str]:
         """基于特定知识点生成问题（适配当前数据结构）"""
         if concept not in self.kg.graph:
             raise ValueError(f"未知知识点: {concept}")
@@ -351,7 +294,7 @@ class KnowledgeQuestionGenerator(SparkAPI):
         print("node_data: ",node_data)
         params = {
             'concept': concept,
-            'level': level,  # 基于连接数推断难度
+            'level': self._infer_difficulty(concept),  # 基于连接数推断难度
             'description': node_data['description']  # 使用节点描述
         }
         print("1111111111111111")
@@ -373,7 +316,6 @@ class KnowledgeQuestionGenerator(SparkAPI):
             )
         print("222222222222222222222")
         return self.generate_questions(prompt)
-
 
     def _infer_difficulty(self, concept: str) -> str:
         """基于连接数推断难度"""
@@ -398,7 +340,7 @@ class KnowledgeQuestionGenerator(SparkAPI):
             return "关键特征"
     
     def generate_and_save(self, output_path: str = "./questions", formats: List[str] = ["md", "txt"], 
-                        concept: str = None, relation_type: str = None,level:str=None):
+                        concept: str = None, relation_type: str = None):
         """生成并保存问题（带进度显示）"""
         print("\n" + "="*50)
         print("🚀 开始生成问题集")
@@ -413,18 +355,18 @@ class KnowledgeQuestionGenerator(SparkAPI):
             print(f"  专注生成知识点: {concept}")
             questions = {
                 "concept_questions": [
-                    ("选择题", self._generate_with_progress(concept, 'mcq',level=level)),
-                    ("简答题", self._generate_with_progress(concept, 'short_answer',level=level))
+                    ("选择题", self._generate_with_progress(concept, 'mcq')),
+                    ("简答题", self._generate_with_progress(concept, 'short_answer'))
                 ]
             }
         elif relation_type:
             print(f"  专注生成关系类型: {relation_type}")
-            questions = {"relation_questions": self.generate_relation_questions(relation_type,level=level)}
+            questions = {"relation_questions": self.generate_relation_questions(relation_type)}
         else:
             print("  生成全部知识点和关系的问题")
             questions = {
-                "all_concepts": self._generate_all_concept_questions(level=level),
-                "all_relations": self.generate_relation_questions(level=level)
+                "all_concepts": self._generate_all_concept_questions(),
+                "all_relations": self.generate_relation_questions()
             }
         
         # 保存文件
@@ -446,19 +388,19 @@ class KnowledgeQuestionGenerator(SparkAPI):
         print(f"\n🎉 全部完成! 总耗时 {time.time()-start_time:.2f} 秒")
         print("="*50)
 
-    def _generate_with_progress(self, concept: str, q_type: str,level:str="easy") -> List[str]:
+    def _generate_with_progress(self, concept: str, q_type: str) -> List[str]:
         """带进度显示的问题生成"""
         try:
             print(f"  正在生成 {q_type} 问题: {concept[:20]}...")
             start_time = time.time()
-            result = self.generate_by_concept(concept, q_type,level)
+            result = self.generate_by_concept(concept, q_type)
             print(f"  ✅ 生成完成 ({len(result)} 个问题, 耗时 {time.time()-start_time:.2f} 秒)")
             return result
         except Exception as e:
             print(f"  ❌ 生成失败: {str(e)}")
             return []
 
-    def _generate_all_concept_questions(self,level: "easy") -> Dict[str, List[str]]:
+    def _generate_all_concept_questions(self) -> Dict[str, List[str]]:
         """生成所有知识点的问题（带进度条）"""
         results = {}
         concepts = list(self.kg.graph.nodes)
@@ -469,8 +411,8 @@ class KnowledgeQuestionGenerator(SparkAPI):
             if cnt<4:
                 try:
                     results[concept] = {
-                        "mcq": self.generate_by_concept(concept, 'mcq',level),
-                        "short_answer": self.generate_by_concept(concept, 'short_answer',level)
+                        "mcq": self.generate_by_concept(concept, 'mcq'),
+                        "short_answer": self.generate_by_concept(concept, 'short_answer')
                     }
                 except Exception as e:
                     print(f"\n⚠️ 生成失败 [{concept}]: {str(e)}")
@@ -478,7 +420,7 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 
         return results
 
-    def generate_relation_questions(self, relation_type: str = None,level:str="easy") -> Dict[str, List[str]]:
+    def generate_relation_questions(self, relation_type: str = None) -> Dict[str, List[str]]:
         """生成关系类问题（带进度显示）"""
         results = {}
         edges = [e for e in self.kg.graph.edges(data=True) 
@@ -492,7 +434,7 @@ class KnowledgeQuestionGenerator(SparkAPI):
         cnt=0
         for src, dst, data in tqdm(edges, desc="生成关系问题"):
             cnt+=1
-            if cnt<4:
+            if cnt<2:
                 try:
                     prompt = (
                         f"请生成考察以下关系的题目：\n"
@@ -500,7 +442,6 @@ class KnowledgeQuestionGenerator(SparkAPI):
                         f"- 知识点2：{dst}\n"
                         f"- 关系类型：{data['type']}\n"
                         f"要求：\n"
-                        f"- 难度：{level}\n"
                         f"- 选择题需包含反映该关系特征的选项\n"
                         f"- 简答题需评估对该关系的理解深度\n"
                         f"- 不要在题干和选项中出现“第几章”等与知识点无关的冗杂字样"
@@ -514,6 +455,81 @@ class KnowledgeQuestionGenerator(SparkAPI):
             else:
                 break
                     
+        return results
+    
+    def generate_by_concepts_batch(self, concepts: List[str], q_type: str = 'mcq') -> Dict[str, List[str]]:
+        """批量生成多个知识点的问题（并发优化）"""
+        print(f"\n🚀 开始批量生成 {len(concepts)} 个知识点的问题")
+        results = {}
+        
+        # 准备所有prompt
+        prompts = []
+        for concept in concepts:
+            if concept not in self.kg.graph:
+                print(f"⚠️ 跳过未知知识点: {concept}")
+                continue
+                
+            params = {
+                'concept': concept,
+                'level': self._infer_difficulty(concept),
+                'description': self.kg.get_node_description(concept)
+            }
+            
+            if q_type == 'mcq':
+                prompt = self.question_types['mcq']['template'].format(**params)
+            else:
+                prompt = self.question_types['short_answer']['template'].format(
+                    concept=concept,
+                    aspect=self._infer_aspect(concept),
+                    length='3-5句话',
+                    description=params['description']
+                )
+            prompts.append(prompt)
+        
+        # 并发执行
+        questions_list = self.concurrent_handler.generate_questions_concurrently(prompts)
+        
+        # 整理结果
+        for concept, questions in zip(concepts, questions_list):
+            results[concept] = [q.strip() for q in questions.split("\n") if q.strip()]
+        
+        return results
+
+    def generate_relation_questions_concurrent(self, relation_type: str = None) -> Dict[str, List[str]]:
+        """并发生成关系类问题"""
+        edges = [e for e in self.kg.graph.edges(data=True) 
+                if relation_type is None or e[2]['type'] == relation_type]
+        
+        if not edges:
+            print("⚠️ 未找到匹配的关系")
+            return {}
+            
+        print(f"\n🚀 开始并发生成 {len(edges)} 条关系问题")
+        results = {}
+        
+        # 准备所有prompt
+        prompts = []
+        relations = []
+        for src, dst, data in edges:
+            prompt = (
+                f"请生成考察以下关系的题目：\n"
+                f"- 知识点1：{src}\n"
+                f"- 知识点2：{dst}\n"
+                f"- 关系类型：{data['type']}\n"
+                f"要求：\n"
+                f"- 选择题需包含反映该关系特征的选项\n"
+                f"- 简答题需评估对该关系的理解深度"
+            )
+            prompts.append(prompt)
+            relations.append(f"{src}→{dst}({data['type']})")
+        
+        # 并发执行
+        questions_list = self.concurrent_handler.generate_questions_concurrently(prompts)
+        
+        # 整理结果
+        for rel, questions in zip(relations, questions_list):
+            results[rel] = [q.strip() for q in questions.split("\n") if q.strip()]
+        
         return results
     def _save_as_markdown(self, questions: Dict, filepath: str):
         """保存为Markdown格式"""
@@ -578,81 +594,42 @@ class KnowledgeQuestionGenerator(SparkAPI):
             else:
                 for i, q in enumerate(content[:3], 1):  # 只显示前3个
                     print(f"{i}. {q[:60]}...")
-
-    def interactive_question_generation(self, concept: str = None):
-        """交互式题目生成流程"""
-        if not concept:
-            concept = self._select_concept()
-        
-        # 1. 生成难度样本
-        print("\n🔄 正在生成难度样本题目...")
-        samples = self.generate_difficulty_samples(concept)
-
-        # 2. 展示样本题目
-        print("\n📚 请选择最适合您需求的难度:")
-        for i, (level, data) in enumerate(samples.items(), 1):
-            print(f"\n选项 {i}: {level.upper()} - {data['description']}")
-            for j, q in enumerate(data['questions'], 1):
-                print(f"  示例{j}: {q[:80]}...")  # 只显示前80字符
-        
-        # 3. 获取用户选择
-        while True:
-            try:
-                choice = int(input("\n请输入您选择的难度编号(1-3): ")) - 1
-                if 0 <= choice < 3:
-                    selected_level = list(samples.keys())[choice]
-                    break
-                print("请输入1-3之间的数字！")
-            except ValueError:
-                print("请输入有效数字！")
-        
-        # 4. 生成完整题目集
-        print(f"\n🎯 您选择了'{selected_level}'难度")
-        concept_choice=0
-        while True:
-            try:
-                concept_choice = int(input("\n生成完整习题集请输“1”，生成指定知识点习题请输“2”，并选择指定的知识点:")) 
-                if concept_choice == 1 or concept_choice == 2 :
-                    break
-            except ValueError:
-                print("请输入有效数字！")
-        print("")
-
-        if concept_choice==1:
-            full_questions = self.generate_and_save(level=selected_level)
-        else:
-            full_questions = self.generate_and_save(concept=concept, level=selected_level)  # 生成10道
-        return full_questions
         
 
-    def _select_concept(self) -> str:
-        """让用户选择知识点"""
-        concepts = list(self.kg.graph.nodes)
-        print("\n📖 可选知识点列表:")
-        for i, concept in enumerate(concepts[:10], 1):  # 只显示前10个
-            print(f"{i}. {concept}")
-        while True:
-            try:
-                choice = int(input("\n请选择知识点编号: ")) - 1
-                if 0 <= choice < len(concepts):
-                    return concepts[choice]
-                print(f"请输入1-{len(concepts)}之间的数字！")
-            except ValueError:
-                print("请输入有效数字！")
+if __name__ == "__main__":
+    mp.freeze_support()
 
+    # 1. 构建知识图谱
+    kg = KnowledgeGraph()
+    kg.load_knowledge_graph()
+
+    # 2. 初始化生成器
+    generator = KnowledgeQuestionGenerator(
+        kg,
+        appid="2d1bc910",
+        api_key="a1df9334fd048ded0c9304ccf12c20d1",
+        api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
+    )
+
+    # 3. 并发生成测试
+    concepts = list(kg.graph.nodes)[:5]  # 取前5个概念测试
+    batch_results = generator.generate_by_concepts_batch(concepts, 'mcq')
     
+    # 4. 并发关系问题生成
+    rel_results = generator.generate_relation_questions_concurrent()
+    
+    # 5. 保存结果
+    generator.generate_and_save(
+        output_path="./output",
+        formats=["md", "txt"],
+        concept=None,
+        relation_type=None
+    )
 
-# 1. 构建知识图谱
-kg = KnowledgeGraph()
-kg.load_knowledge_graph()
+    # # 生成所有关系问题
+    # all_relation_questions = generator.generate_relation_questions()
 
-# 2. 初始化生成器
-generator = KnowledgeQuestionGenerator(
-    kg,
-    appid="2d1bc910",
-    api_key="a1df9334fd048ded0c9304ccf12c20d1",
-    api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
-)
+    # # 生成特定类型关系问题
+    # causal_questions = generator.generate_relation_questions("因果关系")
 
-# 启动交互式生成流程
-result = generator.interactive_question_generation()
+    # generator.generate_and_save()
