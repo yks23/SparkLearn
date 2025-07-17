@@ -4,7 +4,6 @@ import multiprocessing
 from  pre_process.text_recognize.processtext import process_input
 from sider.annotator_simple import SimplifiedAnnotator
 from qg.graph_class import KnowledgeGraph,KnowledgeQuestionGenerator
-from config import APPID,APISecret,APIKEY
 import json
 def parse_args():
     parser = argparse.ArgumentParser(description="EduSpark CLI Tool")
@@ -49,6 +48,7 @@ def generate_QA(input_path, output_path):
     """
     kg = KnowledgeGraph()
     kg.load_knowledge_graph(input_path)
+    print(f"加载知识图谱: {input_path}")
     kg.visualize(os.path.join(input_path,'graph.png'))
     generator = KnowledgeQuestionGenerator(
         kg,
@@ -64,6 +64,8 @@ def main(args):
     file_path = args.file_path
     output_path = args.output_path
     processed_path  = os.path.join(output_path, os.path.basename(file_path))
+    
+    
     if os.path.exists(os.path.join(output_path, args.state_path)):
         with open(os.path.join(output_path, args.state_path), 'r') as f:
             print(f"初始化状态文件: {os.path.join(output_path, args.state_path)}")
@@ -71,8 +73,10 @@ def main(args):
                 state_file = json.load(f) 
             except:
                 state_file = {}
-
-
+    else:
+        print(f"创建新的状态文件: {os.path.join(output_path, args.state_path)}")
+        state_file = {}
+    print(state_file)
     if state_file.get('preprocess',False):
         print("已处理过，跳过预处理")
     else:
@@ -107,6 +111,7 @@ def main(args):
     
     
 if __name__ == "__main__":
+    
     multiprocessing.freeze_support()  # 支持Windows下的多进程
     args = parse_args()
     main(args)

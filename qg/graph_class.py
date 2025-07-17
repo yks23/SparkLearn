@@ -31,7 +31,7 @@ utils_path = project_root / "utils"  # utils 的绝对路径
 sys.path.append(str(utils_path))
 
 # 现在可以直接导入
-from api import (
+from utils.api import (
     single_conversation,
     multi_conservation,
     single_embedding,
@@ -762,20 +762,19 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 print(f"请输入1-{len(concepts)}之间的数字！")
             except ValueError:
                 print("请输入有效数字！")
+if __name__ == "__main__":
 
-    
+    # 1. 构建知识图谱
+    kg = KnowledgeGraph()
+    kg.load_knowledge_graph()
 
-# 1. 构建知识图谱
-kg = KnowledgeGraph()
-kg.load_knowledge_graph()
+    # 2. 初始化生成器
+    generator = KnowledgeQuestionGenerator(
+        kg,
+        appid="2d1bc910",
+        api_key="a1df9334fd048ded0c9304ccf12c20d1",
+        api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
+    )
 
-# 2. 初始化生成器
-generator = KnowledgeQuestionGenerator(
-    kg,
-    appid="2d1bc910",
-    api_key="a1df9334fd048ded0c9304ccf12c20d1",
-    api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
-)
-
-# 启动交互式生成流程
-result = generator.interactive_question_generation()
+    # 启动交互式生成流程
+    result = generator.interactive_question_generation()
