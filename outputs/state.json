@@ -1,6 +1,6 @@
 {
     "preprocess": true,
     "augment": true,
-    "tree": true,
-    "qa": true
+    "tree": false,
+    "qa": false
 }

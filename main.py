@@ -27,15 +27,22 @@ def process_folder(input_path, output_path):
 
 def augment_folder(input_path):
     if not os.path.isdir(input_path):
-        annotator = SimplifiedAnnotator()
-        with open(input_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-        annotator.process(content, input_path)  # 覆盖原文件 
+        # 只处理后缀为 .md 的文件
+        if input_path.lower().endswith(".md"):
+            try:
+                annotator = SimplifiedAnnotator()
+                with open(input_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                annotator.process(content, input_path)  # 覆盖原文件
+            except Exception as e:
+                print(f"⚠️ 处理文件失败：{input_path}，错误：{e}")
+        else:
+            print(f"⏩ 跳过非 .md 文件：{input_path}")
     else:
-        sub_folders = os.listdir(input_path)
-        for sub_folder in sub_folders:
-            sub_folder_path = os.path.join(input_path, sub_folder)
-            augment_folder(sub_folder_path)
+        for sub_name in os.listdir(input_path):
+            sub_path = os.path.join(input_path, sub_name)
+            augment_folder(sub_path)
+
 
 def tree_folder(input_path,output_path):
     os.environ['meta_path'] = output_path  # 设置环境变量
