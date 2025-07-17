@@ -1,6 +1,15 @@
 from multiprocessing import Pool, Manager
 from typing import List, Dict
 from tqdm import tqdm
+import sys
+from pathlib import Path
+
+# 获取 api.py 的绝对路径，并向上找到项目根目录
+current_dir = Path(__file__).parent  # utils/ 目录
+project_root = current_dir.parent    # EduSpark/ 目录
+
+# 将项目根目录添加到 Python 路径
+sys.path.append(str(project_root))
 from config import (
     model_name,
     max_thread_num,
