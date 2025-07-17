@@ -56,7 +56,7 @@ def generate_QA(input_path, output_path):
         api_key="a1df9334fd048ded0c9304ccf12c20d1",
         api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
     )
-    generator.generate_and_save(output_path=output_path)
+    generator.interactive_question_generation()
     
 def main(args):
     # 首先处理原始文件
