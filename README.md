@@ -20,12 +20,17 @@
 python版本为：3.11.7  
 相关依赖安装见requirement.txt  
 ```bash
-conda create --name eduspark python=3.11.7
+conda create --name eduspark python=3.11.7 
+conda activate eduspark
 pip install -r requirements.txt
 ```
 ppt相关处理需要sudo apt install libreoffice-core libreoffice-common  
 sudo apt install libreoffice-impress  
 conda install -c conda-forge poppler  
+PDF处理依赖
+conda install -c conda-forge poppler
+DOCX转换依赖
+conda install -c conda-forge pandoc
 
 ## 目前pipeline
 

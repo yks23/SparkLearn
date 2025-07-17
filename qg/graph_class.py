@@ -50,7 +50,7 @@ class KnowledgeGraph:
             'application': "如何运用{concept}解决实际问题？"
         }
 
-    def load_knowledge_graph(self, graph_file_path: str = '/mnt/d/coding/星火杯/Eduspark/demo_kg/graph'):
+    def load_knowledge_graph(self, graph_file_path: str = './demo_kg/graph'):
         """加载知识图谱（带进度显示）"""
         print("🔍 开始加载知识图谱...")
         start_time = time.time()
