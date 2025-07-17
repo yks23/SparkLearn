@@ -14,8 +14,31 @@ import ssl
 from tqdm import tqdm
 import time
 import matplotlib.pyplot as plt
+import websocket
+import random
 
 import matplotlib.font_manager as fm
+
+import sys
+from pathlib import Path
+
+# 获取当前脚本的绝对路径，并找到 utils 所在的目录（假设和当前脚本的父目录平级）
+current_dir = Path(__file__).parent  # 当前脚本所在目录
+project_root = current_dir.parent    # 上级目录（和 utils 平级）
+utils_path = project_root / "utils"  # utils 的绝对路径
+
+# 添加到 Python 路径
+sys.path.append(str(utils_path))
+
+# 现在可以直接导入
+from api import (
+    single_conversation,
+    multi_conservation,
+    single_embedding,
+    multi_embedding,
+    multiroundConversation,
+)
+import multiprocessing as mp
 
 class KnowledgeGraph:
     def __init__(self):
@@ -27,7 +50,7 @@ class KnowledgeGraph:
             'application': "如何运用{concept}解决实际问题？"
         }
 
-    def load_knowledge_graph(self, graph_file_path: str = './demo_kg/graph'):
+    def load_knowledge_graph(self, graph_file_path: str = '/mnt/d/coding/星火杯/Eduspark/demo_kg/graph'):
         """加载知识图谱（带进度显示）"""
         print("🔍 开始加载知识图谱...")
         start_time = time.time()
@@ -185,6 +208,7 @@ class SparkAPI:
         self.path = urlparse(spark_url).path
         self.answer = ""
         self.question = ""
+        self.system_prompt= ""
 
     def create_url(self):
         """生成带鉴权的WebSocket连接URL"""
@@ -250,24 +274,47 @@ class SparkAPI:
             ws.send(data)
         thread.start_new_thread(run, ())
 
-    def generate_questions(self, text):
+    def generate_questions(self, text: str, q_type: str = None) -> List[str]:
         """生成问题的主方法"""
-        self.question = f"请基于以下文本生成3-5个单项选择题：\n{text}"
+
+        question_type_map = {
+            'mcq': '单项选择题',
+            'short_answer': '简答题'
+        }
+
+        question_num=random.randint(3,5)
+        if q_type != None:
+            self.question =[ f"请生成1道{question_type_map[q_type]}，要求：\n{text}"]* question_num
+        else:
+            self.question =[f"请基于下面要求，生成1道题目，要求：\n{text}"]*question_num
         self.answer = ""  # 重置回答
-        
-        ws_url = self.create_url()
-        ws = websocket.WebSocketApp(
-            ws_url,
-            on_message=self.on_message,
-            on_error=self.on_error,
-            on_close=self.on_close,
-            on_open=self.on_open
+        self.system_prompt = ["你是一个生成练习题的助手，请把生成的题目以markdown语法提供给我，不要加入与题目无关的回答，例如“好的”"]*question_num
+
+        self.answer = multi_conservation(
+            self.system_prompt, self.question, need_json=[False] * question_num, show_progress=True
         )
-        ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
         
-        # 格式化返回的问题列表
-        questions = [q.strip() for q in self.answer.split("\n") if q.strip()]
-        return questions
+        # try:
+        #     ws_url = self.create_url()
+        #     ws = websocket.WebSocketApp(
+        #         ws_url,
+        #         on_message=self.on_message,
+        #         on_error=self.on_error,
+        #         on_close=self.on_close,
+        #         on_open=self.on_open
+        #     )
+        #     ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
+            
+        # 处理每个回答：按换行拆分并过滤空行
+        all_questions = []
+        for answer in self.answer:
+            # 每个answer是一个字符串，可能包含多道题目（用换行分隔）
+            questions = [q.strip() for q in answer.split("\n") if q.strip()]
+            all_questions.extend(questions)
+
+        return all_questions
+        # except Exception as e:
+        #     raise RuntimeError(f"问题生成失败: {str(e)}")
     
 class KnowledgeQuestionGenerator(SparkAPI):
     def __init__(self, kg: KnowledgeGraph, **api_config):
@@ -329,7 +376,7 @@ class KnowledgeQuestionGenerator(SparkAPI):
     def _generate_with_difficulty(self, concept: str, level: str, num: int = 2) -> List[str]:
         """按指定难度生成题目"""
         prompt = (
-            f"请生成关于'{concept}'的{num}道{self.difficulty_levels[level]['description']}题目，要求：\n"
+            f"请生成关于'{concept}'的1道{self.difficulty_levels[level]['description']}题目，要求：\n"
             f"- 题目类型：单项选择题\n"
             f"- 难度：{level}\n"
             f"- 重点考察：{', '.join(self.difficulty_levels[level]['keywords'])}\n)"
@@ -372,7 +419,7 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 description=node_data['description']
             )
         print("222222222222222222222")
-        return self.generate_questions(prompt)
+        return self.generate_questions(prompt,q_type)
 
 
     def _infer_difficulty(self, concept: str) -> str:
@@ -458,7 +505,7 @@ class KnowledgeQuestionGenerator(SparkAPI):
             print(f"  ❌ 生成失败: {str(e)}")
             return []
 
-    def _generate_all_concept_questions(self,level: "easy") -> Dict[str, List[str]]:
+    def _generate_all_concept_questions(self,level: str="easy") -> Dict[str, List[str]]:
         """生成所有知识点的问题（带进度条）"""
         results = {}
         concepts = list(self.kg.graph.nodes)
@@ -515,27 +562,65 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 break
                     
         return results
+    # def _save_as_markdown(self, questions: Dict, filepath: str):
+    #     """保存为Markdown格式"""
+    #     with open(filepath, 'w', encoding='utf-8') as f:
+    #         for category, content in questions.items():
+    #             f.write(f"## {category.replace('_', ' ').title()}\n\n")
+    #             if isinstance(content, dict):
+    #                 for key, value in content.items():
+    #                     f.write(f"### {key}\n")
+    #                     if isinstance(value, list):
+    #                         for q in value:
+    #                             f.write(f"- {q}\n")
+    #                     elif isinstance(value, dict):
+    #                         for sub_key, sub_value in value.items():
+    #                             f.write(f"#### {sub_key}\n")
+    #                             for q in sub_value:
+    #                                 f.write(f"- {q}\n")
+    #                     f.write("\n")
+    #             else:
+    #                 for q in content:
+    #                     f.write(f"- {q}\n")
+    #             f.write("\n")
+
     def _save_as_markdown(self, questions: Dict, filepath: str):
-        """保存为Markdown格式"""
+        """保存为格式良好的Markdown文件，优化处理题型元组结构"""
         with open(filepath, 'w', encoding='utf-8') as f:
             for category, content in questions.items():
+                # 分类标题
                 f.write(f"## {category.replace('_', ' ').title()}\n\n")
-                if isinstance(content, dict):
-                    for key, value in content.items():
-                        f.write(f"### {key}\n")
-                        if isinstance(value, list):
-                            for q in value:
-                                f.write(f"- {q}\n")
-                        elif isinstance(value, dict):
-                            for sub_key, sub_value in value.items():
-                                f.write(f"#### {sub_key}\n")
-                                for q in sub_value:
-                                    f.write(f"- {q}\n")
-                        f.write("\n")
-                else:
-                    for q in content:
-                        f.write(f"- {q}\n")
-                f.write("\n")
+                
+                if isinstance(content, (list, tuple)):
+                    # 处理题型元组结构 [('选择题', [题目列表]), ('简答题', [题目列表])]
+                    for question_type, question_list in content:
+                        if not isinstance(question_list, (list, tuple)):
+                            question_list = [question_list]
+                        
+                        f.write(f"### {question_type}\n\n")
+                        
+                        current_question = []
+                        for item in question_list:
+                            if isinstance(item, str):
+                                # 处理题目文本
+                                if item.startswith('###'):  # 子标题
+                                    if current_question:
+                                        f.write("\n".join(current_question) + "\n\n")
+                                        current_question = []
+                                    f.write(f"{item}\n")
+                                elif item.startswith('**') or "：" in item:  # 题目或答案标记
+                                    if current_question and not current_question[-1].endswith("\n"):
+                                        current_question.append("")  # 添加空行分隔
+                                    current_question.append(item)
+                                else:  # 普通题目内容
+                                    current_question.append(item)
+                            elif item is not None:
+                                current_question.append(str(item))
+                        
+                        if current_question:  # 写入最后一个问题
+                            f.write("\n".join(current_question) + "\n\n")
+                
+                f.write("\n")  # 分类间空行
 
     def _save_as_text(self, questions: Dict, filepath: str):
         """保存为纯文本格式"""
@@ -559,6 +644,44 @@ class KnowledgeQuestionGenerator(SparkAPI):
                         f.write(f"- {q}\n")
                 f.write("\n")
 
+    # def _save_as_markdown(self, questions: Dict, filepath: str):
+    #     """保存为格式良好的Markdown文件"""
+    #     with open(filepath, 'w', encoding='utf-8') as f:
+    #         for category, content in questions.items():
+    #             # 分类标题
+    #             f.write(f"## {category.replace('_', ' ').title()}\n\n")
+                
+    #             if isinstance(content, dict):
+    #                 # 处理嵌套字典结构
+    #                 for key, value in content.items():
+    #                     f.write(f"### {key}\n\n")
+                        
+    #                     if isinstance(value, list):
+    #                         # 处理问题列表
+    #                         for item in value:
+    #                             if isinstance(item, (list, tuple)):
+    #                                 # 处理多行问题(如选择题)
+    #                                 for line in item:
+    #                                     if line.strip():  # 跳过空行
+    #                                         f.write(f"{line}\n")
+    #                                 f.write("\n")  # 问题间空行
+    #                             else:
+    #                                 # 处理单行问题
+    #                                 if item.strip():  # 跳过空行
+    #                                     f.write(f"{item}\n\n")
+    #                     elif isinstance(value, dict):
+    #                         # 处理更深层级的嵌套
+    #                         for sub_key, sub_value in value.items():
+    #                             f.write(f"#### {sub_key}\n\n")
+    #                             for q in sub_value:
+    #                                 f.write(f"{q}\n\n")
+    #             else:
+    #                 # 处理非嵌套的简单列表
+    #                 for q in content:
+    #                     if q.strip():  # 跳过空行
+    #                         f.write(f"{q}\n\n")
+                
+    #             f.write("\n")  # 分类间空行
     def _print_questions_preview(self, questions: Dict):
         """控制台打印预览"""
         print("\n=== 问题预览 ===")
