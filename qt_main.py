@@ -111,7 +111,7 @@ class MainWindow(QWidget):
 
         #下面这些也应该设置为可以调整的项目：
         self.input_path = ""
-        self.output_path = "./outputs"
+        self.output_path = "./outputs2"
         self.state_path = "./state.json"
 
         layout = QVBoxLayout()

@@ -5,6 +5,7 @@ from  pre_process.text_recognize.processtext import process_input
 from sider.annotator_simple import SimplifiedAnnotator
 from qg.graph_class import KnowledgeGraph,KnowledgeQuestionGenerator
 import json
+from tqdm import tqdm
 def parse_args():
     parser = argparse.ArgumentParser(description="EduSpark CLI Tool")
     parser.add_argument('--file_path', type=str, required=True, help='Input file or directory path')
@@ -23,18 +24,35 @@ def process_folder(input_path, output_path):
             sub_folder_path = os.path.join(input_path, sub_folder)
             process_folder(sub_folder_path, new_output_path)
 
+def augment_file(input_path):
+    annotator = SimplifiedAnnotator()
+    with open(input_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    annotator.process(content, input_path)  # 覆盖原文件
 
 def augment_folder(input_path):
     if not os.path.isdir(input_path):
         annotator = SimplifiedAnnotator()
         with open(input_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        annotator.process(content, input_path)  # 覆盖原文件 
+        annotator.process(content, input_path)  # 覆盖原文件
     else:
         sub_folders = os.listdir(input_path)
-        for sub_folder in sub_folders:
-            sub_folder_path = os.path.join(input_path, sub_folder)
-            augment_folder(sub_folder_path)
+        with tqdm(total=len(sub_folders), desc="Augmenting files") as pbar:
+            processes = []
+            for sub_folder in sub_folders:
+                sub_folder_path = os.path.join(input_path, sub_folder)
+                if os.path.isdir(sub_folder_path):
+                    augment_folder(sub_folder_path)
+                else:
+                    p = multiprocessing.Process(target=augment_file, args=(sub_folder_path,))
+                    processes.append(p)
+                    p.start()
+                pbar.update(1)  # 更新进度条
+        
+        # 等待所有进程完成
+        for p in processes:
+            p.join()
 
 def tree_folder(input_path,output_path):
     os.environ['meta_path'] = output_path  # 设置环境变量
