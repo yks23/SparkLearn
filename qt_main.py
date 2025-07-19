@@ -6,10 +6,12 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 
-# === 以下是你提供的原始逻辑 ===
+# 原本使用的模块
 from pre_process.text_recognize.processtext import process_input
 from sider.annotator_simple import SimplifiedAnnotator
 from qg.graph_class import KnowledgeGraph, KnowledgeQuestionGenerator
+from kg_construction.main import main as run_tree_main
+from main import tree_folder, generate_QA
 
 # === 封装线程类：避免UI卡顿 ===
 class PreprocessThread(QThread):
@@ -58,29 +60,40 @@ class KGThread(QThread):
     finished = pyqtSignal()
     log = pyqtSignal(str)
 
-    def __init__(self, file_path):
+    def __init__(self, input_path, output_path):
         super().__init__()
-        self.file_path = file_path
+        self.input_path = input_path
+        self.output_path = output_path
 
     def run(self):
-        kg = KnowledgeGraph()
-        kg.create_graph(self.file_path)
-        self.log.emit(f"知识图谱已生成: {self.file_path}")
+        try:
+            self.log.emit("开始生成结构树图...")
+            tree_folder(self.input_path, self.output_path)
+            self.log.emit(f"结构图已生成: {self.output_path}")
+        except Exception as e:
+            self.log.emit(f"❌ 生成结构图失败: {str(e)}")
         self.finished.emit()
+
 
 class QAThread(QThread):
     finished = pyqtSignal()
     log = pyqtSignal(str)
 
-    def __init__(self, file_path):
+    def __init__(self, input_path, output_path):
         super().__init__()
-        self.file_path = file_path
+        self.input_path = input_path  # 通常是 tree/graph
+        self.output_path = output_path
 
     def run(self):
-        qg = KnowledgeQuestionGenerator()
-        qg.generate(self.file_path)
-        self.log.emit(f"问题生成完成: {self.file_path}")
+        try:
+            self.log.emit("开始生成问答...")
+            generate_QA(self.input_path, self.output_path)
+            self.log.emit(f"问答生成完成，已保存至: {self.output_path}")
+        except Exception as e:
+            self.log.emit(f"❌ 问答生成失败: {str(e)}")
         self.finished.emit()
+
+
 
 # === 主窗口界面 ===
 class MainWindow(QWidget):
@@ -185,37 +198,40 @@ class MainWindow(QWidget):
 
 
     def run_kg(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "选择 Markdown 文件", filter="Markdown files (*.md)")
+        file_path = QFileDialog.getExistingDirectory(self, "选择预处理后文件夹")  # 输入是 preprocess 后的目录
         if file_path:
             output_path = self.output_path or self.get_default_output_path(file_path, "结构梳理")
             os.makedirs(output_path, exist_ok=True)
 
-            self.log(f"开始生成知识图谱: {file_path}")
+            self.log(f"开始生成结构图: {file_path}")
             self.log(f"输出目录: {output_path}")
             self.show_progress(True)
 
-            self.kg_thread = KGThread(file_path)
+            self.kg_thread = KGThread(file_path, output_path)
             self.kg_thread.log.connect(self.log)
             self.kg_thread.finished.connect(lambda: self.show_progress(False))
-            self.kg_thread.finished.connect(lambda: self.log("✅ 知识图谱生成完成"))
+            self.kg_thread.finished.connect(lambda: self.log("✅ 知识结构图生成完成"))
             self.kg_thread.start()
 
 
+
     def run_qa(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "选择 Markdown 文件", filter="Markdown files (*.md)")
+        file_path = QFileDialog.getExistingDirectory(self, "选择结构图目录（包含graph）")
         if file_path:
+            input_graph_path = os.path.join(file_path, "graph")  # 结构图在该目录下
             output_path = self.output_path or self.get_default_output_path(file_path, "生成问答")
             os.makedirs(output_path, exist_ok=True)
 
-            self.log(f"开始生成 QA: {file_path}")
+            self.log(f"开始生成问答: {input_graph_path}")
             self.log(f"输出目录: {output_path}")
             self.show_progress(True)
 
-            self.qa_thread = QAThread(file_path)
+            self.qa_thread = QAThread(input_graph_path, output_path)
             self.qa_thread.log.connect(self.log)
             self.qa_thread.finished.connect(lambda: self.show_progress(False))
             self.qa_thread.finished.connect(lambda: self.log("✅ QA 生成完成"))
             self.qa_thread.start()
+
 
 
     def select_output_path(self):
