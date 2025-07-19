@@ -50,20 +50,28 @@ def tree_folder(input_path,output_path):
     from kg_construction.main import main
     main()
 
-def generate_QA(input_path, output_path):
+def generate_QA(input_path, output_path, concept=None, level="easy"):
     """
-    生成问答对
+    生成问答对（支持外部传入知识点与难度）
     """
+    from qg.graph_class import KnowledgeGraph, KnowledgeQuestionGenerator
+
+    # 1. 加载图谱
     kg = KnowledgeGraph()
     kg.load_knowledge_graph(input_path)
-    kg.visualize(os.path.join(input_path,'graph.png'))
+    kg.visualize(os.path.join(input_path, 'graph.png'))
+
+    # 2. 创建生成器
     generator = KnowledgeQuestionGenerator(
         kg,
         appid="2d1bc910",
         api_key="a1df9334fd048ded0c9304ccf12c20d1",
         api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
     )
-    generator.interactive_question_generation()
+
+    # 3. 调用非交互版本的生成函数
+    generator.run_generation_by_params(output_path=output_path, concept=concept, level=level)
+
     
 def main(args):
     # 首先处理原始文件

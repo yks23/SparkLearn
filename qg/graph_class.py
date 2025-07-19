@@ -702,66 +702,13 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 for i, q in enumerate(content[:3], 1):  # 只显示前3个
                     print(f"{i}. {q[:60]}...")
 
-    def interactive_question_generation(self, concept: str = None):
-        """交互式题目生成流程"""
-        if not concept:
-            concept = self._select_concept()
-        
-        # 1. 生成难度样本
-        print("\n🔄 正在生成难度样本题目...")
-        samples = self.generate_difficulty_samples(concept)
+    def run_generation_by_params(self, output_path: str, concept: str, level: str):
+        """
+        替代交互函数：由外部传入参数 concept 和 level，执行生成并保存。
+        """
+        print(f"\n🧠 知识点: {concept}，难度: {level}")
+        self.generate_and_save(output_path=output_path, concept=concept, level=level)
 
-        # 2. 展示样本题目
-        print("\n📚 请选择最适合您需求的难度:")
-        for i, (level, data) in enumerate(samples.items(), 1):
-            print(f"\n选项 {i}: {level.upper()} - {data['description']}")
-            for j, q in enumerate(data['questions'], 1):
-                print(f"  示例{j}: {q[:80]}...")  # 只显示前80字符
-        
-        # 3. 获取用户选择
-        while True:
-            try:
-                choice = int(input("\n请输入您选择的难度编号(1-3): ")) - 1
-                if 0 <= choice < 3:
-                    selected_level = list(samples.keys())[choice]
-                    break
-                print("请输入1-3之间的数字！")
-            except ValueError:
-                print("请输入有效数字！")
-        
-        # 4. 生成完整题目集
-        print(f"\n🎯 您选择了'{selected_level}'难度")
-        concept_choice=0
-        while True:
-            try:
-                concept_choice = int(input("\n生成完整习题集请输“1”，生成指定知识点习题请输“2”，并选择指定的知识点:")) 
-                if concept_choice == 1 or concept_choice == 2 :
-                    break
-            except ValueError:
-                print("请输入有效数字！")
-        print("")
-
-        if concept_choice==1:
-            full_questions = self.generate_and_save(level=selected_level)
-        else:
-            full_questions = self.generate_and_save(concept=concept, level=selected_level)  # 生成10道
-        return full_questions
-        
-
-    def _select_concept(self) -> str:
-        """让用户选择知识点"""
-        concepts = list(self.kg.graph.nodes)
-        print("\n📖 可选知识点列表:")
-        for i, concept in enumerate(concepts[:10], 1):  # 只显示前10个
-            print(f"{i}. {concept}")
-        while True:
-            try:
-                choice = int(input("\n请选择知识点编号: ")) - 1
-                if 0 <= choice < len(concepts):
-                    return concepts[choice]
-                print(f"请输入1-{len(concepts)}之间的数字！")
-            except ValueError:
-                print("请输入有效数字！")
 
     
 if __name__ == "__main__":
