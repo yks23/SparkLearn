@@ -11,9 +11,10 @@ target_field = ""
 
 # Path to the source text folder
 raw_path = ""
-glm_api_key = os.getenv("chatglm_api_key")
-openai_api_key = os.getenv("openai_api_key")
-silicon_api_key = os.getenv("silicon_api_key")
+
+glm_api_key = os.getenv("chatglm_api_key",None)
+openai_api_key = os.getenv("openai_api_key",None)
+silicon_api_key = os.getenv("silicon_api_key",None)
 
 # Splitting rules for the source text, which can be adjusted based on the original book structure
 re_expression = [r"(# .*\n)", r"(## .*\n)", r"(### .*\n)"]

@@ -6,16 +6,18 @@ from ..src.config_file.config_template import *
 # 下面不用改
 from zhipuai import ZhipuAI
 from openai import AsyncOpenAI, OpenAI
-
-chatglm_client = ZhipuAI(api_key=glm_api_key)
-openai_client = AsyncOpenAI(
-    api_key=openai_api_key,
-    base_url="https://api.openai.com",
-)
-openai_client_v2 = OpenAI(
+if not glm_api_key is None:
+    chatglm_client = ZhipuAI(api_key=glm_api_key)
+if not openai_api_key is None:
+    openai_client = OpenAI(
+        api_key=openai_api_key,
+        base_url="https://api.openai.com/v1",
+    )
+    openai_client_v2 = OpenAI(
     api_key=openai_api_key,
     base_url="https://api.openai.com/v1",
-)
+    )
+    
 max_thread_num = 20
 if 'meta_path' in os.environ:
     metadata_path = os.environ['meta_path'] # 路径地址
