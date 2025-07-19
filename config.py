@@ -20,7 +20,7 @@ json_feature = {
     "lite": True,
 }
 # API key configs
-spark_api_key = "PqaddjxvbBSYjGckQcxD:qzaVIDUrLtMTVLZuEZkg"
+spark_api_key = "xqZXJdxoaaLEBIMuuCBg:FUuIHcWDmPLSpJcXsiSp"
 silicon_api_key = "" # SiliconFlow API key, if applicable
 openai_api_key = "" # OpenAI API key, if applicable
 glm_api_key = "" # ChatGLM API key, if applicable
