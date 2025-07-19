@@ -1,3 +1,4 @@
+# qt_main.py
 import sys
 import os
 import json
@@ -5,7 +6,7 @@ import multiprocessing
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QPushButton, QVBoxLayout, QFileDialog,
     QLabel, QTextEdit, QProgressBar, QMessageBox, QHBoxLayout,
-    QCheckBox, QGroupBox, QGridLayout
+    QCheckBox, QGroupBox, QGridLayout, QComboBox
 )
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject
 from main import process_folder, augment_folder, tree_folder
@@ -26,7 +27,8 @@ class QtLogger(QObject):
 class PipelineThread(QThread):
     log_signal = pyqtSignal(str)
     finished = pyqtSignal()
-    progress_update = pyqtSignal(int)  # 添加进度更新信号
+    progress_update = pyqtSignal(int)
+    kg_ready = pyqtSignal(str)  # 知识图谱准备好时发出
 
     def __init__(self, input_path, output_path, state_path, selected_steps, parent=None):
         super().__init__(parent)
@@ -54,20 +56,18 @@ class PipelineThread(QThread):
             step_names = {
                 'preprocess': "🔧 预处理原始文件",
                 'augment': "🧠 增广文本",
-                'tree': "🌳 构建知识树结构",
-                'qa': "📚 生成问答对"
+                'tree': "🌳 构建知识树结构"
             }
             
             # 步骤处理函数
             steps = {
                 'preprocess': lambda: process_folder(self.input_path, self.output_path),
                 'augment': lambda: augment_folder(self.output_path),
-                'tree': lambda: tree_folder(self.output_path,  os.path.join(self.output_path, "tree")),
-                'qa': lambda: self.generate_qa(os.path.join(self.output_path, "tree", "graph"))
+                'tree': lambda: self.run_tree_step()  # 修改为调用自定义方法
             }
             
             # 按顺序执行选中的步骤
-            step_order = ['preprocess', 'augment', 'tree', 'qa']
+            step_order = ['preprocess', 'augment', 'tree']
             completed_steps = 0
             total_steps = len(self.selected_steps)
             
@@ -97,38 +97,76 @@ class PipelineThread(QThread):
             self.log(f"❌ 运行出错: {str(e)}\n{traceback.format_exc()}")
         finally:
             self.finished.emit()
+    
+    def run_tree_step(self):
+        """执行知识树构建步骤并保存知识图谱路径"""
+        tree_output = os.path.join(self.output_path, "tree")
+        tree_folder(self.output_path, tree_output)
+        graph_path = os.path.join(tree_output, "graph")
+        self.log(f"知识图谱已构建在: {graph_path}")
+        # 发出知识图谱准备就绪的信号
+        self.kg_ready.emit(graph_path)
 
-    def generate_qa(self, graph_path):
-        kg = KnowledgeGraph()
-        kg.load_knowledge_graph(graph_path)
-        concepts = list(kg.graph.nodes)
-        if not concepts:
-            self.log("⚠️ 知识图谱为空，跳过问答生成")
-            return
-        concept = concepts[0]
-        level = "中等"
 
-        generator = KnowledgeQuestionGenerator(
-            kg,
-            appid="2d1bc910",
-            api_key="a1df9334fd048ded0c9304ccf12c20d1",
-            api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
-        )
-        generator.generate_and_save(concept=concept, level=level,output_path=self.output_path+"/questions")
-        self.log("✅ 问答对生成完成")
+class QAGenerationThread(QThread):
+    """专门用于生成问答对的线程"""
+    log_signal = pyqtSignal(str)
+    finished = pyqtSignal(bool)  # 传递生成是否成功的信号
+    
+    def __init__(self, graph_path, concept, difficulty, output_path, parent=None):
+        super().__init__(parent)
+        self.graph_path = graph_path
+        self.concept = concept
+        self.difficulty = difficulty
+        self.output_path = output_path
+    
+    def run(self):
+        try:
+            self.log_signal.emit(f"⏳ 正在生成问答对，使用知识图谱: {self.graph_path}")
+            self.log_signal.emit(f"🔧 知识点: {self.concept}, 难度: {self.difficulty}")
+            
+            # 加载知识图谱
+            kg = KnowledgeGraph()
+            kg.load_knowledge_graph(self.graph_path)
+            self.log_signal.emit(f"✅ 知识图谱加载完成，共 {len(kg.graph.nodes)} 个节点")
+            
+            # 创建生成器
+            generator = KnowledgeQuestionGenerator(
+                kg,
+                appid="2d1bc910",
+                api_key="a1df9334fd048ded0c9304ccf12c20d1",
+                api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
+            )
+            
+            # 生成问答对
+            qa_output_path = os.path.join(self.output_path, "qa")
+            os.makedirs(qa_output_path, exist_ok=True)
+            
+            generator.generate_and_save(
+                output_path=qa_output_path,
+                concept=self.concept,
+                level=self.difficulty.lower()
+            )
+            
+            self.log_signal.emit(f"✅ 问答对已生成在: {qa_output_path}")
+            self.finished.emit(True)
+        except Exception as e:
+            self.log_signal.emit(f"❌ 生成问答对失败: {str(e)}")
+            self.finished.emit(False)
 
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("EduSpark - 处理流程控制")
-        self.resize(700, 600)
+        self.resize(800, 700)  # 增加窗口大小以容纳新控件
 
         # 初始化路径和状态
         self.input_path = ""
         self.output_path = ""
         self.state_path = ""
         self.state = {}
+        self.graph_path = ""  # 存储知识图谱路径
 
         # 创建UI
         self.create_ui()
@@ -173,11 +211,11 @@ class MainWindow(QWidget):
         steps_group = QGroupBox("处理步骤选择")
         steps_layout = QGridLayout()
         
+        # 只保留前三个步骤
         self.step_checks = {
             'preprocess': QCheckBox("🔧 预处理原始文件"),
             'augment': QCheckBox("🧠 增广文本"),
-            'tree': QCheckBox("🌳 构建知识树结构"),
-            'qa': QCheckBox("📚 生成问答对")
+            'tree': QCheckBox("🌳 构建知识树结构")
         }
         
         # 添加复选框
@@ -198,6 +236,31 @@ class MainWindow(QWidget):
         self.progress.setVisible(False)
         self.progress.setValue(0)
         
+        # 题目生成区域
+        qa_group = QGroupBox("题目生成")
+        qa_layout = QGridLayout()
+        
+        # 知识点选择
+        qa_layout.addWidget(QLabel("知识点:"), 0, 0)
+        self.concept_combo = QComboBox()
+        self.concept_combo.setEnabled(False)  # 初始不可用
+        qa_layout.addWidget(self.concept_combo, 0, 1)
+        
+        # 难度选择
+        qa_layout.addWidget(QLabel("难度:"), 1, 0)
+        self.difficulty_combo = QComboBox()
+        self.difficulty_combo.addItems(["简单", "中等", "困难"])
+        self.difficulty_combo.setEnabled(False)  # 初始不可用
+        qa_layout.addWidget(self.difficulty_combo, 1, 1)
+        
+        # 生成题目按钮
+        self.btn_generate_qa = QPushButton("📝 生成题目")
+        self.btn_generate_qa.setEnabled(False)  # 初始不可用
+        self.btn_generate_qa.clicked.connect(self.generate_qa)
+        qa_layout.addWidget(self.btn_generate_qa, 2, 0, 1, 2)
+        
+        qa_group.setLayout(qa_layout)
+        
         # 日志区域
         self.log_area = QTextEdit()
         self.log_area.setReadOnly(True)
@@ -208,6 +271,7 @@ class MainWindow(QWidget):
         main_layout.addWidget(steps_group)
         main_layout.addWidget(btn_run)
         main_layout.addWidget(self.progress)
+        main_layout.addWidget(qa_group)
         main_layout.addWidget(self.log_area)
 
         self.setLayout(main_layout)
@@ -246,6 +310,11 @@ class MainWindow(QWidget):
                     self.state = json.load(f)
                 self.state_label.setText("状态文件: 已加载")
                 self.log_area.append("✅ 状态文件加载成功")
+                
+                # 检查tree步骤是否完成
+                if self.state.get('tree', False):
+                    self.log_area.append("🌳 tree步骤已完成，尝试加载知识图谱...")
+                    self.load_knowledge_graph()
             except Exception as e:
                 self.state = {}
                 self.state_label.setText(f"状态文件: 加载失败 ({str(e)})")
@@ -253,6 +322,35 @@ class MainWindow(QWidget):
         
         # 更新步骤选择框状态
         self.update_step_checks()
+    
+    def load_knowledge_graph(self):
+        """加载知识图谱并更新UI"""
+        # 知识图谱路径是固定的
+        graph_path = os.path.join(self.output_path, "tree", "graph")
+        
+        if not os.path.exists(graph_path):
+            self.log_area.append(f"⚠️ 知识图谱路径不存在: {graph_path}")
+            return
+            
+        try:
+            # 加载知识图谱获取概念列表
+            kg = KnowledgeGraph()
+            kg.load_knowledge_graph(graph_path)
+            concepts = list(kg.graph.nodes)
+            
+            # 更新知识点下拉框
+            self.concept_combo.clear()
+            self.concept_combo.addItems(concepts)
+            
+            # 启用题目生成相关控件
+            self.concept_combo.setEnabled(True)
+            self.difficulty_combo.setEnabled(True)
+            self.btn_generate_qa.setEnabled(True)
+            
+            self.graph_path = graph_path
+            self.log_area.append(f"📚 已加载 {len(concepts)} 个知识点，请选择知识点和难度后点击'生成题目'按钮")
+        except Exception as e:
+            self.log_area.append(f"❌ 加载知识图谱失败: {str(e)}")
     
     def update_step_checks(self):
         for step, check in self.step_checks.items():
@@ -298,7 +396,58 @@ class MainWindow(QWidget):
         self.thread.log_signal.connect(self.log_area.append)
         self.thread.finished.connect(self.on_finish)
         self.thread.progress_update.connect(self.progress.setValue)
+        self.thread.kg_ready.connect(self.on_kg_ready)  # 连接知识图谱就绪信号
         self.thread.start()
+    
+    def on_kg_ready(self, graph_path):
+        """当知识图谱构建完成时调用"""
+        self.graph_path = graph_path
+        self.log_area.append(f"✅ 知识图谱已就绪: {graph_path}")
+        self.load_knowledge_graph()  # 加载知识图谱
+    
+    def generate_qa(self):
+        """生成题目按钮点击事件处理"""
+        if not self.graph_path:
+            QMessageBox.warning(self, "错误", "知识图谱尚未准备好")
+            return
+            
+        concept = self.concept_combo.currentText()
+        difficulty = self.difficulty_combo.currentText()
+        
+        if not concept:
+            QMessageBox.warning(self, "错误", "请选择一个知识点")
+            return
+            
+        # 禁用控件防止重复点击
+        self.concept_combo.setEnabled(False)
+        self.difficulty_combo.setEnabled(False)
+        self.btn_generate_qa.setEnabled(False)
+        
+        # 在日志中显示信息
+        self.log_area.append(f"📚 正在生成题目 - 知识点: {concept}, 难度: {difficulty}")
+        
+        # 创建并启动生成线程
+        self.qa_thread = QAGenerationThread(
+            graph_path=self.graph_path,
+            concept=concept,
+            difficulty=difficulty,
+            output_path=self.output_path
+        )
+        self.qa_thread.log_signal.connect(self.log_area.append)
+        self.qa_thread.finished.connect(self.on_qa_finished)
+        self.qa_thread.start()
+    
+    def on_qa_finished(self, success):
+        """题目生成完成时调用"""
+        # 重新启用控件
+        self.concept_combo.setEnabled(True)
+        self.difficulty_combo.setEnabled(True)
+        self.btn_generate_qa.setEnabled(True)
+        
+        if success:
+            QMessageBox.information(self, "完成", "题目生成成功！")
+        else:
+            QMessageBox.warning(self, "错误", "题目生成失败，请查看日志")
     
     def on_finish(self):
         self.progress.setVisible(False)
