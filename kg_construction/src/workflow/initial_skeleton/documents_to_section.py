@@ -20,28 +20,41 @@ def load_documents(folder_path: str):
                 document = file.read()
                 documents.append([document, file_name.strip(".md")])
     return documents
-
-
+import chardet
 def load_folders(folder_path: str, depth=0):
     documents = {}
     if os.path.isdir(folder_path):
-        documents["is_folder"] = True
-        documents["name"] = os.path.basename(folder_path)
-        documents["children"] = []
-        documents["depth"] = depth
+        documents['is_folder'] = True
+        documents['name'] = os.path.basename(folder_path)
+        documents['children'] = []
+        documents['depth'] = depth
         for item in os.listdir(folder_path):
             item_path = os.path.join(folder_path, item)
-            if "images_" in item_path or item_path.endswith(".png"):
-                continue
-            documents["children"].append(load_folders(item_path, depth + 1))
+            documents['children'].append(load_folders(item_path, depth + 1))
     else:
         # 递归边界
-        documents["is_folder"] = False
-        documents["name"] = os.path.basename(folder_path).replace(".md", "")
-        documents["content"] = ""
-        documents["depth"] = depth
-        with open(folder_path, "r", encoding="utf-8") as file:
-            documents["content"] = file.read()
+        documents['is_folder'] = False
+        documents['name'] = os.path.basename(folder_path)
+        documents['content'] = ""
+        documents['depth'] = depth
+
+        # 检查文件扩展名，只处理文本文件
+        if folder_path.lower().endswith(('.txt', '.md', '.csv', '.json', '.xml')):
+            try:
+                # 尝试自动检测文件编码
+                with open(folder_path, 'rb') as file:
+                    raw_data = file.read()
+                    detected_encoding = chardet.detect(raw_data)['encoding']
+                    if detected_encoding:
+                        documents['content'] = raw_data.decode(detected_encoding, errors='ignore')
+                    else:
+                        documents['content'] = raw_data.decode('utf-8', errors='ignore')
+            except Exception as e:
+                # 如果读取文件时发生错误，记录错误信息
+                documents['content'] = f"Error reading file: {e}"
+        else:
+            # 如果文件不是文本文件，跳过读取内容
+            documents['content'] = "Non-text file, content not read"
     return documents
 
 

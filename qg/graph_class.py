@@ -702,50 +702,45 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 for i, q in enumerate(content[:3], 1):  # 只显示前3个
                     print(f"{i}. {q[:60]}...")
 
-    def interactive_question_generation(self, concept: str = None):
-        """交互式题目生成流程"""
-        if not concept:
-            concept = self._select_concept()
-        
-        # 1. 生成难度样本
-        print("\n🔄 正在生成难度样本题目...")
+    def interactive_question_generation(self, parent_widget=None):
+        """
+        使用Qt对话框替代input/print实现交互
+        """
+        from PyQt5.QtWidgets import QInputDialog, QMessageBox
+
+        # 选择知识点
+        concepts = list(self.kg.graph.nodes)
+        concept, ok = QInputDialog.getItem(parent_widget, "选择知识点", "请选择一个知识点：", concepts, 0, False)
+        if not ok:
+            return
+
+        # 难度样本
         samples = self.generate_difficulty_samples(concept)
+        options = [f"{lvl.upper()} - {samples[lvl]['description']}" for lvl in samples]
+        level_text, ok = QInputDialog.getItem(parent_widget, "选择难度", "请选择难度：", options, 0, False)
+        if not ok:
+            return
+        selected_level = list(samples.keys())[options.index(level_text)]
 
-        # 2. 展示样本题目
-        print("\n📚 请选择最适合您需求的难度:")
-        for i, (level, data) in enumerate(samples.items(), 1):
-            print(f"\n选项 {i}: {level.upper()} - {data['description']}")
-            for j, q in enumerate(data['questions'], 1):
-                print(f"  示例{j}: {q[:80]}...")  # 只显示前80字符
-        
-        # 3. 获取用户选择
-        while True:
-            try:
-                choice = int(input("\n请输入您选择的难度编号(1-3): ")) - 1
-                if 0 <= choice < 3:
-                    selected_level = list(samples.keys())[choice]
-                    break
-                print("请输入1-3之间的数字！")
-            except ValueError:
-                print("请输入有效数字！")
-        
-        # 4. 生成完整题目集
-        print(f"\n🎯 您选择了'{selected_level}'难度")
-        concept_choice=0
-        while True:
-            try:
-                concept_choice = int(input("\n生成完整习题集请输“1”，生成指定知识点习题请输“2”，并选择指定的知识点:")) 
-                if concept_choice == 1 or concept_choice == 2 :
-                    break
-            except ValueError:
-                print("请输入有效数字！")
-        print("")
+        # 生成范围选择
+        range_text, ok = QInputDialog.getItem(
+            parent_widget,
+            "选择生成方式",
+            "请选择题目生成范围：",
+            ["全部知识点", "仅当前知识点"],
+            0, False
+        )
+        if not ok:
+            return
 
-        if concept_choice==1:
-            full_questions = self.generate_and_save(level=selected_level)
+        if range_text == "全部知识点":
+            self.generate_and_save(level=selected_level)
         else:
-            full_questions = self.generate_and_save(concept=concept, level=selected_level)  # 生成10道
-        return full_questions
+            self.generate_and_save(concept=concept, level=selected_level)
+
+        QMessageBox.information(parent_widget, "完成", f"已生成 '{selected_level}' 难度的题目")
+
+
         
 
     def _select_concept(self) -> str:

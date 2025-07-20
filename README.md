@@ -42,7 +42,22 @@ python main.py --file_path ./网原 --output_path ./outputs --state_path state.j
 --output_path: 输出文件路径，输出结果会保存在该路径下
 --state_path: 状态文件路径，记录当前处理状态，避免重复处理。储存在os.path.join(output_path, state_path)
 
+
+## 第一部分只用文书材料
+
+## GUI
 交互式QT版本:
 ```bash
 python qt_main.py
 ```
+后续操作：
+1. 选择输入文件/输入文件夹
+2. 选择输出文件夹
+   - 如果此文件夹里面有state.json，会加载对应的处理状态（在下方的“处理步骤”中反映出来）
+3. 选择需要执行的步骤（一般全选就行），点击“执行选中步骤”
+   - 只要输出文件夹里存在tree/graph/graph.png，右边的图片框会自动加载
+4. 执行完前三步或者state.json里前三步为`true`后，选择知识点、难度的选择框和`生成题目`按钮会亮起
+   - 题目会输出到输出文件夹/questions下
+
+
+
