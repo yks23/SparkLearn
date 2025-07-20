@@ -54,6 +54,9 @@ class DocumentProcessor:
             self._process_docx(input_path, output_path)
         elif ext.lower() in ['.html', '.htm']:
             self._process_html_file(input_path, output_path)
+        elif ext.lower() == '.md':
+            import shutil
+            shutil.copy(input_path, output_path)
         else:
             raise ValueError(f"不支持的文件类型: {ext}")
             

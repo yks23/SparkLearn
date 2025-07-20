@@ -46,23 +46,36 @@ from tqdm import tqdm
 
 def augment_folder(input_path):
     if not os.path.isdir(input_path):
-        # 只处理后缀为 .md 的文件
-        if input_path.lower().endswith(".md"):
+        if input_path.lower().endswith('.md'):
+            annotator = SimplifiedAnnotator()
             try:
-                annotator = SimplifiedAnnotator()
-                with open(input_path, 'r', encoding='utf-8') as f:
+                with open(input_path, 'rb') as f:
+                    raw_data = f.read()
+                    detected_encoding = chardet.detect(raw_data)['encoding']
+                with open(input_path, 'r', encoding=detected_encoding, errors='ignore') as f:
                     content = f.read()
                 annotator.process(content, input_path)  # 覆盖原文件
             except Exception as e:
-                print(f"⚠️ 处理文件失败：{input_path}，错误：{e}")
+                print(f"⚠️ 无法处理文件 {input_path}，错误：{e}")
         else:
             print(f"⏩ 跳过非 .md 文件：{input_path}")
     else:
-        for sub_name in os.listdir(input_path):
-            sub_path = os.path.join(input_path, sub_name)
-            augment_folder(sub_path)
-
-
+        sub_folders = os.listdir(input_path)
+        with tqdm(total=len(sub_folders), desc="Augmenting files") as pbar:
+            processes = []
+            for sub_folder in sub_folders:
+                sub_folder_path = os.path.join(input_path, sub_folder)
+                if os.path.isdir(sub_folder_path):
+                    augment_folder(sub_folder_path)
+                else:
+                    if sub_folder_path.lower().endswith('.md'):
+                        p = multiprocessing.Process(target=augment_file, args=(sub_folder_path,))
+                        processes.append(p)
+                        p.start()
+                pbar.update(1)  # 更新进度条
+        for p in processes:
+            p.join()
+            
 def tree_folder(input_path,output_path):
     os.environ['meta_path'] = output_path  # 设置环境变量
     os.environ['raw_path'] = input_path  # 设置原始数据路径

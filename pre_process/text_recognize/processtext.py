@@ -471,7 +471,9 @@ def process_input(input_path,output_path='./outputs'):
     elif ext.lower() in ['.html', '.htm']:
         print(f"🌐 正在处理 HTML 文件: {input_path}")
         process_html(input_path, output_md_name)
-
+    elif ext.lower() == '.md':
+        import shutil
+        shutil.copy(input_path, output_md_name)
     else:
         print("❌ 不支持的文件类型，请输入 .jpg/.png/.pdf/.docx/.html/.htm 文件或URL")
         return

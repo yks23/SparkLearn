@@ -25,10 +25,10 @@ def load_documents(folder_path: str):
 def load_folders(folder_path: str, depth=0):
     documents = {}
     if os.path.isdir(folder_path):
-        documents["is_folder"] = True
-        documents["name"] = os.path.basename(folder_path)
-        documents["children"] = []
-        documents["depth"] = depth
+        documents['is_folder'] = True
+        documents['name'] = os.path.basename(folder_path)
+        documents['children'] = []
+        documents['depth'] = depth
         for item in os.listdir(folder_path):
             item_path = os.path.join(folder_path, item)
             if "images_" in item_path or item_path.endswith(".png"):
