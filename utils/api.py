@@ -92,7 +92,7 @@ def worker_conservation(args):
                 # 这里防止没有 code 属性报错
                 code = getattr(e, "code", None)
                 logging.error(f"API 请求失败状态码: {code}")
-                logging.error(f"请求对话: {conversation}")
+                logging.error(f"Error: {e}")
                 if code == 503:
                     logging.error("API 请求过多，尝试下一个模型")
                 continue

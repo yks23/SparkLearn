@@ -1,0 +1,9 @@
+{
+    "workflow": [
+        "doc2section",
+        "community_report",
+        "section2tree",
+        "augmentent"
+    ],
+    "processed": 1
+}
