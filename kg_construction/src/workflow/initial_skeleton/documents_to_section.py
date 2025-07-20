@@ -113,6 +113,12 @@ def D2S(documents):
         while len(processing_nodes) > 0:
             now_node = processing_nodes.pop(0)
             now_target = "#" * (now_node.level - documents["depth"] + 1)
+            while now_target in now_node.raw_content:
+                results = extract_sections(now_node.raw_content, now_target)
+                if len(results) == 0:
+                    now_target+='#'
+                else:
+                    break
             results = extract_sections(now_node.raw_content, now_target)
             if len(results):
                 now_node.is_elemental = False
