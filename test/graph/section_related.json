@@ -1,0 +1,79 @@
+[
+    {
+        "id": 8,
+        "summary": "",
+        "descriptions": [
+            "CDMA允许所有用户共享相同频率并通过编码序列区分，而基于RTS/CTS的预约机制需要通过信道竞争和基站协调实现无碰撞传输。"
+        ],
+        "type": "对比关系",
+        "source_id": 1,
+        "target_id": 2,
+        "is_tree": false
+    },
+    {
+        "id": 9,
+        "summary": "",
+        "descriptions": [
+            "碰撞避免和CDMA均属于数据链路层中解决信道共享问题的机制，前者通过RTS/CTS协议实现冲突检测与规避，后者通过编码区分用户实现多路复用。"
+        ],
+        "type": "同属数据链路层技术",
+        "source_id": 0,
+        "target_id": 1,
+        "is_tree": false
+    },
+    {
+        "id": 10,
+        "summary": "",
+        "descriptions": [
+            "LTE作为现代移动通信技术，在CDMA基础上发展出更高效的频谱利用机制（如OFDMA），并整合了IP化架构提升数据传输效率。"
+        ],
+        "type": "技术演进关系",
+        "source_id": 3,
+        "target_id": 1,
+        "is_tree": false
+    },
+    {
+        "id": 11,
+        "summary": "",
+        "descriptions": [
+            "疫情期间蓝牙接触追踪技术依赖数据链路层的碰撞避免机制，通过短距离通信包的快速交互实现设备发现与距离计算。"
+        ],
+        "type": "应用场景依赖",
+        "source_id": 4,
+        "target_id": 0,
+        "is_tree": false
+    },
+    {
+        "id": 12,
+        "summary": "",
+        "descriptions": [
+            "LTE网络中的eNodeB基站为蓝牙设备提供广域网连接能力，使得疫情蓝牙应用能实现跨区域的数据汇总与分析。"
+        ],
+        "type": "架构支撑关系",
+        "source_id": 3,
+        "target_id": 4,
+        "is_tree": false
+    },
+    {
+        "id": 13,
+        "summary": "",
+        "descriptions": [
+            "最长前缀匹配是路由选择的基础算法，用于在路由表中查找与目标IP地址最匹配的条目（如路由器检查IP数据报头部字段时依赖该算法），而协议与服务章节分析了网络层协议（如IP协议）的实现机制。"
+        ],
+        "type": "基础算法与协议实现的关系",
+        "source_id": 6,
+        "target_id": 7,
+        "is_tree": false
+    },
+    {
+        "id": 14,
+        "summary": "",
+        "descriptions": [
+            "Avoid collision（避免碰撞）和long_preifx_matching（最长前缀匹配）分别属于无线通信信道访问机制和路由选择算法领域，两者在技术目标、实现场景和功能逻辑上无直接关联。前者关注数据传输冲突规避，后者聚焦IP地址路由决策。"
+        ],
+        "type": "无直接关系",
+        "source_id": 0,
+        "target_id": 6,
+        "is_tree": false
+    }
+]

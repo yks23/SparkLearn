@@ -1,0 +1,642 @@
+[
+    {
+        "id": 0,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 9,
+        "target_id": 0,
+        "is_tree": true
+    },
+    {
+        "id": 1,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 5,
+        "target_id": 0,
+        "is_tree": true
+    },
+    {
+        "id": 2,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 5,
+        "target_id": 1,
+        "is_tree": true
+    },
+    {
+        "id": 3,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 5,
+        "target_id": 3,
+        "is_tree": true
+    },
+    {
+        "id": 4,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 5,
+        "target_id": 4,
+        "is_tree": true
+    },
+    {
+        "id": 5,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 9,
+        "target_id": 6,
+        "is_tree": true
+    },
+    {
+        "id": 6,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 8,
+        "target_id": 6,
+        "is_tree": true
+    },
+    {
+        "id": 7,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 8,
+        "target_id": 7,
+        "is_tree": true
+    },
+    {
+        "id": 8,
+        "summary": "",
+        "descriptions": [
+            "CDMA允许所有用户共享相同频率并通过编码序列区分，而基于RTS/CTS的预约机制需要通过信道竞争和基站协调实现无碰撞传输。"
+        ],
+        "type": "对比关系",
+        "source_id": 1,
+        "target_id": 2,
+        "is_tree": false
+    },
+    {
+        "id": 9,
+        "summary": "",
+        "descriptions": [
+            "碰撞避免和CDMA均属于数据链路层中解决信道共享问题的机制，前者通过RTS/CTS协议实现冲突检测与规避，后者通过编码区分用户实现多路复用。"
+        ],
+        "type": "同属数据链路层技术",
+        "source_id": 0,
+        "target_id": 1,
+        "is_tree": false
+    },
+    {
+        "id": 10,
+        "summary": "",
+        "descriptions": [
+            "LTE作为现代移动通信技术，在CDMA基础上发展出更高效的频谱利用机制（如OFDMA），并整合了IP化架构提升数据传输效率。"
+        ],
+        "type": "技术演进关系",
+        "source_id": 3,
+        "target_id": 1,
+        "is_tree": false
+    },
+    {
+        "id": 11,
+        "summary": "",
+        "descriptions": [
+            "疫情期间蓝牙接触追踪技术依赖数据链路层的碰撞避免机制，通过短距离通信包的快速交互实现设备发现与距离计算。"
+        ],
+        "type": "应用场景依赖",
+        "source_id": 4,
+        "target_id": 0,
+        "is_tree": false
+    },
+    {
+        "id": 12,
+        "summary": "",
+        "descriptions": [
+            "LTE网络中的eNodeB基站为蓝牙设备提供广域网连接能力，使得疫情蓝牙应用能实现跨区域的数据汇总与分析。"
+        ],
+        "type": "架构支撑关系",
+        "source_id": 3,
+        "target_id": 4,
+        "is_tree": false
+    },
+    {
+        "id": 13,
+        "summary": "",
+        "descriptions": [
+            "最长前缀匹配是路由选择的基础算法，用于在路由表中查找与目标IP地址最匹配的条目（如路由器检查IP数据报头部字段时依赖该算法），而协议与服务章节分析了网络层协议（如IP协议）的实现机制。"
+        ],
+        "type": "基础算法与协议实现的关系",
+        "source_id": 6,
+        "target_id": 7,
+        "is_tree": false
+    },
+    {
+        "id": 14,
+        "summary": "",
+        "descriptions": [
+            "Avoid collision（避免碰撞）和long_preifx_matching（最长前缀匹配）分别属于无线通信信道访问机制和路由选择算法领域，两者在技术目标、实现场景和功能逻辑上无直接关联。前者关注数据传输冲突规避，后者聚焦IP地址路由决策。"
+        ],
+        "type": "无直接关系",
+        "source_id": 0,
+        "target_id": 6,
+        "is_tree": false
+    },
+    {
+        "id": 15,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 0,
+        "target_id": 10,
+        "is_tree": true
+    },
+    {
+        "id": 16,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 0,
+        "target_id": 11,
+        "is_tree": true
+    },
+    {
+        "id": 17,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 0,
+        "target_id": 12,
+        "is_tree": true
+    },
+    {
+        "id": 18,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 0,
+        "target_id": 13,
+        "is_tree": true
+    },
+    {
+        "id": 19,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 2,
+        "target_id": 14,
+        "is_tree": true
+    },
+    {
+        "id": 20,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 2,
+        "target_id": 15,
+        "is_tree": true
+    },
+    {
+        "id": 21,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 2,
+        "target_id": 16,
+        "is_tree": true
+    },
+    {
+        "id": 22,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 2,
+        "target_id": 17,
+        "is_tree": true
+    },
+    {
+        "id": 23,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 3,
+        "target_id": 18,
+        "is_tree": true
+    },
+    {
+        "id": 24,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 3,
+        "target_id": 19,
+        "is_tree": true
+    },
+    {
+        "id": 25,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 3,
+        "target_id": 20,
+        "is_tree": true
+    },
+    {
+        "id": 26,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 3,
+        "target_id": 21,
+        "is_tree": true
+    },
+    {
+        "id": 27,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 4,
+        "target_id": 22,
+        "is_tree": true
+    },
+    {
+        "id": 28,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 4,
+        "target_id": 23,
+        "is_tree": true
+    },
+    {
+        "id": 29,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 4,
+        "target_id": 24,
+        "is_tree": true
+    },
+    {
+        "id": 30,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 4,
+        "target_id": 25,
+        "is_tree": true
+    },
+    {
+        "id": 31,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 4,
+        "target_id": 26,
+        "is_tree": true
+    },
+    {
+        "id": 32,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 4,
+        "target_id": 27,
+        "is_tree": true
+    },
+    {
+        "id": 33,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 4,
+        "target_id": 28,
+        "is_tree": true
+    },
+    {
+        "id": 34,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 6,
+        "target_id": 29,
+        "is_tree": true
+    },
+    {
+        "id": 35,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 6,
+        "target_id": 30,
+        "is_tree": true
+    },
+    {
+        "id": 36,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 6,
+        "target_id": 31,
+        "is_tree": true
+    },
+    {
+        "id": 37,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 7,
+        "target_id": 32,
+        "is_tree": true
+    },
+    {
+        "id": 38,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 7,
+        "target_id": 33,
+        "is_tree": true
+    },
+    {
+        "id": 39,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 7,
+        "target_id": 34,
+        "is_tree": true
+    },
+    {
+        "id": 40,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 7,
+        "target_id": 35,
+        "is_tree": true
+    },
+    {
+        "id": 41,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 7,
+        "target_id": 36,
+        "is_tree": true
+    },
+    {
+        "id": 42,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 7,
+        "target_id": 37,
+        "is_tree": true
+    },
+    {
+        "id": 43,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 7,
+        "target_id": 38,
+        "is_tree": true
+    },
+    {
+        "id": 44,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_entity",
+        "source_id": 7,
+        "target_id": 39,
+        "is_tree": true
+    },
+    {
+        "id": 45,
+        "summary": "",
+        "descriptions": [
+            "发送方首先通过CSMA传输小的请求发送（RTS）数据包到基站（BS），RTS可能会相互碰撞但它们很短。"
+        ],
+        "type": "传输协议",
+        "source_id": 10,
+        "target_id": 11,
+        "is_tree": false
+    },
+    {
+        "id": 46,
+        "summary": "",
+        "descriptions": [
+            "基站收到RTS后广播清除发送（CTS）作为响应，所有节点都能听到CTS。"
+        ],
+        "type": "广播响应",
+        "source_id": 12,
+        "target_id": 13,
+        "is_tree": false
+    },
+    {
+        "id": 47,
+        "summary": "",
+        "descriptions": [
+            "基站收到RTS后广播清除发送（CTS）作为响应，所有节点都能听到CTS。"
+        ],
+        "type": "触发机制",
+        "source_id": 11,
+        "target_id": 13,
+        "is_tree": false
+    },
+    {
+        "id": 48,
+        "summary": "",
+        "descriptions": [
+            "码分多址（CDMA）是一种通信技术，其中每个用户被分配一个唯一的“码”，即编码序列。所有用户共享相同的频率，但每个用户使用自己的编码序列来编码数据。"
+        ],
+        "type": "使用",
+        "source_id": 14,
+        "target_id": 15,
+        "is_tree": false
+    },
+    {
+        "id": 49,
+        "summary": "",
+        "descriptions": [
+            "编码过程涉及原始数据与编码序列的内积，而解码过程则是将编码后的数据与编码序列进行求和内积。"
+        ],
+        "type": "涉及",
+        "source_id": 14,
+        "target_id": 16,
+        "is_tree": false
+    },
+    {
+        "id": 50,
+        "summary": "",
+        "descriptions": [
+            "如果编码序列是正交的，则干扰最小。"
+        ],
+        "type": "依赖",
+        "source_id": 14,
+        "target_id": 17,
+        "is_tree": false
+    },
+    {
+        "id": 51,
+        "summary": "",
+        "descriptions": [
+            "演进节点B（eNodeB）是LTE网络中的关键组件，负责与用户设备（UE）之间的无线通信，包括信号的发送和接收。"
+        ],
+        "type": "负责与...无线通信",
+        "source_id": 18,
+        "target_id": 19,
+        "is_tree": false
+    },
+    {
+        "id": 52,
+        "summary": "",
+        "descriptions": [
+            "移动管理实体（MME）处理所有与信令相关的任务，如用户认证、寻呼和切换过程。"
+        ],
+        "type": "处理",
+        "source_id": 20,
+        "target_id": 21,
+        "is_tree": false
+    },
+    {
+        "id": 53,
+        "summary": "",
+        "descriptions": [
+            "COVID-19 疫情是典型的例子。"
+        ],
+        "type": "实例",
+        "source_id": 22,
+        "target_id": 23,
+        "is_tree": false
+    },
+    {
+        "id": 54,
+        "summary": "",
+        "descriptions": [
+            "历史上西班牙流感（1918年）也是一次全球性的大流行。"
+        ],
+        "type": "实例",
+        "source_id": 22,
+        "target_id": 24,
+        "is_tree": false
+    },
+    {
+        "id": 55,
+        "summary": "",
+        "descriptions": [
+            "例如蓝牙耳机和智能手环等设备都使用蓝牙技术。"
+        ],
+        "type": "应用于",
+        "source_id": 25,
+        "target_id": 26,
+        "is_tree": false
+    },
+    {
+        "id": 56,
+        "summary": "",
+        "descriptions": [
+            "例如蓝牙耳机和智能手环等设备都使用蓝牙技术。"
+        ],
+        "type": "应用于",
+        "source_id": 25,
+        "target_id": 27,
+        "is_tree": false
+    },
+    {
+        "id": 57,
+        "summary": "",
+        "descriptions": [
+            "蓝牙的名字来源于10世纪的一位丹麦国王哈拉尔·布鲁坦（Harald Bluetooth）。"
+        ],
+        "type": "命名来源",
+        "source_id": 25,
+        "target_id": 28,
+        "is_tree": false
+    },
+    {
+        "id": 58,
+        "summary": "",
+        "descriptions": [
+            "最长前缀匹配通常通过三态内容可寻址存储器（TCAM）实现。",
+            "这种方法通常通过三态内容可寻址存储器（TCAM）实现，能够在短时间内完成地址检索，不受路由表大小的影响。"
+        ],
+        "type": "实现方式",
+        "source_id": 29,
+        "target_id": 30,
+        "is_tree": false
+    },
+    {
+        "id": 59,
+        "summary": "",
+        "descriptions": [
+            "Cisco Catalyst设备使用TCAM可以存储约 $^{\\sim}1M$ 个路由表条目。"
+        ],
+        "type": "使用硬件",
+        "source_id": 31,
+        "target_id": 30,
+        "is_tree": false
+    },
+    {
+        "id": 60,
+        "summary": "",
+        "descriptions": [
+            "网络层负责将传输层的报文段封装成数据报，并通过链路层传输。"
+        ],
+        "type": "封装",
+        "source_id": 32,
+        "target_id": 33,
+        "is_tree": false
+    },
+    {
+        "id": 61,
+        "summary": "",
+        "descriptions": [
+            "网络层负责将传输层的报文段封装成数据报，并通过链路层传输。"
+        ],
+        "type": "通过...传输",
+        "source_id": 32,
+        "target_id": 34,
+        "is_tree": false
+    },
+    {
+        "id": 62,
+        "summary": "",
+        "descriptions": [
+            "发送方将传输层的报文段封装成数据报，并传递给链路层进行传输。"
+        ],
+        "type": "封装",
+        "source_id": 35,
+        "target_id": 36,
+        "is_tree": false
+    },
+    {
+        "id": 63,
+        "summary": "",
+        "descriptions": [
+            "接收方从数据报中提取出传输层的报文段，并将其传递给相应的传输层协议。"
+        ],
+        "type": "传递",
+        "source_id": 37,
+        "target_id": 33,
+        "is_tree": false
+    },
+    {
+        "id": 64,
+        "summary": "",
+        "descriptions": [
+            "路由器检查通过它的所有IP数据报的头部字段，并将数据报从输入端口移动到输出端口，以沿着端到端路径传输数据报。"
+        ],
+        "type": "转发",
+        "source_id": 38,
+        "target_id": 39,
+        "is_tree": false
+    }
+]

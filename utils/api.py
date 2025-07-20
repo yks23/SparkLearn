@@ -23,7 +23,7 @@ from openai import OpenAI
 from zhipuai import ZhipuAI
 import logging
 from utils.edusp import get_embp_embedding, parser_Message
-
+from config import qa_temp
 #TODO 完成tree-kg所需要的embedding格式函数
 
 def get_default_client_sync():
@@ -71,12 +71,11 @@ def worker_conservation(args):
         for model in [model_name] + extra_models:
             try:
                 if need_json and json_feature.get(model, False):
-                    print('use_json_feature')
                     result = client.chat.completions.create(
                         model=model_name,
                         messages=conversation,
                         stream=False,
-                        temperature=0.7,
+                        temperature=qa_temp,
                         response_format={"type": "json_object"},
                     )
                 else:
@@ -84,7 +83,7 @@ def worker_conservation(args):
                         model=model_name,
                         messages=conversation,
                         stream=False,
-                        temperature=0.7,
+                        temperature=qa_temp,
                     )
                 results.append(result.choices[0].message.content)
                 done = True

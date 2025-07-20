@@ -768,6 +768,12 @@ if __name__ == "__main__":
     kg = KnowledgeGraph()
     kg.load_knowledge_graph()
 
+    
+if __name__ == "__main__":
+    # 1. 构建知识图谱
+    kg = KnowledgeGraph()
+    kg.load_knowledge_graph()
+
     # 2. 初始化生成器
     generator = KnowledgeQuestionGenerator(
         kg,

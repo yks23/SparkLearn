@@ -37,7 +37,7 @@ class ProcessManager:
             "doc2section",
             "community_report",
             "section2tree",
-            # "augmentent",
+            "augmentent",
             # "augmentrel",
             # "aggregation-naive",
             # "aggregation-llm",
