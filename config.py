@@ -24,7 +24,7 @@ spark_api_key = "xqZXJdxoaaLEBIMuuCBg:FUuIHcWDmPLSpJcXsiSp"
 silicon_api_key = "sk-nadkygsrqzgpzzvfgdvewsxkrbadfzwbphwdldvxliqcohof" # SiliconFlow API key, if applicable
 openai_api_key = "" # OpenAI API key, if applicable
 glm_api_key = "" # ChatGLM API key, if applicable
-model_provider = "silicon"  # 'openai', 'chatglm', 'silicon', 'spark'
+model_provider = "spark"  # 'openai', 'chatglm', 'silicon', 'spark'
 num_dims=2560
 qa_temp = 1.3
 # APP configs
