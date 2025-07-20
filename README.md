@@ -1,4 +1,5 @@
-# EduSpark
+# SparkLearn
+
 ## 项目结构
 - data:
     - 包含各种原材料教材
@@ -20,8 +21,8 @@
 python版本为：3.11.7  
 相关依赖安装见requirement.txt  
 ```bash
-conda create --name eduspark python=3.11.7 
-conda activate eduspark
+conda create --name sparklearn python=3.11.7 
+conda activate sparklearn
 pip install -r requirements.txt
 ```
 ppt相关处理需要sudo apt install libreoffice-core libreoffice-common  
@@ -32,37 +33,16 @@ conda install -c conda-forge poppler
 DOCX转换依赖
 conda install -c conda-forge pandoc
 
-## 目前pipeline
+## Get Started
+命令行版本：
+```bash
+python main.py --file_path ./网原 --output_path ./outputs --state_path state.json
+```
+--file_path: 输入文件路径，支持文件夹和单个文件  
+--output_path: 输出文件路径，输出结果会保存在该路径下
+--state_path: 状态文件路径，记录当前处理状态，避免重复处理。储存在os.path.join(output_path, state_path)
 
-1. 静态过程
-用户填写基本的配置，然后运行主程序即可
-
-- 包含是哪种类型的：multi-笔记（文件夹）/ 一本书 / pdf / 图片 / 网页
-    - 书：结构在内部
-    - 文件夹结构：叶子节点是图片/网页/pdf
-
-dataroot
-    - raw
-    - processed
-        - ...
-    - kg
-    - QA
-
-- 基本过程：
-    - 是否需要sider
-    - 是否需要图谱
-    - 是否需要问题
-
-对象：Task manager
-
-1. preprocess  -> 文本
-2. sider -> 补充后的文本
-3. kg生成 -> 图谱--重在可视化（有无API何以生成静态图片）
-4. qg生成 -> 生成question.pdf和answer.pdf
-
-2. 带有前端
-灵活、可交互。上述流程是高度可定制（容易出问题的）
-
-3. AGENT with ABILITY.
-
-## 第一部分只用文书材料
+交互式QT版本:
+```bash
+python qt_main.py
+```

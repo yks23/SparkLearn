@@ -78,8 +78,8 @@ def main(args):
                 state_file = json.load(f) 
             except:
                 state_file = {}
-
-
+    else:
+        state_file = {}
     if state_file.get('preprocess',False):
         print("已处理过，跳过预处理")
     else:
