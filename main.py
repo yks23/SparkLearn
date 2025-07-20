@@ -75,7 +75,7 @@ def augment_folder(input_path):
                 pbar.update(1)  # 更新进度条
         for p in processes:
             p.join()
-
+            
 def tree_folder(input_path,output_path):
     os.environ['meta_path'] = output_path  # 设置环境变量
     os.environ['raw_path'] = input_path  # 设置原始数据路径
@@ -114,9 +114,7 @@ def main(args):
             except:
                 state_file = {}
     else:
-        print(f"创建新的状态文件: {os.path.join(output_path, args.state_path)}")
         state_file = {}
-    print(state_file)
     if state_file.get('preprocess',False):
         print("已处理过，跳过预处理")
     else:

@@ -1,0 +1,158 @@
+[
+    {
+        "relations": [
+            {
+                "source": "CSMA",
+                "target": "RTS",
+                "type": "传输协议",
+                "raw_content": "发送方首先通过CSMA传输小的请求发送（RTS）数据包到基站（BS），RTS可能会相互碰撞但它们很短。"
+            },
+            {
+                "source": "基站",
+                "target": "CTS",
+                "type": "广播响应",
+                "raw_content": "基站收到RTS后广播清除发送（CTS）作为响应，所有节点都能听到CTS。"
+            },
+            {
+                "source": "RTS",
+                "target": "CTS",
+                "type": "触发机制",
+                "raw_content": "基站收到RTS后广播清除发送（CTS）作为响应，所有节点都能听到CTS。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "码分多址（CDMA）",
+                "target": "编码序列",
+                "type": "使用",
+                "raw_content": "码分多址（CDMA）是一种通信技术，其中每个用户被分配一个唯一的“码”，即编码序列。所有用户共享相同的频率，但每个用户使用自己的编码序列来编码数据。"
+            },
+            {
+                "source": "码分多址（CDMA）",
+                "target": "内积",
+                "type": "涉及",
+                "raw_content": "编码过程涉及原始数据与编码序列的内积，而解码过程则是将编码后的数据与编码序列进行求和内积。"
+            },
+            {
+                "source": "码分多址（CDMA）",
+                "target": "正交编码序列",
+                "type": "依赖",
+                "raw_content": "如果编码序列是正交的，则干扰最小。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "演进节点B（eNodeB）",
+                "target": "用户设备（UE）",
+                "type": "负责与...无线通信",
+                "raw_content": "演进节点B（eNodeB）是LTE网络中的关键组件，负责与用户设备（UE）之间的无线通信，包括信号的发送和接收。"
+            },
+            {
+                "source": "移动管理实体（MME）",
+                "target": "信令相关任务",
+                "type": "处理",
+                "raw_content": "移动管理实体（MME）处理所有与信令相关的任务，如用户认证、寻呼和切换过程。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "大流行",
+                "target": "COVID-19疫情",
+                "type": "实例",
+                "raw_content": "COVID-19 疫情是典型的例子。"
+            },
+            {
+                "source": "大流行",
+                "target": "西班牙流感",
+                "type": "实例",
+                "raw_content": "历史上西班牙流感（1918年）也是一次全球性的大流行。"
+            },
+            {
+                "source": "蓝牙",
+                "target": "蓝牙耳机",
+                "type": "应用于",
+                "raw_content": "例如蓝牙耳机和智能手环等设备都使用蓝牙技术。"
+            },
+            {
+                "source": "蓝牙",
+                "target": "智能手环",
+                "type": "应用于",
+                "raw_content": "例如蓝牙耳机和智能手环等设备都使用蓝牙技术。"
+            },
+            {
+                "source": "蓝牙",
+                "target": "哈拉尔·布鲁坦",
+                "type": "命名来源",
+                "raw_content": "蓝牙的名字来源于10世纪的一位丹麦国王哈拉尔·布鲁坦（Harald Bluetooth）。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "最长前缀匹配",
+                "target": "三态内容可寻址存储器",
+                "type": "实现方式",
+                "raw_content": "最长前缀匹配通常通过三态内容可寻址存储器（TCAM）实现。"
+            },
+            {
+                "source": "Cisco Catalyst设备",
+                "target": "三态内容可寻址存储器",
+                "type": "使用硬件",
+                "raw_content": "Cisco Catalyst设备使用TCAM可以存储约 $^{\\sim}1M$ 个路由表条目。"
+            },
+            {
+                "source": "三态内容可寻址存储器",
+                "target": "最长前缀匹配",
+                "type": "支持功能",
+                "raw_content": "这种方法通常通过三态内容可寻址存储器（TCAM）实现，能够在短时间内完成地址检索，不受路由表大小的影响。"
+            }
+        ]
+    },
+    {
+        "relations": [
+            {
+                "source": "网络层",
+                "target": "传输层",
+                "type": "封装",
+                "raw_content": "网络层负责将传输层的报文段封装成数据报，并通过链路层传输。"
+            },
+            {
+                "source": "网络层",
+                "target": "链路层",
+                "type": "通过...传输",
+                "raw_content": "网络层负责将传输层的报文段封装成数据报，并通过链路层传输。"
+            },
+            {
+                "source": "发送方",
+                "target": "数据报",
+                "type": "封装",
+                "raw_content": "发送方将传输层的报文段封装成数据报，并传递给链路层进行传输。"
+            },
+            {
+                "source": "接收方",
+                "target": "传输层",
+                "type": "传递",
+                "raw_content": "接收方从数据报中提取出传输层的报文段，并将其传递给相应的传输层协议。"
+            },
+            {
+                "source": "路由器",
+                "target": "IP数据报",
+                "type": "检查头部字段",
+                "raw_content": "路由器检查通过它的所有IP数据报的头部字段，并将数据报从输入端口移动到输出端口，以沿着端到端路径传输数据报。"
+            },
+            {
+                "source": "路由器",
+                "target": "IP数据报",
+                "type": "转发",
+                "raw_content": "路由器检查通过它的所有IP数据报的头部字段，并将数据报从输入端口移动到输出端口，以沿着端到端路径传输数据报。"
+            }
+        ]
+    }
+]

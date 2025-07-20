@@ -131,7 +131,9 @@ def extract_and_save_images(parsed_json, page_image, page_num, base_name, output
                         img_path = os.path.join(images_dir, img_filename)
                         cropped.save(img_path)
                         
-                        img_ref = f"\n\n![{title}](images_{base_name}/{img_filename})\n\n"
+                        # 清理base_name中的空格，避免路径问题
+                        safe_base_name = base_name.replace(' ', '_')
+                        img_ref = f"\n\n![{title}](images_{safe_base_name}/{img_filename})\n\n"
                         image_refs[y_pos] = img_ref
                         
                         print(f"✅ 保存图片: {img_filename}")

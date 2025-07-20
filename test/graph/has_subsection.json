@@ -1,0 +1,74 @@
+[
+    {
+        "id": 0,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 9,
+        "target_id": 0,
+        "is_tree": true
+    },
+    {
+        "id": 1,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 5,
+        "target_id": 0,
+        "is_tree": true
+    },
+    {
+        "id": 2,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 5,
+        "target_id": 1,
+        "is_tree": true
+    },
+    {
+        "id": 3,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 5,
+        "target_id": 3,
+        "is_tree": true
+    },
+    {
+        "id": 4,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 5,
+        "target_id": 4,
+        "is_tree": true
+    },
+    {
+        "id": 5,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 9,
+        "target_id": 6,
+        "is_tree": true
+    },
+    {
+        "id": 6,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 8,
+        "target_id": 6,
+        "is_tree": true
+    },
+    {
+        "id": 7,
+        "summary": "",
+        "descriptions": [],
+        "type": "has_subsection",
+        "source_id": 8,
+        "target_id": 7,
+        "is_tree": true
+    }
+]

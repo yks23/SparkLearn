@@ -26,7 +26,7 @@ openai_api_key = "" # OpenAI API key, if applicable
 glm_api_key = "" # ChatGLM API key, if applicable
 model_provider = "spark"  # 'openai', 'chatglm', 'silicon', 'spark'
 num_dims=2560
-
+qa_temp = 1.3
 # APP configs
 APPID ="2d1bc910"
 APISecret = "YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"

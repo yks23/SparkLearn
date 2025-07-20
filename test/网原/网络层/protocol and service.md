@@ -12,7 +12,7 @@
 *  examines header fields in all IP datagrams passing through it
 *  moves datagrams from input ports to output ports to transfer datagrams along end-end path
 
-![图片_1_1](./images_protocol%20and%20service/page_1_img_1.png)
+![图片_1_1](images_protocol and service/page_1_img_1.png)
 
 
 
