@@ -5,6 +5,7 @@ from  pre_process.text_recognize.processtext import process_input
 from sider.annotator_simple import SimplifiedAnnotator
 from qg.graph_class import KnowledgeGraph,KnowledgeQuestionGenerator
 import json
+from tqdm import tqdm
 def parse_args():
     parser = argparse.ArgumentParser(description="EduSpark CLI Tool")
     parser.add_argument('--file_path', type=str, required=True, help='Input file or directory path')
@@ -23,6 +24,25 @@ def process_folder(input_path, output_path):
             sub_folder_path = os.path.join(input_path, sub_folder)
             process_folder(sub_folder_path, new_output_path)
 
+import chardet
+
+def augment_file(input_path):
+    if not input_path.lower().endswith('.md'):
+        print(f"⏩ 跳过非 .md 文件：{input_path}")
+        return
+
+    annotator = SimplifiedAnnotator()
+    try:
+        # 检测文件编码
+        with open(input_path, 'rb') as f:
+            raw_data = f.read()
+            detected_encoding = chardet.detect(raw_data)['encoding']
+        with open(input_path, 'r', encoding=detected_encoding, errors='ignore') as f:
+            content = f.read()
+        annotator.process(content, input_path)  # 覆盖原文件
+    except Exception as e:
+        print(f"⚠️ 无法处理文件 {input_path}，错误：{e}")
+from tqdm import tqdm
 
 def augment_folder(input_path):
     if not os.path.isdir(input_path):
