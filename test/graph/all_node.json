@@ -1,0 +1,737 @@
+[
+    {
+        "id": 0,
+        "title": "Avoid collision",
+        "summary": "为避免碰撞，发送方使用小的预约数据包预留信道用于数据传输。发送方首先通过CSMA传输小的请求发送（RTS）数据包到基站（BS），RTS可能会相互碰撞但它们很短。基站收到RTS后广播清除发送（CTS）作为响应，所有节点都能听到CTS。然后发送方传输数据帧，其他站点则推迟传输。",
+        "example": [
+            {
+                "title": "RTS和CTS机制示例",
+                "content": "发送方首先通过CSMA传输小的请求发送（RTS）数据包到基站（BS），RTS可能会相互碰撞但它们很短。基站收到RTS后广播清除发送（CTS）作为响应，所有节点都能听到CTS。然后发送方传输数据帧，其他站点则推迟传输。"
+            }
+        ],
+        "to_relation": [
+            9,
+            14
+        ],
+        "from_relation": [
+            1,
+            0,
+            11
+        ],
+        "level": 2,
+        "raw_content": "## Avoiding collisions (more)\n\nidea: sender \"reserves\" channel use for data frames using small reservation packets\n\n■ sender first transmits small request-to-send (RTS) packet to BS using CSMA\n\n*  RTSs may still collide with each other (but they're short)\n* ■ BS broadcasts clear-to-send CTS in response to RTS\n* ■ CTS heard by all nodes\n*  sender transmits data frame\n*  other stations defer transmissions\n\n\n\n",
+        "is_elemental": true
+    },
+    {
+        "id": 1,
+        "title": "CDMA",
+        "summary": "为避免碰撞，发送方使用小的预约数据包预留信道用于数据传输。发送方首先通过CSMA传输小的请求发送（RTS）数据包到基站（BS），RTS可能会相互碰撞但它们很短。基站收到RTS后广播清除发送（CTS）作为响应，所有节点都能听到CTS。然后发送方传输数据帧，其他站点则推迟传输。",
+        "example": {},
+        "to_relation": [
+            8
+        ],
+        "from_relation": [
+            2,
+            9,
+            10
+        ],
+        "level": 2,
+        "raw_content": "",
+        "is_elemental": false
+    },
+    {
+        "id": 2,
+        "title": "Code Division Multiple Access (CDMA)",
+        "summary": "码分多址（CDMA）是一种通信技术，其中每个用户被分配一个唯一的“码”，即编码序列。所有用户共享相同的频率，但每个用户使用自己的编码序列来编码数据。这允许多个用户同时传输数据，且如果编码序列是正交的，则干扰最小。编码过程涉及原始数据与编码序列的内积，而解码过程则是将编码后的数据与编码序列进行求和内积。",
+        "example": [
+            {
+                "title": "编码与解码示例",
+                "content": "在CDMA中，编码是通过将原始数据与用户的编码序列进行内积来实现的。例如，如果原始数据为d，编码序列为c，则编码后的数据为d×c。解码时，接收端会将接收到的编码数据与同一编码序列进行求和内积，以恢复原始数据。"
+            }
+        ],
+        "to_relation": [],
+        "from_relation": [
+            8
+        ],
+        "level": 3,
+        "raw_content": "■ unique \"code\" assigned to each user;i.e.,code set partitioning\n\n*  all users share same frequency, but each user has own \"chipping\" sequence (i.e., code) to encode data\n*  allows multiple users to \"coexist\" and transmit simultaneously with minimal interference (if codes are \"orthogonal\")\n\n■ **encoding:** inner product:(original data)X (chipping sequence)\n\n■ **decoding:** summed inner-product:(encoded data)X(chipping sequence)",
+        "is_elemental": true
+    },
+    {
+        "id": 3,
+        "title": "LTE",
+        "summary": "4G LTE架构的主要元素包括演进节点B（eNodeB）、移动管理实体（MME）、服务网关（SGW）、分组数据网络网关（PGW）和归属用户服务器（HSS）。eNodeB负责无线通信，MME处理信令，SGW和PGW分别管理用户平面的数据传输和策略，而HSS存储用户订阅信息。",
+        "example": [
+            {
+                "title": "eNodeB的功能",
+                "content": "演进节点B（eNodeB）是LTE网络中的关键组件，负责与用户设备（UE）之间的无线通信，包括信号的发送和接收。"
+            },
+            {
+                "title": "MME的作用",
+                "content": "移动管理实体（MME）处理所有与信令相关的任务，如用户认证、寻呼和切换过程。"
+            }
+        ],
+        "to_relation": [
+            10,
+            12
+        ],
+        "from_relation": [
+            3
+        ],
+        "level": 2,
+        "raw_content": "## Elements of 4G LTE architecture\n\n![图片_1_1](images_LTE/page_1_img_1.png)\n\n\n\n\n\n",
+        "is_elemental": true
+    },
+    {
+        "id": 4,
+        "title": "Pandemic+bluetooth",
+        "summary": "Pandemic（大流行）指一种疾病在短时间内迅速蔓延至全球各地，对人类生活产生重大影响。COVID-19 疫情是典型的例子，历史上西班牙流感（1918年）也是一次全球性的大流行。Bluetooth（蓝牙）是一种无线通信技术，用于在短距离内连接设备并进行数据传输，例如蓝牙耳机和智能手环等设备都使用蓝牙技术。蓝牙的名字来源于10世纪的一位丹麦国王哈拉尔·布鲁坦（Harald Bluetooth），他以促进不同语言和文化之间的交流而闻名。",
+        "example": [
+            {
+                "title": "Pandemic示例",
+                "content": "COVID-19 疫情就是一个典型的例子。"
+            },
+            {
+                "title": "Bluetooth示例",
+                "content": "蓝牙耳机、智能手环等设备都使用蓝牙技术。"
+            }
+        ],
+        "to_relation": [
+            11
+        ],
+        "from_relation": [
+            4,
+            12
+        ],
+        "level": 2,
+        "raw_content": "## Pandemic + Bluetooth\n\n![图片_1_1](images_Pandemic+bluetooth/page_1_img_1.png)\n\n<details>\n<summary>📚 知识卡片: Pandemic</summary>\n\n**解释**: 指一种疾病在短时间内迅速蔓延至全球各地，对人类生活产生重大影响。\n\n**示例**: COVID-19 疫情就是一个典型的例子。\n\n**有趣事实**: 历史上，西班牙流感（1918年）也是一次全球性的大流行。\n</details>\n\n<details>\n<summary>📚 知识卡片: Bluetooth</summary>\n\n**解释**: 一种无线通信技术，用于在短距离内连接设备并进行数据传输。\n\n**示例**: 蓝牙耳机、智能手环等设备都使用蓝牙技术。\n\n**有趣事实**: 蓝牙的名字来源于10世纪的一位丹麦国王哈拉尔·布鲁坦（Harald Bluetooth），他以促进不同语言和文化之间的交流而闻名。\n</details>\n\n---\n\n### 段落难度评分\n- **第一段**: 难度 1/10（简单介绍主题）\n- **第二段**: 难度 2/10（包含图片，无文字描述）\n\n### 高难度内容分析\n由于文档内容较短且较为直观，没有出现复杂概念或专业术语密集的部分，因此不需要添加知识扩展和易化学习。\n\n---\n\n## Pandemic + Bluetooth\n\n![图片_1_1](images_Pandemic+bluetooth/page_1_img_1.png)",
+        "is_elemental": true
+    },
+    {
+        "id": 5,
+        "title": "数据链路层",
+        "summary": "### 章节总结：数据链路层\n\n数据链路层是网络通信中的关键层次，负责在相邻节点间实现可靠数据传输。本章涵盖多个子主题，包括碰撞避免、码分多址（CDMA）、长期演进（LTE）以及疫情期间蓝牙技术的应用。碰撞避免部分介绍了如何通过协议和算法减少或消除数据传输中的冲突，确保链路的高效利用。CDMA部分探讨了通过编码技术实现多用户共享同一频段的通信方式，提升了频谱利用率和抗干扰能力。LTE部分则聚焦于现代移动通信技术，强调其高数据速率、低延迟和广泛覆盖的特点，为移动互联网的发展提供了重要支持。最后，疫情期间蓝牙技术的应用展示了数据链路层在实际场景中的创新应用，如接触追踪和健康监测，凸显了其在公共卫生事件中的重要作用。这些内容共同构建了数据链路层的全面理解，涵盖了从基础理论到实际应用的多个方面。",
+        "example": {},
+        "to_relation": [
+            1,
+            2,
+            3,
+            4
+        ],
+        "from_relation": [],
+        "level": 1,
+        "raw_content": "",
+        "is_elemental": false
+    },
+    {
+        "id": 6,
+        "title": "long_preifx_matching",
+        "summary": "最长前缀匹配是一种用于路由选择的方法，其核心在于选择与目标地址最长匹配的前缀。这种方法通常通过三态内容可寻址存储器（TCAM）实现，能够在短时间内完成地址检索，不受路由表大小的影响。例如，Cisco Catalyst 设备使用 TCAM 可以存储约 $^{\\sim}1M$ 个路由表条目。",
+        "example": [
+            {
+                "title": "使用TCAM进行最长前缀匹配",
+                "content": "最长前缀匹配通常通过三态内容可寻址存储器（TCAM）实现。在Cisco Catalyst设备中，TCAM可以存储约 $^{\\sim}1M$ 个路由表条目，使得地址检索可以在一个时钟周期内完成，无论路由表的大小如何。"
+            }
+        ],
+        "to_relation": [
+            13
+        ],
+        "from_relation": [
+            6,
+            5,
+            14
+        ],
+        "level": 2,
+        "raw_content": "## Longest prefix matching\n\n* ■ we'll see *why* longest prefix matching is used shortly, when we study addressing\n* ■ longest prefix matching: often performed using ternary content addressable memories (TCAMs)\n*  *content addressable* : present address to TCAM: retrieve address in one clock cycle, regardless of table size\n*  Cisco Catalyst: $^{\\sim}1M$ routing table entries in TCAM\n\n\n\n",
+        "is_elemental": true
+    },
+    {
+        "id": 7,
+        "title": "protocol and service",
+        "summary": "网络层负责将传输层的报文段封装成数据报，并通过链路层传输。发送方将报文段封装成数据报，接收方将数据报中的数据传递给传输层协议。所有互联网设备（包括主机和路由器）都使用网络层协议。路由器检查通过它的所有IP数据报的头部字段，并将数据报从输入端口移动到输出端口，以沿着端到端路径传输数据报。",
+        "example": [
+            {
+                "title": "发送方封装数据报",
+                "content": "发送方将传输层的报文段封装成数据报，并传递给链路层进行传输。"
+            },
+            {
+                "title": "接收方处理数据报",
+                "content": "接收方从数据报中提取出传输层的报文段，并将其传递给相应的传输层协议。"
+            },
+            {
+                "title": "路由器转发数据报",
+                "content": "路由器检查通过它的所有IP数据报的头部字段，并将数据报从输入端口移动到输出端口，以沿着端到端路径传输数据报。"
+            }
+        ],
+        "to_relation": [],
+        "from_relation": [
+            7,
+            13
+        ],
+        "level": 2,
+        "raw_content": "## Network-layer services and protocols\n\n##### ■ transport segment from sending to receiving host\n\n*  *sender: encapsulates segments into* datagrams,passes to link layer\n*  receiver: delivers segments to transport layer protocol\n\n##### ■ network layer protocols in every Internet device: hosts, routers\n\n##### ■ routers:\n\n*  examines header fields in all IP datagrams passing through it\n*  moves datagrams from input ports to output ports to transfer datagrams along end-end path\n\n![图片_1_1](images_protocol and service/page_1_img_1.png)\n\n\n\n\n\n",
+        "is_elemental": true
+    },
+    {
+        "id": 8,
+        "title": "网络层",
+        "summary": "## 章节总结：网络层\n\n网络层是计算机网络中负责数据包传输和路由选择的关键层次，其核心功能在于通过逻辑地址（如IP地址）实现不同网络之间的互联互通。本章首先探讨了**最长前缀匹配**（Longest Prefix Matching）技术，这是路由选择的基础算法，用于在路由表中查找与目标IP地址最匹配的条目，确保数据包沿最优路径转发。接着，章节介绍了**协议与服务**（Protocol and Service）的核心概念，重点分析了网络层的主要协议（如IP协议）及其提供的服务，包括无连接、尽力交付的数据传输模型，以及地址分配、分片与重组等机制。这些内容共同构建了网络层的核心框架，揭示了数据在复杂网络环境中高效传输的原理与实现方式。",
+        "example": {},
+        "to_relation": [
+            6,
+            7
+        ],
+        "from_relation": [],
+        "level": 1,
+        "raw_content": "",
+        "is_elemental": false
+    },
+    {
+        "id": 9,
+        "title": "网原",
+        "summary": "",
+        "example": {},
+        "to_relation": [
+            0,
+            5
+        ],
+        "from_relation": [],
+        "level": 0,
+        "raw_content": "",
+        "is_elemental": false
+    },
+    {
+        "id": 10,
+        "title": "CSMA",
+        "summary": "",
+        "descriptions": [
+            "CSMA"
+        ],
+        "to_relation": [
+            45
+        ],
+        "from_relation": [
+            15
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 11,
+        "title": "RTS",
+        "summary": "",
+        "descriptions": [
+            "RTS"
+        ],
+        "to_relation": [
+            47
+        ],
+        "from_relation": [
+            45,
+            16
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 12,
+        "title": "基站",
+        "summary": "",
+        "descriptions": [
+            "基站"
+        ],
+        "to_relation": [
+            46
+        ],
+        "from_relation": [
+            17
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 13,
+        "title": "CTS",
+        "summary": "",
+        "descriptions": [
+            "CTS"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            46,
+            47,
+            18
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 14,
+        "title": "码分多址（CDMA）",
+        "summary": "",
+        "descriptions": [
+            "码分多址（CDMA）"
+        ],
+        "to_relation": [
+            48,
+            49,
+            50
+        ],
+        "from_relation": [
+            19
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 15,
+        "title": "编码序列",
+        "summary": "",
+        "descriptions": [
+            "编码序列"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            48,
+            20
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 16,
+        "title": "内积",
+        "summary": "",
+        "descriptions": [
+            "内积"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            49,
+            21
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 17,
+        "title": "正交编码序列",
+        "summary": "",
+        "descriptions": [
+            "正交编码序列"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            50,
+            22
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 18,
+        "title": "演进节点B（eNodeB）",
+        "summary": "",
+        "descriptions": [
+            "演进节点B（eNodeB）"
+        ],
+        "to_relation": [
+            51
+        ],
+        "from_relation": [
+            23
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 19,
+        "title": "用户设备（UE）",
+        "summary": "",
+        "descriptions": [
+            "用户设备（UE）"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            51,
+            24
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 20,
+        "title": "移动管理实体（MME）",
+        "summary": "",
+        "descriptions": [
+            "移动管理实体（MME）"
+        ],
+        "to_relation": [
+            52
+        ],
+        "from_relation": [
+            25
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 21,
+        "title": "信令相关任务",
+        "summary": "",
+        "descriptions": [
+            "信令相关任务"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            52,
+            26
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 22,
+        "title": "大流行",
+        "summary": "",
+        "descriptions": [
+            "大流行"
+        ],
+        "to_relation": [
+            53,
+            54
+        ],
+        "from_relation": [
+            27
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 23,
+        "title": "COVID-19疫情",
+        "summary": "",
+        "descriptions": [
+            "COVID-19疫情"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            53,
+            28
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 24,
+        "title": "西班牙流感",
+        "summary": "",
+        "descriptions": [
+            "西班牙流感"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            54,
+            29
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 25,
+        "title": "蓝牙",
+        "summary": "",
+        "descriptions": [
+            "蓝牙"
+        ],
+        "to_relation": [
+            55,
+            56,
+            57
+        ],
+        "from_relation": [
+            30
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 26,
+        "title": "蓝牙耳机",
+        "summary": "",
+        "descriptions": [
+            "蓝牙耳机"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            55,
+            31
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 27,
+        "title": "智能手环",
+        "summary": "",
+        "descriptions": [
+            "智能手环"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            56,
+            32
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 28,
+        "title": "哈拉尔·布鲁坦",
+        "summary": "",
+        "descriptions": [
+            "哈拉尔·布鲁坦"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            57,
+            33
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 29,
+        "title": "最长前缀匹配",
+        "summary": "",
+        "descriptions": [
+            "最长前缀匹配"
+        ],
+        "to_relation": [
+            58
+        ],
+        "from_relation": [
+            34
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 30,
+        "title": "三态内容可寻址存储器",
+        "summary": "",
+        "descriptions": [
+            "三态内容可寻址存储器"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            58,
+            59,
+            35
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 31,
+        "title": "Cisco Catalyst设备",
+        "summary": "",
+        "descriptions": [
+            "Cisco Catalyst设备"
+        ],
+        "to_relation": [
+            59
+        ],
+        "from_relation": [
+            36
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 32,
+        "title": "网络层",
+        "summary": "",
+        "descriptions": [
+            "网络层"
+        ],
+        "to_relation": [
+            60,
+            61
+        ],
+        "from_relation": [
+            37
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 33,
+        "title": "传输层",
+        "summary": "",
+        "descriptions": [
+            "传输层"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            60,
+            63,
+            38
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 34,
+        "title": "链路层",
+        "summary": "",
+        "descriptions": [
+            "链路层"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            61,
+            39
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 35,
+        "title": "发送方",
+        "summary": "",
+        "descriptions": [
+            "发送方"
+        ],
+        "to_relation": [
+            62
+        ],
+        "from_relation": [
+            40
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 36,
+        "title": "数据报",
+        "summary": "",
+        "descriptions": [
+            "数据报"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            62,
+            41
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 37,
+        "title": "接收方",
+        "summary": "",
+        "descriptions": [
+            "接收方"
+        ],
+        "to_relation": [
+            63
+        ],
+        "from_relation": [
+            42
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 38,
+        "title": "路由器",
+        "summary": "",
+        "descriptions": [
+            "路由器"
+        ],
+        "to_relation": [
+            64
+        ],
+        "from_relation": [
+            43
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    },
+    {
+        "id": 39,
+        "title": "IP数据报",
+        "summary": "",
+        "descriptions": [
+            "IP数据报"
+        ],
+        "to_relation": [],
+        "from_relation": [
+            64,
+            44
+        ],
+        "type": "entity",
+        "section": "",
+        "alias": [],
+        "is_core_entity": true
+    }
+]
