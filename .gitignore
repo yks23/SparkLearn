@@ -3,3 +3,6 @@
 __pycache__/
 test/
 extra_data/
+output/
+outputs/
+outputs_new/

@@ -12,7 +12,7 @@ from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject, QUrl
 from PyQt5.QtGui import QPixmap, QDesktopServices
 from main import process_folder, augment_folder, tree_folder
 from qg.graph_class import KnowledgeGraph, KnowledgeQuestionGenerator
-
+from config import APISecret, APIKEY, APPID
 
 class QtLogger(QObject):
     log_signal = pyqtSignal(str)
@@ -126,9 +126,9 @@ class QAGenerationThread(QThread):
 
             generator = KnowledgeQuestionGenerator(
                 kg,
-                appid="2d1bc910",
-                api_key="a1df9334fd048ded0c9304ccf12c20d1",
-                api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
+                appid=APPID,
+                api_key=APIKEY,
+                api_secret=APISecret
             )
 
             qa_output_path = os.path.join(self.output_path, "qa")

@@ -6,6 +6,7 @@ from sider.annotator_simple import SimplifiedAnnotator
 from qg.graph_class import KnowledgeGraph,KnowledgeQuestionGenerator
 import json
 from tqdm import tqdm
+from config import APIKEY, APISecret, APPID
 def parse_args():
     parser = argparse.ArgumentParser(description="EduSpark CLI Tool")
     parser.add_argument('--file_path', type=str, required=True, help='Input file or directory path')
@@ -92,9 +93,9 @@ def generate_QA(input_path, output_path):
     kg.visualize(os.path.join(input_path,'graph.png'))
     generator = KnowledgeQuestionGenerator(
         kg,
-        appid="2d1bc910",
-        api_key="a1df9334fd048ded0c9304ccf12c20d1",
-        api_secret="YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
+        appid=APPID,
+        api_key=APIKEY,
+        api_secret=APISecret
     )
     generator.interactive_question_generation()
     

@@ -1,1 +1,2477 @@
-[]
+[
+    {
+        "id": 415,
+        "summary": "",
+        "descriptions": [
+            "第一部分梳理了工业工程的历史发展进程...第二部分详细阐述了工业工程的定义和内涵"
+        ],
+        "type": "逻辑前提",
+        "source_id": 1,
+        "target_id": 2,
+        "is_tree": false
+    },
+    {
+        "id": 416,
+        "summary": "",
+        "descriptions": [
+            "第二部分详细阐述了工业工程的定义和内涵...第三部分重点论述了系统设计的原理和应用"
+        ],
+        "type": "方法论基础",
+        "source_id": 2,
+        "target_id": 3,
+        "is_tree": false
+    },
+    {
+        "id": 417,
+        "summary": "",
+        "descriptions": [
+            "第一部分梳理了工业工程的历史发展进程...第三部分展示了工业工程在优化工作流程、设备和人员配置方面的实践价值"
+        ],
+        "type": "发展演进",
+        "source_id": 1,
+        "target_id": 3,
+        "is_tree": false
+    },
+    {
+        "id": 418,
+        "summary": "",
+        "descriptions": [
+            "讨论题部分则提供了对前述历史内容的反思与延伸，通过问题引导读者思考工业工程在不同历史阶段的演化特点、影响因素以及未来发展趋势"
+        ],
+        "type": "逻辑延展",
+        "source_id": 4,
+        "target_id": 5,
+        "is_tree": false
+    },
+    {
+        "id": 419,
+        "summary": "",
+        "descriptions": [
+            "每个主题章节均配套有讨论题和练习"
+        ],
+        "type": "逻辑前提",
+        "source_id": 57,
+        "target_id": 58,
+        "is_tree": false
+    },
+    {
+        "id": 420,
+        "summary": "",
+        "descriptions": [
+            "人力资源管理的相关内容强调人在系统中的核心地位"
+        ],
+        "type": "逻辑前提",
+        "source_id": 57,
+        "target_id": 63,
+        "is_tree": false
+    },
+    {
+        "id": 421,
+        "summary": "",
+        "descriptions": [
+            "明确了系统的定义和核心特征，为后续章节奠定理论基础"
+        ],
+        "type": "逻辑前提",
+        "source_id": 57,
+        "target_id": 59,
+        "is_tree": false
+    },
+    {
+        "id": 422,
+        "summary": "",
+        "descriptions": [
+            "计算机和信息系统的章节则侧重于技术支持"
+        ],
+        "type": "逻辑前提",
+        "source_id": 57,
+        "target_id": 61,
+        "is_tree": false
+    },
+    {
+        "id": 423,
+        "summary": "",
+        "descriptions": [
+            "为帮助强化学习效果，每个主题章节均配套有讨论题和练习"
+        ],
+        "type": "逻辑前提",
+        "source_id": 57,
+        "target_id": 65,
+        "is_tree": false
+    },
+    {
+        "id": 424,
+        "summary": "",
+        "descriptions": [
+            "附录A的概率统计知识与图表部分则为系统分析和决策提供了实用工具"
+        ],
+        "type": "逻辑前提",
+        "source_id": 57,
+        "target_id": 67,
+        "is_tree": false
+    },
+    {
+        "id": 425,
+        "summary": "",
+        "descriptions": [
+            "每个主题章节均配套有讨论题和练习"
+        ],
+        "type": "逻辑前提",
+        "source_id": 59,
+        "target_id": 60,
+        "is_tree": false
+    },
+    {
+        "id": 426,
+        "summary": "",
+        "descriptions": [
+            "每个主题章节均配套有讨论题和练习"
+        ],
+        "type": "逻辑前提",
+        "source_id": 61,
+        "target_id": 62,
+        "is_tree": false
+    },
+    {
+        "id": 427,
+        "summary": "",
+        "descriptions": [
+            "每个主题章节均配套有讨论题和练习"
+        ],
+        "type": "逻辑前提",
+        "source_id": 63,
+        "target_id": 64,
+        "is_tree": false
+    },
+    {
+        "id": 428,
+        "summary": "",
+        "descriptions": [
+            "本章介绍了工业工程在1880-1930年期间的发展年表，重点是弗雷德里克·W. 泰勒和弗兰克·B. 吉尔布雷斯的工作及其对工业工程领域的贡献。"
+        ],
+        "type": "时间发展关系",
+        "source_id": 69,
+        "target_id": 76,
+        "is_tree": false
+    },
+    {
+        "id": 429,
+        "summary": "",
+        "descriptions": [
+            "讨论了泰勒在科学管理发展中所起的作用以及吉尔布雷斯关于方法研究的理念，以及他们对工业工程的深远影响。"
+        ],
+        "type": "影响关系",
+        "source_id": 69,
+        "target_id": 80,
+        "is_tree": false
+    },
+    {
+        "id": 430,
+        "summary": "",
+        "descriptions": [
+            "随后，通过对比分析传统工程学科（土木、化学、电气和机械工程）的认证过程和标准，强调工业工程同样具有工程学科的科学性和严谨性."
+        ],
+        "type": "比较关系",
+        "source_id": 69,
+        "target_id": 81,
+        "is_tree": false
+    },
+    {
+        "id": 431,
+        "summary": "",
+        "descriptions": [
+            "探讨了工业工程原理和方法在非制造业（如银行、医院和政府职能）中的应用案例，展示了其广泛的适用性和实用性."
+        ],
+        "type": "前提关系",
+        "source_id": 71,
+        "target_id": 72,
+        "is_tree": false
+    },
+    {
+        "id": 432,
+        "summary": "",
+        "descriptions": [
+            "讨论了工业工程同样具有工程学科的科学性和严谨性,以及其教育认证过程."
+        ],
+        "type": "认证关系",
+        "source_id": 75,
+        "target_id": 78,
+        "is_tree": false
+    },
+    {
+        "id": 433,
+        "summary": "",
+        "descriptions": [
+            "探讨了工业工程未来的挑战，展示了其广泛的适用性和实用性."
+        ],
+        "type": "前后关系",
+        "source_id": 70,
+        "target_id": 82,
+        "is_tree": false
+    },
+    {
+        "id": 434,
+        "summary": "",
+        "descriptions": [
+            "章节首先介绍了整体工业与系统工程方法论，然后深入到工业与系统工程设计的细节部分"
+        ],
+        "type": "概述与分支",
+        "source_id": 83,
+        "target_id": 84,
+        "is_tree": false
+    },
+    {
+        "id": 435,
+        "summary": "",
+        "descriptions": [
+            "在讨论了工业与系统工程设计之后，进一步探讨了工业与系统工程师执行的典型活动"
+        ],
+        "type": "理论到实践",
+        "source_id": 84,
+        "target_id": 85,
+        "is_tree": false
+    },
+    {
+        "id": 436,
+        "summary": "",
+        "descriptions": [
+            "对工业工程师典型活动的了解是为了评估他们在整体组织中的作用"
+        ],
+        "type": "活动与背景关系",
+        "source_id": 85,
+        "target_id": 86,
+        "is_tree": false
+    },
+    {
+        "id": 437,
+        "summary": "",
+        "descriptions": [
+            "对工业工程师活动的理解是设计对应绩效评测方法的基础"
+        ],
+        "type": "活动与评测标准",
+        "source_id": 85,
+        "target_id": 88,
+        "is_tree": false
+    },
+    {
+        "id": 438,
+        "summary": "",
+        "descriptions": [
+            "在与整体组织的关系明确后，进一步细化讨论职能内部的组织结构"
+        ],
+        "type": "宏观与微观",
+        "source_id": 86,
+        "target_id": 87,
+        "is_tree": false
+    },
+    {
+        "id": 439,
+        "summary": "",
+        "descriptions": [
+            "2.7解释了系统的本质概念，而2.8具体讨论了其中的反馈控制原理"
+        ],
+        "type": "基本概念到应用",
+        "source_id": 89,
+        "target_id": 90,
+        "is_tree": false
+    },
+    {
+        "id": 440,
+        "summary": "",
+        "descriptions": [
+            "在介绍了职能内部组织之后，讨论相应的绩效测评方法"
+        ],
+        "type": "结构与机能测评",
+        "source_id": 87,
+        "target_id": 88,
+        "is_tree": false
+    },
+    {
+        "id": 441,
+        "summary": "",
+        "descriptions": [
+            "本章讨论了金属加工工艺以外的多种工艺流程和工业工程的相关概念。产品设计与生产工艺设计之间存在交互作用。"
+        ],
+        "type": "引导",
+        "source_id": 91,
+        "target_id": 92,
+        "is_tree": false
+    },
+    {
+        "id": 442,
+        "summary": "",
+        "descriptions": [
+            "金属加工的基本类型包括剪切、车削、钻孔等。拉丝和冲压杯形物件的区别在于加工方式和应用场景的不同。铜焊和锡焊因其高效和精确而在电子工业中得到广泛应用。"
+        ],
+        "type": "覆盖",
+        "source_id": 91,
+        "target_id": 94,
+        "is_tree": false
+    },
+    {
+        "id": 443,
+        "summary": "",
+        "descriptions": [
+            "夹具和卡具是生产中的重要辅助工具。"
+        ],
+        "type": "提到",
+        "source_id": 91,
+        "target_id": 95,
+        "is_tree": false
+    },
+    {
+        "id": 444,
+        "summary": "",
+        "descriptions": [
+            "应急维修和预防性维修各有其适用场合。人工智能在产业生产中的应用广泛。"
+        ],
+        "type": "举例",
+        "source_id": 91,
+        "target_id": 96,
+        "is_tree": false
+    },
+    {
+        "id": 445,
+        "summary": "",
+        "descriptions": [
+            "产品设计与生产工艺设计之间存在交互作用，这种交互作用是必需的以确保设计的可生产性。"
+        ],
+        "type": "前提",
+        "source_id": 92,
+        "target_id": 94,
+        "is_tree": false
+    },
+    {
+        "id": 446,
+        "summary": "",
+        "descriptions": [
+            "夹具和卡具是生产中的重要辅助工具，用于提高加工精度。"
+        ],
+        "type": "支持",
+        "source_id": 94,
+        "target_id": 95,
+        "is_tree": false
+    },
+    {
+        "id": 447,
+        "summary": "",
+        "descriptions": [
+            "布局与作业顺序一致确保了流程的顺畅和合理，减少了在制品库存。单位产品的生产时间短，降低了物料搬运成本。生产线操作简单，培训时间和费用较少。这种布局使得生产计划和控制系统变得简单，减少了运输和存储过程中产品所占用的空间。"
+        ],
+        "type": "逻辑前提",
+        "source_id": 101,
+        "target_id": 102,
+        "is_tree": false
+    },
+    {
+        "id": 448,
+        "summary": "",
+        "descriptions": [
+            "首先讨论了工厂布局对各种费用项目的影响及其发生机制"
+        ],
+        "type": "逻辑前提",
+        "source_id": 123,
+        "target_id": 124,
+        "is_tree": false
+    },
+    {
+        "id": 449,
+        "summary": "",
+        "descriptions": [
+            "比较了扩大规模式布局设计与重新布局设计的区别"
+        ],
+        "type": "比较分析",
+        "source_id": 124,
+        "target_id": 125,
+        "is_tree": false
+    },
+    {
+        "id": 450,
+        "summary": "",
+        "descriptions": [
+            "重点讨论了工厂选址的分析技术及其在实际决策中的作用和优缺点"
+        ],
+        "type": "技术与方法论",
+        "source_id": 125,
+        "target_id": 126,
+        "is_tree": false
+    },
+    {
+        "id": 451,
+        "summary": "",
+        "descriptions": [
+            "涉及了距离测量方法（直交线式和欧几里得式）的不同适用场合"
+        ],
+        "type": "不同方法论",
+        "source_id": 126,
+        "target_id": 127,
+        "is_tree": false
+    },
+    {
+        "id": 452,
+        "summary": "",
+        "descriptions": [
+            "列举了三种基本布局方法及其应用实例"
+        ],
+        "type": "方法应用",
+        "source_id": 127,
+        "target_id": 128,
+        "is_tree": false
+    },
+    {
+        "id": 453,
+        "summary": "",
+        "descriptions": [
+            "讨论了启发式求解方法与最优求解法的区别"
+        ],
+        "type": "方法论比较",
+        "source_id": 128,
+        "target_id": 129,
+        "is_tree": false
+    },
+    {
+        "id": 454,
+        "summary": "",
+        "descriptions": [
+            "产品、工艺和固定位置布局各自的优劣势"
+        ],
+        "type": "方法分类",
+        "source_id": 129,
+        "target_id": 130,
+        "is_tree": false
+    },
+    {
+        "id": 455,
+        "summary": "",
+        "descriptions": [
+            "介绍了计算机布局软件中的建设型与改良型程序"
+        ],
+        "type": "技术与工具",
+        "source_id": 130,
+        "target_id": 131,
+        "is_tree": false
+    },
+    {
+        "id": 456,
+        "summary": "",
+        "descriptions": [
+            "选址决策过程的两个层次"
+        ],
+        "type": "决策层级",
+        "source_id": 131,
+        "target_id": 132,
+        "is_tree": false
+    },
+    {
+        "id": 457,
+        "summary": "",
+        "descriptions": [
+            "不同部门选址问题的差异"
+        ],
+        "type": "问题差异化",
+        "source_id": 132,
+        "target_id": 133,
+        "is_tree": false
+    },
+    {
+        "id": 458,
+        "summary": "",
+        "descriptions": [
+            "总结了计算机布局设计和评价的优点"
+        ],
+        "type": "技术分析",
+        "source_id": 133,
+        "target_id": 134,
+        "is_tree": false
+    },
+    {
+        "id": 459,
+        "summary": "",
+        "descriptions": [
+            "讨论了设施布局与选址的相似性与差异"
+        ],
+        "type": "方法论总结",
+        "source_id": 134,
+        "target_id": 135,
+        "is_tree": false
+    },
+    {
+        "id": 460,
+        "summary": "",
+        "descriptions": [
+            "举例说明了需要考虑原材料与顾客就近性的选址决策问题"
+        ],
+        "type": "实践例子",
+        "source_id": 135,
+        "target_id": 136,
+        "is_tree": false
+    },
+    {
+        "id": 461,
+        "summary": "",
+        "descriptions": [
+            "工作分析是工作评定的前置步骤，了解详细工作需要先进行工作分析才能评定工作。"
+        ],
+        "type": "逻辑前提",
+        "source_id": 139,
+        "target_id": 140,
+        "is_tree": false
+    },
+    {
+        "id": 462,
+        "summary": "",
+        "descriptions": [
+            "工作评定影响工资调查，确定各工作相对贡献是薪资水平决策的关键参照数据。"
+        ],
+        "type": "逻辑前提",
+        "source_id": 140,
+        "target_id": 141,
+        "is_tree": false
+    },
+    {
+        "id": 463,
+        "summary": "",
+        "descriptions": [
+            "工作评定与薪资制定密切相关，决定不同工作岗位薪资水平的基本标准参照值。"
+        ],
+        "type": "逻辑前提",
+        "source_id": 140,
+        "target_id": 142,
+        "is_tree": false
+    },
+    {
+        "id": 464,
+        "summary": "",
+        "descriptions": [
+            "市场薪资调查反馈的数据是指导企业薪资决策的最主要基准数据之一。"
+        ],
+        "type": "直接影响",
+        "source_id": 141,
+        "target_id": 142,
+        "is_tree": false
+    },
+    {
+        "id": 465,
+        "summary": "",
+        "descriptions": [
+            "11.1概述为后续具体特性分析提供理论基础"
+        ],
+        "type": "前提关系",
+        "source_id": 150,
+        "target_id": 151,
+        "is_tree": false
+    },
+    {
+        "id": 466,
+        "summary": "",
+        "descriptions": [
+            "11.1概述中包含了对心理特性的整体说明"
+        ],
+        "type": "前提关系",
+        "source_id": 150,
+        "target_id": 152,
+        "is_tree": false
+    },
+    {
+        "id": 467,
+        "summary": "",
+        "descriptions": [
+            "生理特性与心理特性共同构成人与工作界面的研究基础"
+        ],
+        "type": "互补关系",
+        "source_id": 151,
+        "target_id": 153,
+        "is_tree": false
+    },
+    {
+        "id": 468,
+        "summary": "",
+        "descriptions": [
+            "心理特性分析直接应用于人机界面设计"
+        ],
+        "type": "应用关系",
+        "source_id": 152,
+        "target_id": 153,
+        "is_tree": false
+    },
+    {
+        "id": 469,
+        "summary": "",
+        "descriptions": [
+            "工作测定与生产率测定的讨论为能源管理提供了基础方法论"
+        ],
+        "type": "逻辑前提",
+        "source_id": 154,
+        "target_id": 155,
+        "is_tree": false
+    },
+    {
+        "id": 470,
+        "summary": "",
+        "descriptions": [
+            "通过工作设计中使用的流程图等工具可优化水务管理流程"
+        ],
+        "type": "方法论扩展",
+        "source_id": 154,
+        "target_id": 156,
+        "is_tree": false
+    },
+    {
+        "id": 471,
+        "summary": "",
+        "descriptions": [
+            "能源与水管理在生产系统中存在资源消耗的联动关系"
+        ],
+        "type": "资源协同",
+        "source_id": 155,
+        "target_id": 156,
+        "is_tree": false
+    },
+    {
+        "id": 472,
+        "summary": "",
+        "descriptions": [
+            "引言章节概述了本章内容，为后续会计章节提供背景"
+        ],
+        "type": "概述引入",
+        "source_id": 159,
+        "target_id": 160,
+        "is_tree": false
+    },
+    {
+        "id": 473,
+        "summary": "",
+        "descriptions": [
+            "会计章节引出成本会计这个细分领域"
+        ],
+        "type": "细分专题",
+        "source_id": 160,
+        "target_id": 161,
+        "is_tree": false
+    },
+    {
+        "id": 474,
+        "summary": "",
+        "descriptions": [
+            "成本会计知识是理解工程经济概念的基础"
+        ],
+        "type": "应用延伸",
+        "source_id": 161,
+        "target_id": 162,
+        "is_tree": false
+    },
+    {
+        "id": 475,
+        "summary": "",
+        "descriptions": [
+            "工程经济分析需要依赖利息因数作为计算工具"
+        ],
+        "type": "理论基础",
+        "source_id": 162,
+        "target_id": 163,
+        "is_tree": false
+    },
+    {
+        "id": 476,
+        "summary": "",
+        "descriptions": [
+            "工程经济原理用于Gadgets公司案例的现值计算"
+        ],
+        "type": "实务应用",
+        "source_id": 162,
+        "target_id": 164,
+        "is_tree": false
+    },
+    {
+        "id": 477,
+        "summary": "",
+        "descriptions": [
+            "引言提及的技术影响最终在计算机影响章节具体阐述"
+        ],
+        "type": "技术影响",
+        "source_id": 159,
+        "target_id": 165,
+        "is_tree": false
+    },
+    {
+        "id": 478,
+        "summary": "",
+        "descriptions": [
+            "利息因数作为具体计算工具应用于案例的现值计算"
+        ],
+        "type": "工具应用",
+        "source_id": 163,
+        "target_id": 164,
+        "is_tree": false
+    },
+    {
+        "id": 479,
+        "summary": "",
+        "descriptions": [
+            "会计方法受到计算机技术的显著影响"
+        ],
+        "type": "技术关联",
+        "source_id": 160,
+        "target_id": 165,
+        "is_tree": false
+    },
+    {
+        "id": 480,
+        "summary": "",
+        "descriptions": [
+            "工程经济分析受益于计算机技术的支持"
+        ],
+        "type": "技术关联",
+        "source_id": 162,
+        "target_id": 165,
+        "is_tree": false
+    },
+    {
+        "id": 481,
+        "summary": "",
+        "descriptions": [
+            "引言部分通常会介绍基本定义和概念，这是理解运筹学与工业工程相似性的前提。"
+        ],
+        "type": "前提",
+        "source_id": 166,
+        "target_id": 167,
+        "is_tree": false
+    },
+    {
+        "id": 482,
+        "summary": "",
+        "descriptions": [
+            "理解了运筹学与工业工程的相似性之后，可以更容易理解运筹学的性质。"
+        ],
+        "type": "逻辑衔接",
+        "source_id": 167,
+        "target_id": 168,
+        "is_tree": false
+    },
+    {
+        "id": 483,
+        "summary": "",
+        "descriptions": [
+            "理解了运筹学的性质，可以自然过渡到运筹学的分类。"
+        ],
+        "type": "分类关系",
+        "source_id": 168,
+        "target_id": 169,
+        "is_tree": false
+    },
+    {
+        "id": 484,
+        "summary": "",
+        "descriptions": [
+            "确定性运筹学是运筹学分类下的一个子类别。"
+        ],
+        "type": "子类别",
+        "source_id": 169,
+        "target_id": 170,
+        "is_tree": false
+    },
+    {
+        "id": 485,
+        "summary": "",
+        "descriptions": [
+            "数学规划是确定性运筹学中的一种技术方法。"
+        ],
+        "type": "技术方法",
+        "source_id": 170,
+        "target_id": 171,
+        "is_tree": false
+    },
+    {
+        "id": 486,
+        "summary": "",
+        "descriptions": [
+            "无约束最优化是数学规划下的一个细分领域。"
+        ],
+        "type": "细分领域",
+        "source_id": 171,
+        "target_id": 172,
+        "is_tree": false
+    },
+    {
+        "id": 487,
+        "summary": "",
+        "descriptions": [
+            "线性规划是无约束最优化的一个应用实例。"
+        ],
+        "type": "应用实例",
+        "source_id": 172,
+        "target_id": 173,
+        "is_tree": false
+    },
+    {
+        "id": 488,
+        "summary": "",
+        "descriptions": [
+            "介绍了线性规划后，可以扩展到其他运筹学技术。"
+        ],
+        "type": "扩展",
+        "source_id": 173,
+        "target_id": 174,
+        "is_tree": false
+    },
+    {
+        "id": 489,
+        "summary": "",
+        "descriptions": [
+            "计算机的引入对其他运筹学技术的应用和发展有着重要影响。"
+        ],
+        "type": "影响因素",
+        "source_id": 174,
+        "target_id": 175,
+        "is_tree": false
+    },
+    {
+        "id": 490,
+        "summary": "",
+        "descriptions": [
+            "引言部分提出的概念和方法在整个章节的发展和总结中得到呼应，特别是在计算机的影响部分体现了技术发展的演进。"
+        ],
+        "type": "总结呼应",
+        "source_id": 166,
+        "target_id": 175,
+        "is_tree": false
+    },
+    {
+        "id": 491,
+        "summary": "",
+        "descriptions": [
+            "本章内容涉及供应链管理中的三个主要内容，15.1引言可能是对整体内容的概述，作为对后续内容的引入，特别是包含了预测这一部分。"
+        ],
+        "type": "介绍引导",
+        "source_id": 176,
+        "target_id": 177,
+        "is_tree": false
+    },
+    {
+        "id": 492,
+        "summary": "",
+        "descriptions": [
+            "预测章节（可能通过排队论177进行分析），为制定库存控制178提供数据和方法依据。"
+        ],
+        "type": "方法前置",
+        "source_id": 177,
+        "target_id": 178,
+        "is_tree": false
+    },
+    {
+        "id": 493,
+        "summary": "",
+        "descriptions": [
+            "15.2排队论作为一个数学工具可能会受到统计学和计算机发展180的影响或支持来分析预测模型及销售波动情况。"
+        ],
+        "type": "学科交叉",
+        "source_id": 177,
+        "target_id": 180,
+        "is_tree": false
+    },
+    {
+        "id": 494,
+        "summary": "",
+        "descriptions": [
+            "15.3库存控制中的需求和补货问题可能利用马尔可夫链179来解决，尤其是涉及不确定性因素的情景。"
+        ],
+        "type": "模型补充",
+        "source_id": 178,
+        "target_id": 179,
+        "is_tree": false
+    },
+    {
+        "id": 495,
+        "summary": "",
+        "descriptions": [
+            "计算机和统计学180的发展有助于更好的库存管理178，如精确计算订费量和支持EOQ数学模型。"
+        ],
+        "type": "技术支持",
+        "source_id": 180,
+        "target_id": 178,
+        "is_tree": false
+    },
+    {
+        "id": 496,
+        "summary": "",
+        "descriptions": [
+            "现代统计和计算能力180使复杂的排队论分析177在供应链中变得更可行和实用。"
+        ],
+        "type": "能力提高",
+        "source_id": 180,
+        "target_id": 177,
+        "is_tree": false
+    },
+    {
+        "id": 497,
+        "summary": "",
+        "descriptions": [
+            "引言章节通常会介绍项目管理的背景和基础概念，为进一步探讨网络计划提供铺垫"
+        ],
+        "type": "逻辑前提",
+        "source_id": 186,
+        "target_id": 187,
+        "is_tree": false
+    },
+    {
+        "id": 498,
+        "summary": "",
+        "descriptions": [
+            "项目的网络计划是应用关键路径法进行项目时间管理的基础"
+        ],
+        "type": "理论基础",
+        "source_id": 187,
+        "target_id": 188,
+        "is_tree": false
+    },
+    {
+        "id": 499,
+        "summary": "",
+        "descriptions": [
+            "关键路径法作为基础技术，计划评审技术是其用于不确定性管理的扩展方法"
+        ],
+        "type": "方法演进",
+        "source_id": 188,
+        "target_id": 189,
+        "is_tree": false
+    },
+    {
+        "id": 500,
+        "summary": "",
+        "descriptions": [
+            "在掌握关键路径法后可进一步进行时间-成本优化的经济性分析"
+        ],
+        "type": "应用扩展",
+        "source_id": 188,
+        "target_id": 190,
+        "is_tree": false
+    },
+    {
+        "id": 501,
+        "summary": "",
+        "descriptions": [
+            "网络计划为资源配置优化提供了基本框架和必要前提"
+        ],
+        "type": "应用延伸",
+        "source_id": 187,
+        "target_id": 191,
+        "is_tree": false
+    },
+    {
+        "id": 502,
+        "summary": "",
+        "descriptions": [
+            "计划评审技术产生的时间估算数据可作为时间-成本优化的输入"
+        ],
+        "type": "技术联动",
+        "source_id": 189,
+        "target_id": 190,
+        "is_tree": false
+    },
+    {
+        "id": 503,
+        "summary": "",
+        "descriptions": [
+            "关键路径法识别出关键活动后，可以针对性地进行资源平衡与调度"
+        ],
+        "type": "技术支持",
+        "source_id": 188,
+        "target_id": 191,
+        "is_tree": false
+    },
+    {
+        "id": 504,
+        "summary": "",
+        "descriptions": [
+            "18.1 引言为18.2 系统思想介绍提供了背景基础"
+        ],
+        "type": "逻辑前提",
+        "source_id": 192,
+        "target_id": 193,
+        "is_tree": false
+    },
+    {
+        "id": 505,
+        "summary": "",
+        "descriptions": [
+            "18.2 系统思想介绍为18.3 定义和术语提供了理论基础"
+        ],
+        "type": "逻辑前提",
+        "source_id": 193,
+        "target_id": 194,
+        "is_tree": false
+    },
+    {
+        "id": 506,
+        "summary": "",
+        "descriptions": [
+            "18.3 定义和术语中阐明的概念为18.4 系统工程的应用奠定基础"
+        ],
+        "type": "逻辑前提",
+        "source_id": 194,
+        "target_id": 195,
+        "is_tree": false
+    },
+    {
+        "id": 507,
+        "summary": "",
+        "descriptions": [
+            "18.4 系统工程的方法论直接应用于18.5 系统描述的构建"
+        ],
+        "type": "应用延伸",
+        "source_id": 195,
+        "target_id": 196,
+        "is_tree": false
+    },
+    {
+        "id": 508,
+        "summary": "",
+        "descriptions": [
+            "信息系统的基本概念是理解信息系统设计过程的基础"
+        ],
+        "type": "逻辑前提",
+        "source_id": 203,
+        "target_id": 204,
+        "is_tree": false
+    },
+    {
+        "id": 509,
+        "summary": "",
+        "descriptions": [
+            "数据库管理系统是信息系统的重要组成部分"
+        ],
+        "type": "组成部分",
+        "source_id": 203,
+        "target_id": 205,
+        "is_tree": false
+    },
+    {
+        "id": 510,
+        "summary": "",
+        "descriptions": [
+            "数据通信网络对于信息系统的实际应用和运转至关重要"
+        ],
+        "type": "关键支撑",
+        "source_id": 203,
+        "target_id": 206,
+        "is_tree": false
+    },
+    {
+        "id": 511,
+        "summary": "",
+        "descriptions": [
+            "数据通信网络为数据库管理系统间的信息交换提供通道"
+        ],
+        "type": "数据交换基础",
+        "source_id": 205,
+        "target_id": 206,
+        "is_tree": false
+    },
+    {
+        "id": 512,
+        "summary": "",
+        "descriptions": [
+            "引言（21.1）为选拔、测试和安置（21.2）提供了背景和理论基础。"
+        ],
+        "type": "逻辑前提",
+        "source_id": 207,
+        "target_id": 208,
+        "is_tree": false
+    },
+    {
+        "id": 513,
+        "summary": "",
+        "descriptions": [
+            "选拔、测试和安置（21.2）后的下一步是绩效评价、培训、教育和晋升（21.3）。"
+        ],
+        "type": "发展补充",
+        "source_id": 208,
+        "target_id": 209,
+        "is_tree": false
+    },
+    {
+        "id": 514,
+        "summary": "",
+        "descriptions": [
+            "工作分析和工作描述（21.4）为劳资关系（21.5）的讨论打下了基础。"
+        ],
+        "type": "基础性关系",
+        "source_id": 210,
+        "target_id": 211,
+        "is_tree": false
+    },
+    {
+        "id": 515,
+        "summary": "",
+        "descriptions": [
+            "劳资关系（21.5）会影响安全计划（21.6）的实施和执行。"
+        ],
+        "type": "逻辑关系",
+        "source_id": 211,
+        "target_id": 212,
+        "is_tree": false
+    },
+    {
+        "id": 516,
+        "summary": "",
+        "descriptions": [
+            "安全计划（21.6）是员工福利和公益（21.7）的一部分。"
+        ],
+        "type": "并行关系",
+        "source_id": 212,
+        "target_id": 213,
+        "is_tree": false
+    },
+    {
+        "id": 517,
+        "summary": "",
+        "descriptions": [
+            "安全计划（21.6）支持福利和公益（21.7）的实现。"
+        ],
+        "type": "支持",
+        "source_id": 212,
+        "target_id": 213,
+        "is_tree": false
+    },
+    {
+        "id": 518,
+        "summary": "",
+        "descriptions": [
+            "福利和公益（21.7）对激励、监督指导和沟通（21.8）起着正面促进作用。"
+        ],
+        "type": "促进",
+        "source_id": 213,
+        "target_id": 214,
+        "is_tree": false
+    },
+    {
+        "id": 519,
+        "summary": "",
+        "descriptions": [
+            "绩效评价、培训、教育和晋升（21.3）是工程管理（21.9）的重要组成部分。"
+        ],
+        "type": "层次关系",
+        "source_id": 209,
+        "target_id": 215,
+        "is_tree": false
+    },
+    {
+        "id": 520,
+        "summary": "",
+        "descriptions": [
+            "激励、监督指导和沟通（21.8）有助于提升工程管理（21.9）的效果。"
+        ],
+        "type": "贡献",
+        "source_id": 214,
+        "target_id": 215,
+        "is_tree": false
+    },
+    {
+        "id": 521,
+        "summary": "",
+        "descriptions": [
+            "工作分析和工作描述（21.4）为工程管理（21.9）活动提供基本信息。"
+        ],
+        "type": "基础性知识",
+        "source_id": 210,
+        "target_id": 215,
+        "is_tree": false
+    },
+    {
+        "id": 522,
+        "summary": "",
+        "descriptions": [
+            "概率论的基本理论学习建立在理解一般基本概率理论的基础上"
+        ],
+        "type": "prerequisite",
+        "source_id": 216,
+        "target_id": 217,
+        "is_tree": false
+    },
+    {
+        "id": 523,
+        "summary": "",
+        "descriptions": [
+            "样本空间是基本概率理论的核心概念部分"
+        ],
+        "type": "has_part",
+        "source_id": 217,
+        "target_id": 218,
+        "is_tree": false
+    },
+    {
+        "id": 524,
+        "summary": "",
+        "descriptions": [
+            "事件和其概率是理解概率论的必备条件"
+        ],
+        "type": "has_part",
+        "source_id": 217,
+        "target_id": 219,
+        "is_tree": false
+    },
+    {
+        "id": 525,
+        "summary": "",
+        "descriptions": [
+            "学习事件的概率之后可以进一步探讨事件的运算法则"
+        ],
+        "type": "next",
+        "source_id": 219,
+        "target_id": 220,
+        "is_tree": false
+    },
+    {
+        "id": 526,
+        "summary": "",
+        "descriptions": [
+            "组合的概念有助于理解复杂事件的概率规律和结构"
+        ],
+        "type": "prelude",
+        "source_id": 220,
+        "target_id": 222,
+        "is_tree": false
+    },
+    {
+        "id": 527,
+        "summary": "",
+        "descriptions": [
+            "概率的基本运算符和法则为随机变量建模准备"
+        ],
+        "type": "next",
+        "source_id": 220,
+        "target_id": 221,
+        "is_tree": false
+    },
+    {
+        "id": 528,
+        "summary": "",
+        "descriptions": [
+            "随机变量的概念对概率估算的准确实现至关重要"
+        ],
+        "type": "supports",
+        "source_id": 223,
+        "target_id": 224,
+        "is_tree": false
+    },
+    {
+        "id": 529,
+        "summary": "",
+        "descriptions": [
+            "概率估算方法为分析几个关键概率分布奠定统计基础"
+        ],
+        "type": "enables",
+        "source_id": 224,
+        "target_id": 225,
+        "is_tree": false
+    },
+    {
+        "id": 530,
+        "summary": "",
+        "descriptions": [
+            "运筹学的影响为数字计算机的应用和发展提供了理论基础和方法支持。"
+        ],
+        "type": "发展与促进",
+        "source_id": 243,
+        "target_id": 244,
+        "is_tree": false
+    },
+    {
+        "id": 531,
+        "summary": "",
+        "descriptions": [
+            "数字计算机的影响为服务业的出现和发展提供了技术支持和应用平台。"
+        ],
+        "type": "推动与应用",
+        "source_id": 244,
+        "target_id": 245,
+        "is_tree": false
+    },
+    {
+        "id": 532,
+        "summary": "",
+        "descriptions": [
+            "运筹学的影响间接促进服务业的出现，通过优化服务流程和资源配置。"
+        ],
+        "type": "间接促进",
+        "source_id": 243,
+        "target_id": 245,
+        "is_tree": false
+    },
+    {
+        "id": 533,
+        "summary": "",
+        "descriptions": [
+            "生产运作层与管理系统层"
+        ],
+        "type": "逻辑递进",
+        "source_id": 248,
+        "target_id": 249,
+        "is_tree": false
+    },
+    {
+        "id": 534,
+        "summary": "",
+        "descriptions": [
+            "管理系统层与公司全局性服务层"
+        ],
+        "type": "逻辑递进",
+        "source_id": 249,
+        "target_id": 250,
+        "is_tree": false
+    },
+    {
+        "id": 535,
+        "summary": "",
+        "descriptions": [
+            "在给出系统分类之前需要先明确定义"
+        ],
+        "type": "逻辑前提",
+        "source_id": 251,
+        "target_id": 252,
+        "is_tree": false
+    },
+    {
+        "id": 536,
+        "summary": "",
+        "descriptions": [
+            "必须先定义产品的结构和规格，才能评估零部件的易制造性"
+        ],
+        "type": "逻辑前提",
+        "source_id": 253,
+        "target_id": 254,
+        "is_tree": false
+    },
+    {
+        "id": 537,
+        "summary": "",
+        "descriptions": [
+            "在评估零部件易制造性后，需要确定能够用于加工零件的可选工艺"
+        ],
+        "type": "逻辑前提",
+        "source_id": 254,
+        "target_id": 255,
+        "is_tree": false
+    },
+    {
+        "id": 538,
+        "summary": "",
+        "descriptions": [
+            "确定可选工艺后才能对各种工艺进行成本估算"
+        ],
+        "type": "逻辑前提",
+        "source_id": 255,
+        "target_id": 256,
+        "is_tree": false
+    },
+    {
+        "id": 539,
+        "summary": "",
+        "descriptions": [
+            "基于工艺成本估算的结果来优化确定加工顺序"
+        ],
+        "type": "逻辑前提",
+        "source_id": 256,
+        "target_id": 257,
+        "is_tree": false
+    },
+    {
+        "id": 540,
+        "summary": "",
+        "descriptions": [
+            "最终在确认加工顺序后形成最终的工艺文件"
+        ],
+        "type": "逻辑前提",
+        "source_id": 257,
+        "target_id": 258,
+        "is_tree": false
+    },
+    {
+        "id": 541,
+        "summary": "",
+        "descriptions": [
+            "产品结构定义会限制可选工艺的范围"
+        ],
+        "type": "信息输入",
+        "source_id": 253,
+        "target_id": 255,
+        "is_tree": false
+    },
+    {
+        "id": 542,
+        "summary": "",
+        "descriptions": [
+            "易制造性评估结果会显著影响成本估算的关键参数"
+        ],
+        "type": "直接影响",
+        "source_id": 254,
+        "target_id": 256,
+        "is_tree": false
+    },
+    {
+        "id": 543,
+        "summary": "",
+        "descriptions": [
+            "3.5.1中设计工具、夹具和卡具的成本会影响3.5.2的成本估算"
+        ],
+        "type": "前置条件",
+        "source_id": 266,
+        "target_id": 267,
+        "is_tree": false
+    },
+    {
+        "id": 544,
+        "summary": "",
+        "descriptions": [
+            "3.5.1的工具夹具设计需要考虑3.5.3维护系统的设计需求"
+        ],
+        "type": "设计约束",
+        "source_id": 266,
+        "target_id": 268,
+        "is_tree": false
+    },
+    {
+        "id": 545,
+        "summary": "",
+        "descriptions": [
+            "3.5.1的工具夹具设计需要考虑3.5.4包装系统的设计要求"
+        ],
+        "type": "设计约束",
+        "source_id": 266,
+        "target_id": 269,
+        "is_tree": false
+    },
+    {
+        "id": 546,
+        "summary": "",
+        "descriptions": [
+            "3.5.3维护系统设计成本受3.5.2成本估算的影响"
+        ],
+        "type": "设计约束",
+        "source_id": 267,
+        "target_id": 268,
+        "is_tree": false
+    },
+    {
+        "id": 547,
+        "summary": "",
+        "descriptions": [
+            "3.5.4包装系统设计成本受3.5.2成本估算的影响"
+        ],
+        "type": "设计约束",
+        "source_id": 267,
+        "target_id": 269,
+        "is_tree": false
+    },
+    {
+        "id": 548,
+        "summary": "",
+        "descriptions": [
+            "运输问题的线性规划方法是多目标问题的基础理论"
+        ],
+        "type": "基础理论与扩展应用",
+        "source_id": 270,
+        "target_id": 271,
+        "is_tree": false
+    },
+    {
+        "id": 549,
+        "summary": "",
+        "descriptions": [
+            "运输问题的线性规划方法可应用于公用事业部门的选址问题"
+        ],
+        "type": "方法应用",
+        "source_id": 270,
+        "target_id": 273,
+        "is_tree": false
+    },
+    {
+        "id": 550,
+        "summary": "",
+        "descriptions": [
+            "数学规划作为一种通用的方法框架可以包含运输问题的线性规划方法"
+        ],
+        "type": "包含关系",
+        "source_id": 272,
+        "target_id": 270,
+        "is_tree": false
+    },
+    {
+        "id": 551,
+        "summary": "",
+        "descriptions": [
+            "仓库选址是路径安排的前提，只有在仓库位置确定后，才能进行路径的安排和优化"
+        ],
+        "type": "逻辑前提",
+        "source_id": 277,
+        "target_id": 278,
+        "is_tree": false
+    },
+    {
+        "id": 552,
+        "summary": "",
+        "descriptions": [
+            "运作管理中的路径安排与公共部门的路径安排都是关于路径规划的，但前者侧重企业物流，后者侧重公共服务"
+        ],
+        "type": "同类比较",
+        "source_id": 278,
+        "target_id": 279,
+        "is_tree": false
+    },
+    {
+        "id": 553,
+        "summary": "",
+        "descriptions": [
+            "流程程序图作为基础的工业工程工具，为双手操作图的制作提供基本原理和方法支撑"
+        ],
+        "type": "基础与应用",
+        "source_id": 280,
+        "target_id": 281,
+        "is_tree": false
+    },
+    {
+        "id": 554,
+        "summary": "",
+        "descriptions": [
+            "流程程序图是其他更复杂的工业工程图表（如线图、多动作图等）的基础"
+        ],
+        "type": "基础与扩展",
+        "source_id": 280,
+        "target_id": 282,
+        "is_tree": false
+    },
+    {
+        "id": 555,
+        "summary": "",
+        "descriptions": [
+            "通过双手操作图识别出的动作浪费可以作为应用动作经济性原则的直接依据"
+        ],
+        "type": "应用实施",
+        "source_id": 281,
+        "target_id": 283,
+        "is_tree": false
+    },
+    {
+        "id": 556,
+        "summary": "",
+        "descriptions": [
+            "动作经济性原则需要结合人因工程学原理来确保持续改进方案的人机适应性"
+        ],
+        "type": "准则指导",
+        "source_id": 283,
+        "target_id": 284,
+        "is_tree": false
+    },
+    {
+        "id": 557,
+        "summary": "",
+        "descriptions": [
+            "时间研究标准资料法（286）是在直接时间研究法（285）的基础上发展而来，依赖直接时间研究的数据基础。"
+        ],
+        "type": "前提基础",
+        "source_id": 285,
+        "target_id": 286,
+        "is_tree": false
+    },
+    {
+        "id": 558,
+        "summary": "",
+        "descriptions": [
+            "预定时间系统标准资料法（288）是预定时间标准法（287）的系统化与应用延伸，涵盖更复杂的综合情境。"
+        ],
+        "type": "扩展应用",
+        "source_id": 287,
+        "target_id": 288,
+        "is_tree": false
+    },
+    {
+        "id": 559,
+        "summary": "",
+        "descriptions": [
+            "工作抽样（289）与直接时间研究法（285）互为补充，前者适用于长周期、非连续作业，后者针对短周期重复操作。"
+        ],
+        "type": "互补方法",
+        "source_id": 285,
+        "target_id": 289,
+        "is_tree": false
+    },
+    {
+        "id": 560,
+        "summary": "",
+        "descriptions": [
+            "6.4.1 生产率测定基础是6.4.2 标准化生产率测定模型的基础"
+        ],
+        "type": "基础与扩展",
+        "source_id": 290,
+        "target_id": 291,
+        "is_tree": false
+    },
+    {
+        "id": 561,
+        "summary": "",
+        "descriptions": [
+            "6.4.1 生产率测定基础是6.4.3 多因素生产率测定模型的基础"
+        ],
+        "type": "基础与扩展",
+        "source_id": 290,
+        "target_id": 292,
+        "is_tree": false
+    },
+    {
+        "id": 562,
+        "summary": "",
+        "descriptions": [
+            "6.4.2 标准化生产率测定模型发展为更复杂的6.4.3 多因素生产率测定模型"
+        ],
+        "type": "从简单到复杂",
+        "source_id": 291,
+        "target_id": 292,
+        "is_tree": false
+    },
+    {
+        "id": 563,
+        "summary": "",
+        "descriptions": [
+            "需求预测是制定生产计划的基础"
+        ],
+        "type": "逻辑前提",
+        "source_id": 293,
+        "target_id": 294,
+        "is_tree": false
+    },
+    {
+        "id": 564,
+        "summary": "",
+        "descriptions": [
+            "生产计划是制定库存计划的重要依据"
+        ],
+        "type": "逻辑前提",
+        "source_id": 294,
+        "target_id": 295,
+        "is_tree": false
+    },
+    {
+        "id": 565,
+        "summary": "",
+        "descriptions": [
+            "生产计划为生产作业计划提供总体框架"
+        ],
+        "type": "逻辑前提",
+        "source_id": 294,
+        "target_id": 296,
+        "is_tree": false
+    },
+    {
+        "id": 566,
+        "summary": "",
+        "descriptions": [
+            "生产作业计划是调度和过程控制的具体执行方案"
+        ],
+        "type": "逻辑前提",
+        "source_id": 296,
+        "target_id": 297,
+        "is_tree": false
+    },
+    {
+        "id": 567,
+        "summary": "",
+        "descriptions": [
+            "各职能的综合需要协调需求预测与其他职能的关系"
+        ],
+        "type": "综合协调",
+        "source_id": 298,
+        "target_id": 293,
+        "is_tree": false
+    },
+    {
+        "id": 568,
+        "summary": "",
+        "descriptions": [
+            "各职能的综合需要协调生产计划与其他职能的关系"
+        ],
+        "type": "综合协调",
+        "source_id": 298,
+        "target_id": 294,
+        "is_tree": false
+    },
+    {
+        "id": 569,
+        "summary": "",
+        "descriptions": [
+            "各职能的综合需要协调库存控制与其他职能的关系"
+        ],
+        "type": "综合协调",
+        "source_id": 298,
+        "target_id": 295,
+        "is_tree": false
+    },
+    {
+        "id": 570,
+        "summary": "",
+        "descriptions": [
+            "各职能的综合需要协调生产作业计划与其他职能的关系"
+        ],
+        "type": "综合协调",
+        "source_id": 298,
+        "target_id": 296,
+        "is_tree": false
+    },
+    {
+        "id": 571,
+        "summary": "",
+        "descriptions": [
+            "各职能的综合需要协调调度和过程控制与其他职能的关系"
+        ],
+        "type": "综合协调",
+        "source_id": 298,
+        "target_id": 297,
+        "is_tree": false
+    },
+    {
+        "id": 572,
+        "summary": "",
+        "descriptions": [
+            "流程图作为基础工具帮助梳理流程，为进一步分析因果关系提供支持"
+        ],
+        "type": "前提",
+        "source_id": 302,
+        "target_id": 303,
+        "is_tree": false
+    },
+    {
+        "id": 573,
+        "summary": "",
+        "descriptions": [
+            "因果关系图为实验设计提供理论依据和潜在变量的初步假设"
+        ],
+        "type": "扩展",
+        "source_id": 303,
+        "target_id": 308,
+        "is_tree": false
+    },
+    {
+        "id": 574,
+        "summary": "",
+        "descriptions": [
+            "检查表收集的数据可以直接用于排列图的优先级分析"
+        ],
+        "type": "输入",
+        "source_id": 304,
+        "target_id": 305,
+        "is_tree": false
+    },
+    {
+        "id": 575,
+        "summary": "",
+        "descriptions": [
+            "9.5.2考核计时制在9.5.1计时制的基础上增加了考核机制"
+        ],
+        "type": "细化关系",
+        "source_id": 313,
+        "target_id": 314,
+        "is_tree": false
+    },
+    {
+        "id": 576,
+        "summary": "",
+        "descriptions": [
+            "9.5.1计时制和9.5.3计件奖励制是两种基本的工资计算方式"
+        ],
+        "type": "平行关联",
+        "source_id": 313,
+        "target_id": 315,
+        "is_tree": false
+    },
+    {
+        "id": 577,
+        "summary": "",
+        "descriptions": [
+            "9.5.4标准工时制在9.5.1计时制的基础上建立了标准化的时间基准"
+        ],
+        "type": "演进关系",
+        "source_id": 313,
+        "target_id": 316,
+        "is_tree": false
+    },
+    {
+        "id": 578,
+        "summary": "",
+        "descriptions": [
+            "9.5.1计时制与9.5.5团队奖励计划形成从个体到团队的薪酬结构层次"
+        ],
+        "type": "层级关系",
+        "source_id": 313,
+        "target_id": 317,
+        "is_tree": false
+    },
+    {
+        "id": 579,
+        "summary": "",
+        "descriptions": [
+            "9.5.3计件奖励制演变为9.5.5团队奖励计划以适应团队协作场景"
+        ],
+        "type": "适用条件转换",
+        "source_id": 315,
+        "target_id": 317,
+        "is_tree": false
+    },
+    {
+        "id": 580,
+        "summary": "",
+        "descriptions": [
+            "9.5.2考核计时制往往以9.5.4标准工时制确定的时间基准作为考核标准"
+        ],
+        "type": "评估依据",
+        "source_id": 316,
+        "target_id": 314,
+        "is_tree": false
+    },
+    {
+        "id": 581,
+        "summary": "",
+        "descriptions": [
+            "制造业的简要历史为计算机和电子技术的影响提供了背景"
+        ],
+        "type": "历史演变",
+        "source_id": 318,
+        "target_id": 319,
+        "is_tree": false
+    },
+    {
+        "id": 582,
+        "summary": "",
+        "descriptions": [
+            "计算机和电子技术的发展推动了其他最新发展的出现"
+        ],
+        "type": "技术驱动",
+        "source_id": 319,
+        "target_id": 320,
+        "is_tree": false
+    },
+    {
+        "id": 583,
+        "summary": "",
+        "descriptions": [
+            "其他最新发展为未来企业的形态奠定了基础"
+        ],
+        "type": "趋势延伸",
+        "source_id": 320,
+        "target_id": 321,
+        "is_tree": false
+    },
+    {
+        "id": 584,
+        "summary": "",
+        "descriptions": [
+            "计算机在产品设计中的应用为后续流程设计提供基础"
+        ],
+        "type": "逻辑序列",
+        "source_id": 322,
+        "target_id": 323,
+        "is_tree": false
+    },
+    {
+        "id": 585,
+        "summary": "",
+        "descriptions": [
+            "流程设计的技术积累促进电子设计的计算机应用"
+        ],
+        "type": "应用扩展",
+        "source_id": 323,
+        "target_id": 324,
+        "is_tree": false
+    },
+    {
+        "id": 586,
+        "summary": "",
+        "descriptions": [
+            "计算机辅助工艺设计(CAPP)为数字控制(NC)提供了工艺规划基础"
+        ],
+        "type": "基础技术",
+        "source_id": 325,
+        "target_id": 326,
+        "is_tree": false
+    },
+    {
+        "id": 587,
+        "summary": "",
+        "descriptions": [
+            "成组技术(GT)通过零件分类可提高计算机辅助工艺设计(CAPP)效率"
+        ],
+        "type": "技术集成",
+        "source_id": 327,
+        "target_id": 325,
+        "is_tree": false
+    },
+    {
+        "id": 588,
+        "summary": "",
+        "descriptions": [
+            "自动存取和处理系统为计算机辅助工厂管理提供实时物流数据"
+        ],
+        "type": "数据支持",
+        "source_id": 328,
+        "target_id": 330,
+        "is_tree": false
+    },
+    {
+        "id": 589,
+        "summary": "",
+        "descriptions": [
+            "计算机辅助检测数据是计算机辅助工厂管理中质量管理的重要输入"
+        ],
+        "type": "质量控制",
+        "source_id": 329,
+        "target_id": 330,
+        "is_tree": false
+    },
+    {
+        "id": 590,
+        "summary": "",
+        "descriptions": [
+            "柔性制造系统(FMS)的核心设备包含数字控制(NC)机床"
+        ],
+        "type": "硬件集成",
+        "source_id": 331,
+        "target_id": 326,
+        "is_tree": false
+    },
+    {
+        "id": 591,
+        "summary": "",
+        "descriptions": [
+            "计算机辅助工艺设计(CAPP)是柔性制造系统(FMS)实施的前置环节"
+        ],
+        "type": "系统规划",
+        "source_id": 325,
+        "target_id": 331,
+        "is_tree": false
+    },
+    {
+        "id": 592,
+        "summary": "",
+        "descriptions": [
+            "自动存取和处理系统构成柔性制造系统(FMS)的物料运输子系统"
+        ],
+        "type": "物流支撑",
+        "source_id": 328,
+        "target_id": 331,
+        "is_tree": false
+    },
+    {
+        "id": 593,
+        "summary": "",
+        "descriptions": [
+            "能源管理属于本章节内容之一"
+        ],
+        "type": "包含",
+        "source_id": 340,
+        "target_id": 343,
+        "is_tree": false
+    },
+    {
+        "id": 594,
+        "summary": "",
+        "descriptions": [
+            "水资源管理属于本章节内容之一"
+        ],
+        "type": "包含",
+        "source_id": 341,
+        "target_id": 343,
+        "is_tree": false
+    },
+    {
+        "id": 595,
+        "summary": "",
+        "descriptions": [
+            "危险材料管理属于本章节内容之一"
+        ],
+        "type": "包含",
+        "source_id": 342,
+        "target_id": 343,
+        "is_tree": false
+    },
+    {
+        "id": 596,
+        "summary": "",
+        "descriptions": [
+            "政府规章可能为工业工程角色的发挥提供法律和规范框架"
+        ],
+        "type": "逻辑前提",
+        "source_id": 350,
+        "target_id": 351,
+        "is_tree": false
+    },
+    {
+        "id": 597,
+        "summary": "",
+        "descriptions": [
+            "一次偿付复利因数（13.5.1）为其他利息因数（13.5.2）的基础"
+        ],
+        "type": "逻辑前提",
+        "source_id": 352,
+        "target_id": 353,
+        "is_tree": false
+    },
+    {
+        "id": 598,
+        "summary": "",
+        "descriptions": [
+            "示例（13.5.3）展示了一次偿付复利因数（13.5.1）的实际应用"
+        ],
+        "type": "理论到实践",
+        "source_id": 352,
+        "target_id": 354,
+        "is_tree": false
+    },
+    {
+        "id": 599,
+        "summary": "",
+        "descriptions": [
+            "示例（13.5.3）展示了其他利息因数（13.5.2）的实际应用"
+        ],
+        "type": "理论到实践",
+        "source_id": 353,
+        "target_id": 354,
+        "is_tree": false
+    },
+    {
+        "id": 600,
+        "summary": "",
+        "descriptions": [
+            "'14.4.1 确定性方法'和 '14.4.2 随机性方法'作为并列的子章节，代表两种不同的计算方法论"
+        ],
+        "type": "对比关系",
+        "source_id": 360,
+        "target_id": 361,
+        "is_tree": false
+    },
+    {
+        "id": 601,
+        "summary": "",
+        "descriptions": [
+            "两种方法可以相互补充，共同构成完整的问题解决方案集"
+        ],
+        "type": "互补关系",
+        "source_id": 360,
+        "target_id": 361,
+        "is_tree": false
+    },
+    {
+        "id": 602,
+        "summary": "",
+        "descriptions": [
+            "分派问题是运输问题的一种特殊情景（总供应=总需求）\t两者都是线性规划实际应用的扩展"
+        ],
+        "type": "特殊到一般",
+        "source_id": 362,
+        "target_id": 363,
+        "is_tree": false
+    },
+    {
+        "id": 603,
+        "summary": "",
+        "descriptions": [
+            "整数规划是非线性规划的一种特例"
+        ],
+        "type": "具体与一般的关系",
+        "source_id": 364,
+        "target_id": 365,
+        "is_tree": false
+    },
+    {
+        "id": 604,
+        "summary": "",
+        "descriptions": [
+            "0-1规划是整数规划的特例，因此也是非线性规划的一种特例"
+        ],
+        "type": "具体与一般的关系",
+        "source_id": 364,
+        "target_id": 366,
+        "is_tree": false
+    },
+    {
+        "id": 605,
+        "summary": "",
+        "descriptions": [
+            "几何规划是非线性规划的一种类型"
+        ],
+        "type": "包含关系",
+        "source_id": 364,
+        "target_id": 367,
+        "is_tree": false
+    },
+    {
+        "id": 606,
+        "summary": "",
+        "descriptions": [
+            "其他规划问题包含在非线性规划范畴内"
+        ],
+        "type": "包含关系",
+        "source_id": 364,
+        "target_id": 368,
+        "is_tree": false
+    },
+    {
+        "id": 607,
+        "summary": "",
+        "descriptions": [
+            "0-1规划是整数规划的特殊情况"
+        ],
+        "type": "具体与一般的关系",
+        "source_id": 365,
+        "target_id": 366,
+        "is_tree": false
+    },
+    {
+        "id": 608,
+        "summary": "",
+        "descriptions": [
+            "在了解排队论的符号（15.2.2）之前，需要先理解排队系统的结构（15.2.1）以正确应用符号"
+        ],
+        "type": "前提基础",
+        "source_id": 369,
+        "target_id": 370,
+        "is_tree": false
+    },
+    {
+        "id": 609,
+        "summary": "",
+        "descriptions": [
+            "掌握排队论的符号（15.2.2 370）后才能有效解析单服务通道模型（15.2.3 371）的具体运用和计算"
+        ],
+        "type": "知识延伸",
+        "source_id": 370,
+        "target_id": 371,
+        "is_tree": false
+    },
+    {
+        "id": 610,
+        "summary": "",
+        "descriptions": [
+            "因为章节15.4.1（正则马尔可夫链）的介绍通常作为理解章节15.4.2（嵌入式马尔可夫链）的基础概念"
+        ],
+        "type": "前提关系",
+        "source_id": 375,
+        "target_id": 376,
+        "is_tree": false
+    },
+    {
+        "id": 611,
+        "summary": "",
+        "descriptions": [
+            "系统思想的起源为理解系统的层级性奠定了基础"
+        ],
+        "type": "概念发展",
+        "source_id": 381,
+        "target_id": 382,
+        "is_tree": false
+    },
+    {
+        "id": 612,
+        "summary": "",
+        "descriptions": [
+            "系统分析与设计是系统设计流程的逻辑前提"
+        ],
+        "type": "逻辑前提",
+        "source_id": 383,
+        "target_id": 384,
+        "is_tree": false
+    },
+    {
+        "id": 613,
+        "summary": "",
+        "descriptions": [
+            "方块图被用于导出转移函数"
+        ],
+        "type": "逻辑前提",
+        "source_id": 385,
+        "target_id": 386,
+        "is_tree": false
+    },
+    {
+        "id": 614,
+        "summary": "",
+        "descriptions": [
+            "转移函数是对方块图的数学化表示"
+        ],
+        "type": "功能扩展",
+        "source_id": 386,
+        "target_id": 385,
+        "is_tree": false
+    },
+    {
+        "id": 615,
+        "summary": "",
+        "descriptions": [
+            "从‘寻找起始点’到‘共同目标’是一个自然过渡，首先需要确定起始位置，然后才能寻找共同的努力方向"
+        ],
+        "type": "逻辑前提",
+        "source_id": 388,
+        "target_id": 389,
+        "is_tree": false
+    },
+    {
+        "id": 616,
+        "summary": "",
+        "descriptions": [
+            "‘共同目标’为‘设定目的和目标’提供了基础，只有明确了共同的方向才能具体化目的和目标"
+        ],
+        "type": "逻辑前提",
+        "source_id": 389,
+        "target_id": 390,
+        "is_tree": false
+    },
+    {
+        "id": 617,
+        "summary": "",
+        "descriptions": [
+            "‘设定目的和目标’是构建‘整体框架’的先决条件，具体的目标是整体结构不可或缺的组成部分"
+        ],
+        "type": "逻辑前提",
+        "source_id": 390,
+        "target_id": 391,
+        "is_tree": false
+    },
+    {
+        "id": 618,
+        "summary": "",
+        "descriptions": [
+            "‘整体框架’形成后的结果是对未来的‘展望’，完整的结构是进行长期预测的基础"
+        ],
+        "type": "逻辑前提",
+        "source_id": 391,
+        "target_id": 387,
+        "is_tree": false
+    },
+    {
+        "id": 619,
+        "summary": "",
+        "descriptions": [
+            "在进行功能确定之前需要先有目标的详细描述"
+        ],
+        "type": "逻辑前提",
+        "source_id": 392,
+        "target_id": 393,
+        "is_tree": false
+    },
+    {
+        "id": 620,
+        "summary": "",
+        "descriptions": [
+            "功能确定后需要对这些功能进行归类"
+        ],
+        "type": "顺序关系",
+        "source_id": 393,
+        "target_id": 394,
+        "is_tree": false
+    },
+    {
+        "id": 621,
+        "summary": "",
+        "descriptions": [
+            "确定功能后可以推导出功能目标"
+        ],
+        "type": "推导关系",
+        "source_id": 393,
+        "target_id": 395,
+        "is_tree": false
+    },
+    {
+        "id": 622,
+        "summary": "",
+        "descriptions": [
+            "工作描述为管理控制提供了基础信息支持"
+        ],
+        "type": "支持关系",
+        "source_id": 396,
+        "target_id": 397,
+        "is_tree": false
+    },
+    {
+        "id": 623,
+        "summary": "",
+        "descriptions": [
+            "管理控制会影响组织设计的动态过程"
+        ],
+        "type": "影响关系",
+        "source_id": 397,
+        "target_id": 398,
+        "is_tree": false
+    },
+    {
+        "id": 624,
+        "summary": "",
+        "descriptions": [
+            "组织设计的动态过程决定了组织结构的形成"
+        ],
+        "type": "决定关系",
+        "source_id": 398,
+        "target_id": 399,
+        "is_tree": false
+    },
+    {
+        "id": 625,
+        "summary": "",
+        "descriptions": [
+            "组织结构需要包含组织内的协调机制"
+        ],
+        "type": "包含关系",
+        "source_id": 399,
+        "target_id": 400,
+        "is_tree": false
+    },
+    {
+        "id": 626,
+        "summary": "",
+        "descriptions": [
+            "良好的组织内协调能力可以促进组织设计的持续更新"
+        ],
+        "type": "促进关系",
+        "source_id": 400,
+        "target_id": 401,
+        "is_tree": false
+    },
+    {
+        "id": 627,
+        "summary": "",
+        "descriptions": [
+            "组织的生命周期阶段（19.5.1）是理解组织复兴和再设计（19.5.2）的基础"
+        ],
+        "type": "前提关系",
+        "source_id": 402,
+        "target_id": 403,
+        "is_tree": false
+    },
+    {
+        "id": 628,
+        "summary": "",
+        "descriptions": [
+            "组织复兴和再设计（19.5.2）为学习型组织（19.5.3）的建立创造了条件"
+        ],
+        "type": "发展关系",
+        "source_id": 403,
+        "target_id": 404,
+        "is_tree": false
+    },
+    {
+        "id": 629,
+        "summary": "",
+        "descriptions": [
+            "进行系统分析前需完成可行性研究"
+        ],
+        "type": "逻辑前提",
+        "source_id": 405,
+        "target_id": 406,
+        "is_tree": false
+    },
+    {
+        "id": 630,
+        "summary": "",
+        "descriptions": [
+            "系统分析完成后进行系统概要设计"
+        ],
+        "type": "时序关系",
+        "source_id": 406,
+        "target_id": 407,
+        "is_tree": false
+    },
+    {
+        "id": 631,
+        "summary": "",
+        "descriptions": [
+            "在系统概要设计后进行系统详细设计"
+        ],
+        "type": "时序关系",
+        "source_id": 407,
+        "target_id": 409,
+        "is_tree": false
+    },
+    {
+        "id": 632,
+        "summary": "",
+        "descriptions": [
+            "系统详细设计后进入系统实施阶段"
+        ],
+        "type": "时序关系",
+        "source_id": 409,
+        "target_id": 410,
+        "is_tree": false
+    },
+    {
+        "id": 633,
+        "summary": "",
+        "descriptions": [
+            "在系统正式投入运行前的评价环节"
+        ],
+        "type": "依赖关系",
+        "source_id": 408,
+        "target_id": 410,
+        "is_tree": false
+    },
+    {
+        "id": 634,
+        "summary": "",
+        "descriptions": [
+            "系统实施后进入运行和维护阶段"
+        ],
+        "type": "时序关系",
+        "source_id": 410,
+        "target_id": 411,
+        "is_tree": false
+    },
+    {
+        "id": 635,
+        "summary": "",
+        "descriptions": [
+            "系统评价与合理化适用于各设计阶段"
+        ],
+        "type": "交叉验证",
+        "source_id": 408,
+        "target_id": 407,
+        "is_tree": false
+    },
+    {
+        "id": 636,
+        "summary": "",
+        "descriptions": [
+            "系统详细设计阶段仍需合理性验证"
+        ],
+        "type": "质量保障",
+        "source_id": 408,
+        "target_id": 409,
+        "is_tree": false
+    },
+    {
+        "id": 637,
+        "summary": "",
+        "descriptions": [
+            "第一部分梳理了工业工程的历史发展进程，展示了其从早期工业革命到现代科学管理体系的演变。"
+        ],
+        "type": "历史发展脉络",
+        "source_id": 0,
+        "target_id": 1,
+        "is_tree": false
+    },
+    {
+        "id": 638,
+        "summary": "",
+        "descriptions": [
+            "第二部分详细阐述了工业工程的定义和内涵，解释了它作为提高生产效率的核心方法论角色。"
+        ],
+        "type": "基本概念阐明学科定位",
+        "source_id": 0,
+        "target_id": 2,
+        "is_tree": false
+    },
+    {
+        "id": 639,
+        "summary": "",
+        "descriptions": [
+            "第三部分重点论述了系统设计的原理和应用，揭示了工业工程在优化工作流程、设备和人员配置方面的实践价值。"
+        ],
+        "type": "系统方法展示实践路径",
+        "source_id": 0,
+        "target_id": 3,
+        "is_tree": false
+    }
+]

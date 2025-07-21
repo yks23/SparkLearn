@@ -463,7 +463,8 @@ class RelationExtractionoperation(KGoperator):
     ):
         self.prompt_path = system_prompt_path
         self.return_type = "json"
-        self.user_input = "章节的概括是：\n" + section_summary + "\n"
+        if len(section_summary):
+            self.user_input = "章节的概括是：\n" + section_summary + "\n"
         self.user_input += "以下是用户输入的子章节：\n"
         self.default = json.dumps({"relations": []})
         if isinstance(entities[0], str):
@@ -473,9 +474,8 @@ class RelationExtractionoperation(KGoperator):
                 self.user_input += (
                     "实体名称和id是：\n" + ent.title + "\n" + str(ent.id) + "\n"
                 )
-                if ent.summary != "":
+                if len(ent.summary):
                     self.user_input += "实体的概括是:\n"
-                    print(ent.summary)
                     self.user_input += ent.summary
                     self.user_input += "\n"
                 else:

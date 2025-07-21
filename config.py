@@ -1,3 +1,4 @@
+import os
 # model_name = "4.0Ultra"
 model_name = "Pro/deepseek-ai/DeepSeek-V3"
 
@@ -40,14 +41,14 @@ json_feature = {
     "Pro/deepseek-ai/DeepSeek-V3": False,
 }
 # API key configs
-spark_api_key = "xqZXJdxoaaLEBIMuuCBg:FUuIHcWDmPLSpJcXsiSp"
-silicon_api_key = "sk-nadkygsrqzgpzzvfgdvewsxkrbadfzwbphwdldvxliqcohof" # SiliconFlow API key, if applicable
-openai_api_key = "" # OpenAI API key, if applicable
-glm_api_key = "" # ChatGLM API key, if applicable
+spark_api_key = os.getenv("spark_api_key","")
+silicon_api_key = os.getenv("silicon_api_key","") # SiliconFlow API key, if applicable
+openai_api_key = os.getenv("openai_api_key","") # OpenAI API key, if applicable
+glm_api_key = os.getenv("chatglm_api_key","") # ChatGLM API key, if applicable
 model_provider = "silicon"  # 'openai', 'chatglm', 'silicon', 'spark'
 num_dims=2560
 qa_temp = 1.3
 # APP configs
-APPID ="2d1bc910"
-APISecret = "YzZjODMwNmNjNmRiMDVjOGI4MjcxZDVi"
-APIKEY = "a1df9334fd048ded0c9304ccf12c20d1"
+APPID = os.getenv("APPID","")
+APISecret = os.getenv("APISecret","")
+APIKEY = os.getenv("APIKEY","")
