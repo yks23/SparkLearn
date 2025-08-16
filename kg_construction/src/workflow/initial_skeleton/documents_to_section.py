@@ -40,8 +40,24 @@ def load_folders(folder_path: str, depth=0):
         documents["name"] = os.path.basename(folder_path).replace(".md", "")
         documents["content"] = ""
         documents["depth"] = depth
-        with open(folder_path, "r", encoding="utf-8") as file:
-            documents["content"] = file.read()
+        # 尝试多种编码方式读取文件
+        encodings = ['utf-8', 'gbk', 'gb2312', 'gb18030', 'latin-1']
+        content = None
+        
+        for encoding in encodings:
+            try:
+                with open(folder_path, "r", encoding=encoding) as file:
+                    content = file.read()
+                print(f"✅ 成功使用 {encoding} 编码读取文件: {os.path.basename(folder_path)}")
+                break
+            except UnicodeDecodeError:
+                continue
+        
+        if content is None:
+            print(f"❌ 无法读取文件 {folder_path}，尝试了所有编码方式")
+            content = ""  # 如果所有编码都失败，使用空字符串
+        
+        documents["content"] = content
     return documents
 
 

@@ -439,6 +439,13 @@ class MainWindow(QWidget):
 
 
 if __name__ == '__main__':
+    # 设置环境变量来解决Qt插件问题
+    os.environ['QT_QPA_PLATFORM'] = 'cocoa'  # macOS专用
+    os.environ['QT_MAC_WANTS_LAYER'] = '1'
+    
+    # 禁用Qt插件的警告
+    os.environ['QT_LOGGING_RULES'] = '*.debug=false;qt.qpa.*=false'
+    
     multiprocessing.freeze_support()
     app = QApplication(sys.argv)
     w = MainWindow()

@@ -1,6 +1,8 @@
 import os
+from dotenv import load_dotenv
 # model_name = "4.0Ultra"
-model_name = "Pro/deepseek-ai/DeepSeek-V3"
+# model_name = "Pro/deepseek-ai/DeepSeek-V3"
+model_name = "THUDM/glm-4-9b-chat"
 
 """
 4.0Ultra
@@ -40,6 +42,8 @@ json_feature = {
     "deepseek-ai/DeepSeek-V3": True,
     "Pro/deepseek-ai/DeepSeek-V3": False,
 }
+
+load_dotenv()
 # API key configs
 spark_api_key = os.getenv("spark_api_key","")
 silicon_api_key = os.getenv("silicon_api_key","") # SiliconFlow API key, if applicable

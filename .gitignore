@@ -6,3 +6,4 @@ extra_data/
 output/
 outputs/
 outputs_new/
+.env

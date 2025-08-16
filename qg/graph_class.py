@@ -1,3 +1,10 @@
+# 在导入matplotlib之前设置后端，避免GUI线程问题
+import matplotlib
+matplotlib.use('Agg')  # 使用非交互式后端
+# 设置环境变量，避免Qt冲突
+import os
+os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+
 import networkx as nx
 from typing import Dict, List, Tuple
 import json
@@ -101,17 +108,20 @@ class KnowledgeGraph:
         """
         print(f"\n🖼️ 开始可视化知识图谱（最多显示 {max_nodes} 个节点）...")
 
-        # 设置支持中文的字体
-        try:
-            # ✅ Windows 常见字体
-            zh_font = fm.FontProperties(fname="C:/Windows/Fonts/simhei.ttf")
-        except:
-            try:
-                # ✅ MacOS 常见字体
-                zh_font = fm.FontProperties(fname="/System/Library/Fonts/STHeiti Medium.ttc")
-            except:
-                print("⚠️ 未找到中文字体，中文可能无法正常显示。")
-                zh_font = None
+        # # 设置支持中文的字体
+        # try:
+        #     # ✅ Windows 常见字体
+        #     zh_font = fm.FontProperties(fname="C:/Windows/Fonts/simhei.ttf")
+        # except:
+        #     try:
+        #         # ✅ MacOS 常见字体
+        #         zh_font = fm.FontProperties(fname="/System/Library/Fonts/STHeiti Medium.ttc")
+        #     except:
+        #         print("⚠️ 未找到中文字体，中文可能无法正常显示。")
+        #         zh_font = None
+
+        # 完全避免字体管理器，直接使用字符串
+        print("✅ 使用默认字体设置")
 
         # 限制可视化规模
         subgraph = self.graph.copy()
@@ -119,30 +129,91 @@ class KnowledgeGraph:
             nodes_subset = list(subgraph.nodes)[:max_nodes]
             subgraph = subgraph.subgraph(nodes_subset)
 
-        plt.figure(figsize=(12, 8))
-        # pos = nx.spring_layout(subgraph, weight='weight', seed=42, k=0.8/(len(subgraph)**0.5))
-        # pos = nx.circular_layout(subgraph)  # 替代 spring_layout
-        pos = nx.kamada_kawai_layout(subgraph)  # 替代 spring_layout
+        # 注释掉直接使用matplotlib的代码，改用子进程方式
+        # plt.figure(figsize=(12, 8))
+        # # pos = nx.spring_layout(subgraph, weight='weight', seed=42, k=0.8/(len(subgraph)**0.5))
+        # # pos = nx.circular_layout(subgraph)  # 替代 spring_layout
+        # pos = nx.kamada_kawai_layout(subgraph)  # 替代 spring_layout
 
-        # 绘制节点和边
-        nx.draw(subgraph, pos, with_labels=True, node_color="skyblue", edge_color="gray",
-                node_size=2000, font_size=10, font_family=zh_font.get_name() if zh_font else "sans-serif", arrows=True)
-
-        # 边的关系标签
-        edge_labels = nx.get_edge_attributes(subgraph, 'short')
+        # # 绘制节点和边
+        # nx.draw(subgraph, pos, with_labels=True, node_color="skyblue", edge_color="gray",
+        #         node_size=2000, font_size=10, font_family=zh_font.get_name() if zh_font else "sans-serif", arrows=True)
         
-        nx.draw_networkx_edge_labels(
-            subgraph, pos, edge_labels=edge_labels,
-            font_color='red', font_size=8,
-            font_family=zh_font.get_name() if zh_font else "sans-serif"
-        )
+        
+        try:
+            # 使用子进程来避免Qt和matplotlib的冲突
+            import subprocess
+            import tempfile
+            import pickle
+            
+            print("🔄 使用子进程生成图片...")
+            
+            # 准备数据
+            graph_data = {
+                'nodes': list(subgraph.nodes()),
+                'edges': list(subgraph.edges()),
+                'output_path': output_path
+            }
+            
+            # 创建临时文件保存数据
+            with tempfile.NamedTemporaryFile(mode='wb', suffix='.pkl', delete=False) as f:
+                pickle.dump(graph_data, f)
+                temp_file = f.name
+            
+            # 创建可视化脚本
+            viz_script = f'''
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import networkx as nx
+import pickle
+import sys
 
-        plt.axis("off")
-        plt.tight_layout()
-        plt.savefig(output_path, dpi=300)
-        plt.close()
+# 加载数据
+with open('{temp_file}', 'rb') as f:
+    data = pickle.load(f)
 
-        print(f"✅ 可视化完成，图片已保存至: {output_path}")
+# 重建图
+G = nx.DiGraph()
+for node in data['nodes']:
+    G.add_node(node)
+for edge in data['edges']:
+    G.add_edge(edge[0], edge[1])
+
+# 可视化
+plt.figure(figsize=(10, 6))
+pos = nx.random_layout(G)
+nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=1000, font_size=6)
+plt.axis('off')
+plt.savefig('{output_path}', dpi=100, bbox_inches='tight')
+plt.close('all')
+print("图片生成完成")
+'''
+            
+            # 运行子进程
+            result = subprocess.run([sys.executable, '-c', viz_script], 
+                                  capture_output=True, text=True, timeout=30)
+            
+            if result.returncode == 0:
+                print(f"✅ 可视化完成，图片已保存至: {output_path}")
+            else:
+                print(f"⚠️ 子进程失败: {result.stderr}")
+                raise Exception("子进程生成图片失败")
+                
+        except Exception as e:
+            print(f"⚠️ 可视化失败: {str(e)}")
+            # 尝试生成文本文件
+            try:
+                with open(output_path.replace('.png', '.txt'), 'w', encoding='utf-8') as f:
+                    f.write("知识图谱节点列表:\n")
+                    for node in self.graph.nodes:
+                        f.write(f"- {node}\n")
+                    f.write("\n知识图谱关系列表:\n")
+                    for edge in self.graph.edges(data=True):
+                        f.write(f"- {edge[0]} -> {edge[1]} ({edge[2].get('type', 'unknown')})\n")
+                print(f"✅ 已生成文本格式的知识图谱: {output_path.replace('.png', '.txt')}")
+            except:
+                print("⚠️ 无法生成任何输出文件")
 
 
     def generate_questions(self) -> List[Dict[str, str]]:
@@ -757,11 +828,6 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 print(f"请输入1-{len(concepts)}之间的数字！")
             except ValueError:
                 print("请输入有效数字！")
-if __name__ == "__main__":
-
-    # 1. 构建知识图谱
-    kg = KnowledgeGraph()
-    kg.load_knowledge_graph()
 
     
 if __name__ == "__main__":
