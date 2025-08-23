@@ -53,7 +53,7 @@ def community_report():
     response=execute_operator(ops=all_opt,cached_file_path=os.path.join(request_cache_path,"community_report_cache.json"),need_read_from_cache=True)
     last_id=relation_id_begin
     for i in range(len(response)):
-        if not isinstance(response[i].get('relations',None),list):
+        if response[i] is None or not isinstance(response[i], dict) or not isinstance(response[i].get('relations',None),list):
             continue
         for j in response[i]['relations']:
             j['id']=last_id

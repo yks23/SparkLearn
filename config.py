@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 # model_name = "4.0Ultra"
 # model_name = "Pro/deepseek-ai/DeepSeek-V3"
-model_name = "THUDM/glm-4-9b-chat"
+model_name = "deepseek-ai/DeepSeek-V3"
 
 """
 4.0Ultra

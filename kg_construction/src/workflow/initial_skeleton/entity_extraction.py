@@ -1,5 +1,6 @@
 from typing import Tuple, List, Dict, Optional, Union
 import os
+import json
 import logging
 from dataclasses import dataclass, field
 
@@ -134,7 +135,12 @@ def extract_entities_and_relations(
     """从响应JSON中提取实体和关系"""
     logging.info("Extracting entities and relations from response.")
     result = ExtractionResult(current_id=current_id, current_relation_id=current_relation_id)
-    if response_json == None:
+    if response_json is None:
+        return None
+    
+    # 确保 response_json 是字典类型
+    if not isinstance(response_json, dict):
+        logging.warning(f"Expected dict, got {type(response_json)}: {response_json}")
         return None
     entities = response_json.get("entities", [])
     relations = response_json.get("relations", [])
@@ -237,10 +243,11 @@ def process_extraction(
                 need_read_from_cache=True
             )
             # 第二步：抽取关系
-            step_2_input = [
-                f"关系来源的原文:\n{contents_input[i]}\n以下是用户提供的实体:\n{step_1_output[i]}"
-                for i in range(len(step_1_output))
-            ]
+            step_2_input = []
+            for i in range(len(step_1_output)):
+                # 将字典转换为JSON字符串用于显示
+                entities_str = json.dumps(step_1_output[i], ensure_ascii=False, indent=2) if isinstance(step_1_output[i], dict) else str(step_1_output[i])
+                step_2_input.append(f"关系来源的原文:\n{contents_input[i]}\n以下是用户提供的实体:\n{entities_str}")
             
             response_data = communicate_with_agent(
                 system_prompt=async_system_prompt_2,
@@ -253,13 +260,23 @@ def process_extraction(
             # 合并实体数据
             
             for i, resp in enumerate(response_data):
-                if resp is None:
-                    resp = {}
+                # 确保 resp 是字典类型
+                if resp is None or not isinstance(resp, dict):
+                    response_data[i] = {}
+                    resp = response_data[i]
+                
                 try:
-                    resp["entities"] = jsonalize(step_1_output[i])["entities"]
+                    # step_1_output[i] 可能是字典、列表或其他类型
+                    if isinstance(step_1_output[i], dict) and "entities" in step_1_output[i]:
+                        resp["entities"] = step_1_output[i]["entities"]
+                    elif isinstance(step_1_output[i], list):
+                        # 如果是列表，假设列表中的每个元素都是实体
+                        resp["entities"] = step_1_output[i]
+                    else:
+                        resp["entities"] = []
                 except Exception as e:
                     logging.error(f"error data: {step_1_output[i]}")
-                    resp["entities"]=[]
+                    resp["entities"] = []
             
             return response_data
         else:

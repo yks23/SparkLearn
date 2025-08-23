@@ -66,13 +66,13 @@ def augmented_generation(need_entity:bool,need_relation:bool,is_first:bool):
     nodes_file = os.path.join(cache_folder, "entity_nodes.json")
     relations_file = os.path.join(cache_folder, "entity_related.json")
     if is_first:
-        entity_prompt_file=os.path.join(os.getcwd(),final_prompt_path,"entity_augmented_generation.txt")
+        entity_prompt_file=os.path.join(final_prompt_path,"entity_augmented_generation.txt")
     else:
-        entity_prompt_file=os.path.join(os.getcwd(),final_prompt_path,"inc_entity_augmented_generation.txt")
+        entity_prompt_file=os.path.join(final_prompt_path,"inc_entity_augmented_generation.txt")
     if is_first:
-        rellation_prompt_file=os.path.join(os.getcwd(),final_prompt_path,"relation_augmented_generation.txt")
+        rellation_prompt_file=os.path.join(final_prompt_path,"relation_augmented_generation.txt")
     else:
-        rellation_prompt_file=os.path.join(os.getcwd(),final_prompt_path,"inc_relation_augmented_generation.txt")
+        rellation_prompt_file=os.path.join(final_prompt_path,"inc_relation_augmented_generation.txt")
     
     # 读取节点和关系数据
     with open(entity_prompt_file, 'r', encoding='utf-8') as file:

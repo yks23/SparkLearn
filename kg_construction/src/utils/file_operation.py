@@ -28,6 +28,18 @@ def save_json(file_path: str, data: list):
 
 
 def jsonalize(data):
+    # 处理None和空字符串的情况
+    if data is None or data == "":
+        return None
+    
+    # 如果数据已经是字典或列表，直接返回
+    if isinstance(data, (dict, list)):
+        return data
+    
+    # 确保数据是字符串类型
+    if not isinstance(data, str):
+        log.error(f"Expected string data, got {type(data)}: {data}")
+        return {}
     
     if data.startswith("```json\n") and data.endswith("\n```"):
         data = data.split("```json\n")[1].split("\n```")[0]

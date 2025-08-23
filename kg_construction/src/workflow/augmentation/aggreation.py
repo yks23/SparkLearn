@@ -1,3 +1,4 @@
+import os
 from ....src.model import Section, Entity
 from ....src.model.graph_structure import GraphStructureType
 from ....src.utils import save_json,communicate_with_agent
@@ -5,16 +6,16 @@ from ....src.model.base_operator import AggregationOperation
 from ....src.config import request_cache_path,final_prompt_path,graph_structure_path
 from ....src.utils.file_operation import save_json
 from ....src.utils.id_operation import realloc_id,graph_structure,save_relation
-import os
+
 def  load_data():
     """加载数据"""
     [node_dict,edge_dict] = graph_structure([GraphStructureType.all_node,GraphStructureType.all_relation],return_type='dict')
     node_dict = {node["id"]: node for node in node_dict}
     edge_dict = {edge["id"]: edge for edge in edge_dict}
     [section_nodes,entity_nodes] = graph_structure([GraphStructureType.section_node,GraphStructureType.entity_node],return_type='object')
-    with open(final_prompt_path + "/aggregation_prompt.txt","r",encoding="utf-8") as f:
+    with open(os.path.join(final_prompt_path, "aggregation_prompt.txt"),"r",encoding="utf-8") as f:
         system_prompt1 = f.read()
-    with open(final_prompt_path + "/relation_detection_prompt.txt","r",encoding="utf-8") as f:
+    with open(os.path.join(final_prompt_path, "relation_detection_prompt.txt"),"r",encoding="utf-8") as f:
         system_prompt2 = f.read()
     return section_nodes,entity_nodes,node_dict,edge_dict,system_prompt1,system_prompt2
 def get_node_info(node_id, node_dict):

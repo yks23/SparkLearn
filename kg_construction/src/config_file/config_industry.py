@@ -1,4 +1,11 @@
 import os
+from ..utils.path_resolver import get_prompt_path
+
+# 使用路径解析工具获取prompt路径
+prompt_path = get_prompt_path()
+standard_prompt_path = prompt_path
+target_prompt_path = prompt_path
+final_prompt_path = prompt_path
 
 # Default configuration for the project
 
@@ -12,14 +19,6 @@ model_name = "glm-4-air"  # e.g., "glm-4-air" or "flash"
 glm_api_key = os.getenv("chatglm_api_key")
 openai_api_key = os.getenv("openai_api_key")
 silicon_api_key = os.getenv("silicon_api_key")
-
-# Cache path for graph structures (if any)
-# Path to the standard prompt files
-standard_prompt_path = "./prompt/prompt"
-# Path to custom prompt files
-target_prompt_path = "./prompt/prompt"
-# Path to the prompt files currently used
-final_prompt_path = "./prompt/prompt"
 
 # Custom domain or field
 target_field = "Industrial Engineering"

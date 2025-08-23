@@ -1,22 +1,11 @@
 import os
+from ..utils.path_resolver import get_prompt_path
 
-# Model provider
-model_provider = "silicon"  # options: "chatglm", "openai", or "silicon"
-
-# Model name
-model_name = "Pro/deepseek-ai/DeepSeek-V3"  # e.g., "glm-4-air" or "flash"
-
-# API keys loaded from environment variables
-glm_api_key = os.getenv("chatglm_api_key")
-openai_api_key = os.getenv("openai_api_key")
-silicon_api_key = os.getenv("silicon_api_key")
-
-# Cache path for graph structures (if any)
-
-# Paths to prompt files
-standard_prompt_path = "./prompt/prompt"
-target_prompt_path = "./prompt/prompt"
-final_prompt_path = "./prompt/prompt"
+# 使用路径解析工具获取prompt路径
+prompt_path = get_prompt_path()
+standard_prompt_path = prompt_path
+target_prompt_path = prompt_path
+final_prompt_path = prompt_path
 
 # Custom domain
 target_field = "Educational Psychology"
