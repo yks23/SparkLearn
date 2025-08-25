@@ -105,8 +105,14 @@ class SimplifiedAnnotator:
                 need_json=False,
                 show_progress=True
             )
+            
+            # 检查响应是否为空，这通常表示API调用失败
+            if not response or response.strip() == "":
+                raise Exception("API调用失败：返回空响应，可能是认证错误或网络问题")
+                
             return response
         except Exception as e:
             print(f"API调用失败: {e}")
-            return "智能批注生成失败，请重试。"
+            # 重新抛出异常，让上层函数能够捕获并处理
+            raise
 
