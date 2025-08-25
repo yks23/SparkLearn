@@ -15,10 +15,16 @@ def get_community_report(level:int,nodes:list[Section]):
         ops=[Summaryoperator(node) for node in type_1_node]
         request_response=execute_operator(ops,cached_file_path=os.path.join(request_cache_path,f"community_summary_{level}.json"),need_read_from_cache=True)
         for (node,response) in zip(type_1_node,request_response):
-            if response==None:
+            if response==None or response==[]:
                 node.summary=node.raw_content
                 node.example=[]
+                continue           
+            if response==[]:
+                print("empty response")
                 continue
+            print("response:",response)
+            if isinstance(response, list):
+                response = response[0]
             node.summary=response.get("summary","")
             node.example=response.get("example",[])
     print(id_to_sons.keys())

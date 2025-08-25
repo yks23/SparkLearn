@@ -159,7 +159,8 @@ class KnowledgeGraph:
             with tempfile.NamedTemporaryFile(mode='wb', suffix='.pkl', delete=False) as f:
                 pickle.dump(graph_data, f)
                 temp_file = f.name
-            
+            # 关键修复点：替换路径中的反斜杠
+            safe_temp_file = temp_file.replace('\\', '\\\\')
             # 创建可视化脚本
             viz_script = f'''
 import matplotlib
