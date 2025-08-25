@@ -253,7 +253,7 @@ def process_extraction(
                 system_prompt=async_system_prompt_2,
                 user_input=step_2_input,
                 need_json=True,
-                cached_file_path=request_cache_path + "/step_2_output.json",
+                cached_file_path=os.path.join(request_cache_path , "/step_2_output.json"),
                 need_read_from_cache=True
             )
             
