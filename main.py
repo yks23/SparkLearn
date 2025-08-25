@@ -43,6 +43,8 @@ def augment_file(input_path):
         annotator.process(content, input_path)  # 覆盖原文件
     except Exception as e:
         print(f"⚠️ 无法处理文件 {input_path}，错误：{e}")
+        # 重新抛出异常，让上层函数能够捕获并处理
+        raise
 from tqdm import tqdm
 
 def augment_folder(input_path):
@@ -58,6 +60,8 @@ def augment_folder(input_path):
                 annotator.process(content, input_path)  # 覆盖原文件
             except Exception as e:
                 print(f"⚠️ 无法处理文件 {input_path}，错误：{e}")
+                # 重新抛出异常，让上层函数能够捕获并处理
+                raise
         else:
             print(f"⏩ 跳过非 .md 文件：{input_path}")
     else:
@@ -67,7 +71,11 @@ def augment_folder(input_path):
             for sub_folder in sub_folders:
                 sub_folder_path = os.path.join(input_path, sub_folder)
                 if os.path.isdir(sub_folder_path):
-                    augment_folder(sub_folder_path)
+                    try:
+                        augment_folder(sub_folder_path)
+                    except Exception as e:
+                        print(f"⚠️ 处理子文件夹 {sub_folder_path} 失败，错误：{e}")
+                        raise
                 else:
                     if sub_folder_path.lower().endswith('.md'):
                         p = multiprocessing.Process(target=augment_file, args=(sub_folder_path,))
@@ -81,7 +89,12 @@ def tree_folder(input_path,output_path):
     os.environ['meta_path'] = output_path  # 设置环境变量
     os.environ['raw_path'] = input_path  # 设置原始数据路径
     from kg_construction.main import main
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"⚠️ 构建知识树失败，错误：{e}")
+        # 重新抛出异常，让上层函数能够捕获并处理
+        raise
 
 def generate_QA(input_path, output_path):
     """
