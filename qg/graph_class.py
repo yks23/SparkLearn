@@ -62,8 +62,8 @@ class KnowledgeGraph:
         print("🔍 开始加载知识图谱...")
         start_time = time.time()
         
-        nodes_path = graph_file_path + "/all_node.json"
-        edges_path = graph_file_path + "/all_relations.json"
+        nodes_path = os.path.join(graph_file_path ,"all_node.json")
+        edges_path = os.path.join(graph_file_path , "all_relations.json")
         
         # 加载节点
         print(f"📂 正在加载节点文件: {nodes_path}")
@@ -309,11 +309,11 @@ class SparkAPI:
             self.question =[f"请基于下面要求，生成1道题目，要求：\n{text}"]*question_num
         self.answer = ""  # 重置回答
         self.system_prompt = ["你是一个生成练习题的助手，请把生成的题目以markdown语法提供给我，不要加入与题目无关的回答，例如“好的”"]*question_num
-
+        # print('### 开始生成问题', self.question)
         self.answer = multi_conservation(
             self.system_prompt, self.question, need_json=[False] * question_num, show_progress=True
         )
-        
+        # print('### 生成问题完成', self.answer)
         # try:
         #     ws_url = self.create_url()
         #     ws = websocket.WebSocketApp(
@@ -331,7 +331,7 @@ class SparkAPI:
             # 每个answer是一个字符串，可能包含多道题目（用换行分隔）
             questions = [q.strip() for q in answer.split("\n") if q.strip()]
             all_questions.extend(questions)
-
+        # print('### 生成问题完成', all_questions)
         return all_questions
         # except Exception as e:
         #     raise RuntimeError(f"问题生成失败: {str(e)}")
@@ -376,7 +376,31 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 'keywords': ['分析', '综合', '复杂']
             }
         }
+    def generate_for_concept_sequence(
+        self,
+        concept_sequence: List[str],
+        level: str = "easy",
+        q_type: str = "mcq",
+        include_answer: bool = True,
+        save_path: str = None
+    ) -> Dict[str, List[Dict[str, str]]]:
+        results = {}
+        for concept in tqdm(concept_sequence, desc="生成题目"):
+            if concept not in self.kg.graph:
+                print(f"⚠️ 知识点 '{concept}' 不在图谱中，跳过。")
+                continue
+            questions = self.generate_by_concept(concept, q_type=q_type, level=level)
+            results[concept] = questions
 
+        if save_path:
+            qa_dir = Path(save_path) / "QA"
+            qa_dir.mkdir(parents=True, exist_ok=True)
+            for concept, questions in results.items():
+                with open(qa_dir / f"{concept}.md", "w", encoding="utf-8") as f:
+                    f.write('\n'.join(questions))
+
+        return results
+    
     def generate_difficulty_samples(self, concept: str) -> Dict[str, List[str]]:
         """生成三种难度的样例题目"""
         samples = {}
@@ -438,8 +462,10 @@ class KnowledgeQuestionGenerator(SparkAPI):
                 length='3-5句话',
                 description=node_data['description']
             )
-        print("222222222222222222222")
-        return self.generate_questions(prompt,q_type)
+        # print("222222222222222222222",prompt)
+        output = self.generate_questions(prompt,q_type)
+        # print(output)
+        return output
 
 
     def _infer_difficulty(self, concept: str) -> str:
