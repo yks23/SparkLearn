@@ -19,8 +19,17 @@ def get_community_report(level:int,nodes:list[Section]):
                 node.summary=node.raw_content
                 node.example=[]
                 continue
-            node.summary=response.get("summary","")
-            node.example=response.get("example",[])
+            # 处理response可能是列表的情况
+            if isinstance(response, list) and len(response) > 0:
+                # 如果response是列表，取第一个元素
+                response = response[0]
+            if isinstance(response, dict):
+                node.summary=response.get("summary","")
+                node.example=response.get("example",[])
+            else:
+                # 如果response既不是字典也不是列表，直接使用原始内容
+                node.summary=node.raw_content
+                node.example=[]
     print(id_to_sons.keys())
     if len(type_2_node)!=0:
         ops=[Summaryoperator(node,id_to_sons[node.id]) for node in type_2_node]
@@ -29,9 +38,15 @@ def get_community_report(level:int,nodes:list[Section]):
             if response==None:
                 node.summary=node.raw_content
                 continue
-            node.summary=response
+            # 处理response可能是列表的情况
+            if isinstance(response, list) and len(response) > 0:
+                # 如果response是列表，取第一个元素
+                response = response[0]
             if isinstance(response,dict):
-                node.summary=response.get("summary",[])
+                node.summary=response.get("summary","")
+            else:
+                # 如果response既不是字典也不是列表，直接使用原始内容
+                node.summary=node.raw_content
     return 
     
 def community_report():

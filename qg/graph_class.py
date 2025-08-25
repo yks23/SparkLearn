@@ -108,20 +108,23 @@ class KnowledgeGraph:
         """
         print(f"\n🖼️ 开始可视化知识图谱（最多显示 {max_nodes} 个节点）...")
 
-        # # 设置支持中文的字体
-        # try:
-        #     # ✅ Windows 常见字体
-        #     zh_font = fm.FontProperties(fname="C:/Windows/Fonts/simhei.ttf")
-        # except:
-        #     try:
-        #         # ✅ MacOS 常见字体
-        #         zh_font = fm.FontProperties(fname="/System/Library/Fonts/STHeiti Medium.ttc")
-        #     except:
-        #         print("⚠️ 未找到中文字体，中文可能无法正常显示。")
-        #         zh_font = None
-
-        # 完全避免字体管理器，直接使用字符串
-        print("✅ 使用默认字体设置")
+        # 设置支持中文的字体
+        import platform
+        try:
+            if platform.system() == 'Windows':
+                font_path = 'C:/Windows/Fonts/simhei.ttf'
+            elif platform.system() == 'Darwin':  # macOS
+                font_path = '/System/Library/Fonts/STHeiti Medium.ttc'
+            else:  # Linux
+                font_path = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
+            
+            zh_font = fm.FontProperties(fname=font_path)
+            print(f"✅ 找到中文字体: {font_path}")
+            font_name = zh_font.get_name()
+        except Exception as e:
+            print(f"⚠️ 未找到中文字体: {e}")
+            zh_font = None
+            font_name = 'sans-serif'
 
         # 限制可视化规模
         subgraph = self.graph.copy()
@@ -129,76 +132,22 @@ class KnowledgeGraph:
             nodes_subset = list(subgraph.nodes)[:max_nodes]
             subgraph = subgraph.subgraph(nodes_subset)
 
-        # 注释掉直接使用matplotlib的代码，改用子进程方式
-        # plt.figure(figsize=(12, 8))
-        # # pos = nx.spring_layout(subgraph, weight='weight', seed=42, k=0.8/(len(subgraph)**0.5))
-        # # pos = nx.circular_layout(subgraph)  # 替代 spring_layout
-        # pos = nx.kamada_kawai_layout(subgraph)  # 替代 spring_layout
-
-        # # 绘制节点和边
-        # nx.draw(subgraph, pos, with_labels=True, node_color="skyblue", edge_color="gray",
-        #         node_size=2000, font_size=10, font_family=zh_font.get_name() if zh_font else "sans-serif", arrows=True)
-        
-        
         try:
-            # 使用子进程来避免Qt和matplotlib的冲突
-            import subprocess
-            import tempfile
-            import pickle
+            # 直接使用matplotlib生成图片
+            plt.figure(figsize=(12, 8))
+            pos = nx.kamada_kawai_layout(subgraph)
             
-            print("🔄 使用子进程生成图片...")
+            # 绘制节点和边
+            nx.draw(subgraph, pos, with_labels=True, 
+                   node_color="skyblue", edge_color="gray",
+                   node_size=2000, font_size=10, 
+                   font_family=font_name, arrows=True)
             
-            # 准备数据
-            graph_data = {
-                'nodes': list(subgraph.nodes()),
-                'edges': list(subgraph.edges()),
-                'output_path': output_path
-            }
+            plt.axis('off')
+            plt.savefig(output_path, dpi=150, bbox_inches='tight')
+            plt.close('all')
             
-            # 创建临时文件保存数据
-            with tempfile.NamedTemporaryFile(mode='wb', suffix='.pkl', delete=False) as f:
-                pickle.dump(graph_data, f)
-                temp_file = f.name
-            
-            # 创建可视化脚本
-            viz_script = f'''
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import networkx as nx
-import pickle
-import sys
-
-# 加载数据
-with open('{temp_file}', 'rb') as f:
-    data = pickle.load(f)
-
-# 重建图
-G = nx.DiGraph()
-for node in data['nodes']:
-    G.add_node(node)
-for edge in data['edges']:
-    G.add_edge(edge[0], edge[1])
-
-# 可视化
-plt.figure(figsize=(10, 6))
-pos = nx.random_layout(G)
-nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=1000, font_size=6)
-plt.axis('off')
-plt.savefig('{output_path}', dpi=100, bbox_inches='tight')
-plt.close('all')
-print("图片生成完成")
-'''
-            
-            # 运行子进程
-            result = subprocess.run([sys.executable, '-c', viz_script], 
-                                  capture_output=True, text=True, timeout=30)
-            
-            if result.returncode == 0:
-                print(f"✅ 可视化完成，图片已保存至: {output_path}")
-            else:
-                print(f"⚠️ 子进程失败: {result.stderr}")
-                raise Exception("子进程生成图片失败")
+            print(f"✅ 可视化完成，图片已保存至: {output_path}")
                 
         except Exception as e:
             print(f"⚠️ 可视化失败: {str(e)}")
