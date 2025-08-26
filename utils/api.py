@@ -95,6 +95,12 @@ def worker_conservation(args):
                 logging.error(f"Error: {e}")
                 if code == 503:
                     logging.error("API 请求过多，尝试下一个模型")
+                elif code == 30011 or "paid balance" in str(e).lower() or "insufficient" in str(e).lower():
+                    logging.error("API余额不足，无法继续使用付费模型")
+                    # 对于余额不足，直接返回空结果，不再尝试其他模型
+                    results.append("")
+                    done = True
+                    break
                 continue
         if not done:
             logging.error("所有模型都请求失败")
@@ -199,6 +205,11 @@ def worker_embedding(args):
             logging.error(f"请求文本: {text}")
             if code == 503:
                 logging.error("API 请求过多，尝试下一个模型")
+            elif code == 30011 or "paid balance" in str(e).lower() or "insufficient" in str(e).lower():
+                logging.error("API余额不足，无法继续使用付费模型")
+                # 对于余额不足，返回空embedding
+                results.append([0.0] * 1536)  # 假设embedding维度为1536
+                continue
             continue
         # 更新进度计数
         if counter is not None:
