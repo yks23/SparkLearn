@@ -148,6 +148,16 @@ def extract_entities_and_relations(
 
     # 处理实体
     for ent in entities:
+        # 验证实体数据格式
+        if not isinstance(ent, dict):
+            logging.warning(f"Invalid entity format, expected dict, got {type(ent)}: {ent}")
+            continue
+        
+        # 检查必需的字段
+        if "name" not in ent or "type" not in ent:
+            logging.warning(f"Missing required fields in entity: {ent}")
+            continue
+            
         try:
             entity = Entity(
                 id=result.current_id,
@@ -165,6 +175,16 @@ def extract_entities_and_relations(
             logging.error(f"Failed to process entity: {e}")
             continue
     for rel in relations:
+        # 验证关系数据格式
+        if not isinstance(rel, dict):
+            logging.warning(f"Invalid relation format, expected dict, got {type(rel)}: {rel}")
+            continue
+        
+        # 检查必需的字段
+        if "source" not in rel or "target" not in rel:
+            logging.warning(f"Missing required fields in relation: {rel}")
+            continue
+            
         if rel["source"] not in name_to_id.keys():
             entity=Entity(
                 id=result.current_id,
@@ -190,6 +210,16 @@ def extract_entities_and_relations(
     # name_set=set(name_to_id.keys())
     # 处理关系
     for rel in relations:
+        # 验证关系数据格式
+        if not isinstance(rel, dict):
+            logging.warning(f"Invalid relation format, expected dict, got {type(rel)}: {rel}")
+            continue
+        
+        # 检查必需的字段
+        if "source" not in rel or "target" not in rel:
+            logging.warning(f"Missing required fields in relation: {rel}")
+            continue
+            
         source_name = rel["source"]
         target_name = rel["target"]
         if isinstance(source_name, list):
